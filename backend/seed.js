@@ -22,7 +22,14 @@ async function seed() {
       // So no additional parsing of raw SQL inserts is needed. We can just print success.
       console.log('Local JSON fallback database loaded and seeded successfully.');
     } else {
-      console.log('Executing SQL statements in PostgreSQL database...');
+      const schemaSqlPath = path.join(__dirname, 'db_schema.sql');
+      if (fs.existsSync(schemaSqlPath)) {
+        console.log('Applying database schema in PostgreSQL...');
+        const schemaSql = fs.readFileSync(schemaSqlPath, 'utf8');
+        await db.query(schemaSql);
+        console.log('Database schema applied successfully.');
+      }
+      console.log('Executing seed SQL statements in PostgreSQL database...');
       // Execute the multi-statement seed SQL
       await db.query(seedSql);
       console.log('PostgreSQL database seeded successfully with SGPGI MCQs!');
