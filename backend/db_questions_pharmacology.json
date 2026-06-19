@@ -1,0 +1,112 @@
+[
+  {
+    "id": 10,
+    "subject": "Pharmacology",
+    "topic": "Cardiac Medications",
+    "question": "Before administering Digoxin (Lanoxin), the nurse must check which of the following vital signs?",
+    "options": [
+      "Blood pressure",
+      "Apical pulse rate",
+      "Respiratory rate",
+      "Temperature"
+    ],
+    "correct_answer": 1,
+    "explanation": "Digoxin decreases the heart rate (negative chronotropic effect). The nurse must check the apical pulse for a full 60 seconds before administering digoxin. The medication is typically withheld if the apical pulse is less than 60 beats per minute in adults.",
+    "difficulty": "Easy",
+    "tags": [
+      "digoxin",
+      "apical pulse",
+      "pharmacology"
+    ],
+    "previous_year_indicator": "SGPGI 2023",
+    "created_at": "2026-06-16T17:04:58.056Z"
+  },
+  {
+    "id": 21,
+    "subject": "Pharmacology",
+    "topic": "Seizure Management",
+    "question": "A nurse is preparing to administer an intravenous dose of Phenytoin (Dilantin) to a patient with active seizures. Which solution should the nurse use to prime the IV line to prevent drug precipitation?",
+    "options": [
+      "5% Dextrose in Water (D5W)",
+      "Ringer's Lactate (RL)",
+      "0.9% Normal Saline (NS)",
+      "0.45% Half-Normal Saline"
+    ],
+    "correct_answer": 2,
+    "explanation": "Phenytoin is highly incompatible with dextrose solutions, which cause it to precipitate immediately in the line. It must only be mixed or co-administered with 0.9% Normal Saline.",
+    "difficulty": "Medium",
+    "tags": [
+      "phenytoin",
+      "IV priming",
+      "seizures"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.314Z"
+  },
+  {
+    "id": 43,
+    "subject": "Pharmacology",
+    "topic": "Emergency Medications (Seizures)",
+    "question": "What is the drug of choice for managing an active, prolonged generalized tonic-clonic seizure in a patient in status epilepticus?",
+    "options": [
+      "Lorazepam IV",
+      "Phenytoin IV",
+      "Phenobarbital IM",
+      "Valproic Acid PO"
+    ],
+    "correct_answer": 0,
+    "explanation": "Intravenous benzodiazepines (Lorazepam or Diazepam) are the first-line treatments for status epilepticus due to their rapid onset of action in enhancing GABA-mediated inhibition in the brain. Phenytoin is given afterward for long-term seizure maintenance.",
+    "difficulty": "Easy",
+    "tags": [
+      "status epilepticus",
+      "lorazepam",
+      "seizures"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.416Z"
+  },
+  {
+    "id": 61,
+    "subject": "Pharmacology",
+    "topic": "Gastrointestinal (Hepatic Encephalopathy)",
+    "question": "What is the specific therapeutic mechanism of action of Lactulose when administered to a patient with advanced hepatic cirrhosis and hepatic encephalopathy?",
+    "options": [
+      "Accelerates glycogen synthesis in the liver cells",
+      "Converts systemic ammonia into ammonium in the colon for excretion",
+      "Directly decreases portal vein hypertension",
+      "Protects gastric mucosa from active bleeding"
+    ],
+    "correct_answer": 1,
+    "explanation": "Lactulose lowers colonic pH, converting diffusible ammonia (NH3) into non-absorbable ammonium ions (NH4+), which are trapped in the bowel and excreted via its laxative effect, lowering blood ammonia levels.",
+    "difficulty": "Medium",
+    "tags": [
+      "lactulose",
+      "hepatic encephalopathy",
+      "ammonia"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.526Z"
+  },
+  {
+    "id": 62,
+    "subject": "Pharmacology",
+    "topic": "Safety (Potassium IV)",
+    "question": "A nurse is documenting a patient's potassium level as 2.8 mEq/L. The physician orders intravenous Potassium Chloride (KCl). Which method of administration is strictly prohibited?",
+    "options": [
+      "Intravenous piggyback via an infusion pump over 2 hours",
+      "Direct intravenous push injection",
+      "Diluted in 500 mL of Normal Saline over 4 hours",
+      "Administered via a central venous catheter"
+    ],
+    "correct_answer": 1,
+    "explanation": "Administering Potassium Chloride via direct IV push causes immediate, lethal cardiac arrest. It must always be diluted and infused slowly via a pump, with a maximum concentration of 40 mEq/L and a rate not exceeding 10 mEq/hour.",
+    "difficulty": "Easy",
+    "tags": [
+      "potassium chloride",
+      "IV push",
+      "safety"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.533Z"
+  }
+]

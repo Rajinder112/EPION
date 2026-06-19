@@ -1,0 +1,135 @@
+[
+  {
+    "id": 5,
+    "subject": "Obstetrics & Gynecology (OBGYN)",
+    "topic": "Antenatal Care",
+    "question": "Calculate the Expected Date of Delivery (EDD) using Nagele's rule for a pregnant woman whose Last Menstrual Period (LMP) began on October 10, 2025.",
+    "options": [
+      "July 17, 2026",
+      "July 10, 2026",
+      "July 3, 2026",
+      "August 17, 2026"
+    ],
+    "correct_answer": 0,
+    "explanation": "Nagele's Rule formula: Add 7 days to the first day of the Last Menstrual Period (LMP), subtract 3 months, and add 1 year. So, Oct 10 + 7 days = Oct 17. Subtracting 3 months gives July 17. Adding 1 year gives July 17, 2026.",
+    "difficulty": "Medium",
+    "tags": [
+      "EDD calculation",
+      "Nageles rule",
+      "obgyn"
+    ],
+    "previous_year_indicator": "SGPGI 2021",
+    "created_at": "2026-06-16T17:04:58.056Z"
+  },
+  {
+    "id": 6,
+    "subject": "Obstetrics & Gynecology (OBGYN)",
+    "topic": "Complications of Pregnancy",
+    "question": "A pregnant woman at 32 weeks gestation presents with painless, bright red vaginal bleeding. The nurse should suspect which condition?",
+    "options": [
+      "Abruptio placentae",
+      "Placenta previa",
+      "Ectopic pregnancy",
+      "Pre-eclampsia"
+    ],
+    "correct_answer": 1,
+    "explanation": "Painless, bright red vaginal bleeding in the second half of pregnancy is the classic sign of placenta previa. Abruptio placentae is characterized by painful, dark red vaginal bleeding and uterine rigidity.",
+    "difficulty": "Medium",
+    "tags": [
+      "placenta previa",
+      "pregnancy bleeding",
+      "obgyn"
+    ],
+    "previous_year_indicator": "AIIMS NORCET 2022",
+    "created_at": "2026-06-16T17:04:58.056Z"
+  },
+  {
+    "id": 24,
+    "subject": "Obstetrics & Gynecology (OBGYN)",
+    "topic": "Pregnancy Complications (Preeclampsia)",
+    "question": "A multigravida at 32 weeks gestation is admitted with severe preeclampsia. The physician orders a continuous intravenous infusion of Magnesium Sulfate (MgSO4). Which assessment parameter serves as the earliest indicator of magnesium toxicity?",
+    "options": [
+      "Decreased urine output below 30 mL/hour",
+      "Loss of deep tendon reflexes (patellar reflex)",
+      "Respiratory rate dropping below 10 breaths/minute",
+      "Serum magnesium level reaching 4 mEq/L"
+    ],
+    "correct_answer": 1,
+    "explanation": "Neuromuscular blockade occurs early as magnesium levels rise. The loss of deep tendon reflexes occurs at serum levels of 7–10 mEq/L, serving as a reliable early warning before life-threatening respiratory depression (< 12/min) develops at levels > 12 mEq/L.",
+    "difficulty": "Hard",
+    "tags": [
+      "magnesium sulfate",
+      "toxicity",
+      "preeclampsia",
+      "reflexes"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.328Z"
+  },
+  {
+    "id": 40,
+    "subject": "Obstetrics & Gynecology (OBGYN)",
+    "topic": "Pregnancy Complications (Abruption)",
+    "question": "A pregnant woman at 34 weeks gestation is diagnosed with a total abruptio placentae. Which characteristic clinical presentation should the nurse expect to find during assessment?",
+    "options": [
+      "Painless, bright red vaginal bleeding with a soft uterus",
+      "Painful, dark red vaginal bleeding with a rigid, board-like abdomen",
+      "Intermittent painless contractions without vaginal bleeding",
+      "Profuse watery vaginal discharge with a dilated cervix"
+    ],
+    "correct_answer": 1,
+    "explanation": "Abruptio placentae is the premature separation of the placenta from the uterine wall. It causes retroplacental bleeding, leading to severe uterine pain and a characteristic rigid, board-like abdomen due to blood infiltrating the myometrium.",
+    "difficulty": "Medium",
+    "tags": [
+      "abruptio placentae",
+      "bleeding",
+      "obgyn"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.401Z"
+  },
+  {
+    "id": 80,
+    "subject": "Obstetrics & Gynecology (OBGYN)",
+    "topic": "Placenta Previa bleeding",
+    "question": "A multigravida patient at 36 weeks gestation has been diagnosed with a total placenta previa. She calls the clinic reporting mild spotting. What instruction should the nurse prioritize?",
+    "options": [
+      "Come to the emergency department immediately and avoid any vaginal contact",
+      "Perform a self-vaginal exam to assess cervical dilation",
+      "Take an aspirin and rest in a prone position for 2 hours",
+      "Increase ambulation to encourage fetal descent"
+    ],
+    "correct_answer": 0,
+    "explanation": "Any vaginal manipulation or contact can disrupt a low-lying placenta, triggering severe maternal hemorrhage. Immediate evaluation at the hospital is required.",
+    "difficulty": "Medium",
+    "tags": [
+      "placenta previa",
+      "bleeding",
+      "obgyn"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.697Z"
+  },
+  {
+    "id": 96,
+    "subject": "Obstetrics & Gynecology (OBGYN)",
+    "topic": "Pregnancy Complications (Abruption bleeding)",
+    "question": "A multigravida at 34 weeks gestation presents to the emergency unit with sudden-onset, painful, dark red vaginal bleeding. The nurse notes that the abdomen feels rigid and board-like upon palpation. What condition does this indicate?",
+    "options": [
+      "Placenta Previa",
+      "Abruptio Placentae",
+      "Hydatidiform Mole",
+      "Cervical Incompetence"
+    ],
+    "correct_answer": 1,
+    "explanation": "Painful, dark red bleeding accompanied by a rigid, board-like uterus is a classic presentation of abruptio placentae, where blood infiltrates the uterine muscle fibers following premature placental separation.",
+    "difficulty": "Easy",
+    "tags": [
+      "abruptio placentae",
+      "bleeding",
+      "uterus rigidity"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.844Z"
+  }
+]

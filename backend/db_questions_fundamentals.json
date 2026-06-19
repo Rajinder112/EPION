@@ -1,0 +1,156 @@
+[
+  {
+    "id": 7,
+    "subject": "Fundamentals of Nursing",
+    "topic": "Infection Control",
+    "question": "What is the minimum duration recommended for hand washing with soap and water under running water to ensure proper hygiene?",
+    "options": [
+      "5 - 10 seconds",
+      "15 - 20 seconds",
+      "40 - 60 seconds",
+      "2 minutes"
+    ],
+    "correct_answer": 2,
+    "explanation": "According to WHO, hand washing with soap and water should take 40-60 seconds total, with the actual rubbing of hands taking at least 20 seconds. An alcohol-based hand rub should take 20-30 seconds.",
+    "difficulty": "Easy",
+    "tags": [
+      "hand hygiene",
+      "infection control",
+      "nursing basics"
+    ],
+    "previous_year_indicator": "ESIC 2019",
+    "created_at": "2026-06-16T17:04:58.056Z"
+  },
+  {
+    "id": 8,
+    "subject": "Fundamentals of Nursing",
+    "topic": "Administration of Medications",
+    "question": "Which angle of insertion is correct when administering an intramuscular (IM) injection to an adult?",
+    "options": [
+      "15 degrees",
+      "45 degrees",
+      "90 degrees",
+      "60 degrees"
+    ],
+    "correct_answer": 2,
+    "explanation": "An intramuscular (IM) injection is administered at a 90-degree angle. Subcutaneous injections are given at 45 degrees (or 90 degrees if using a short needle/pinching skin), and intradermal injections are given at 10 to 15 degrees.",
+    "difficulty": "Easy",
+    "tags": [
+      "medication safety",
+      "injection angles",
+      "fundamentals"
+    ],
+    "previous_year_indicator": "RRB 2019",
+    "created_at": "2026-06-16T17:04:58.056Z"
+  },
+  {
+    "id": 26,
+    "subject": "Fundamentals of Nursing",
+    "topic": "Infection Control (Biomedical Waste)",
+    "question": "According to the National Biomedical Waste Management guidelines, into which color-coded waste bag should a nurse discard a used, un-emptied blood bag?",
+    "options": [
+      "Red bag",
+      "Yellow bag",
+      "Blue cardboard box",
+      "White translucent container"
+    ],
+    "correct_answer": 1,
+    "explanation": "Human blood, blood products, and soiled items contaminated with blood are classified as infectious anatomical/biomedical waste and must be disposed of in a Yellow bag for incineration.",
+    "difficulty": "Easy",
+    "tags": [
+      "biomedical waste",
+      "blood bag",
+      "infection control"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.340Z"
+  },
+  {
+    "id": 46,
+    "subject": "Fundamentals of Nursing",
+    "topic": "Advanced Life Support (CPR)",
+    "question": "Under the current national standard guidelines for Cardiopulmonary Resuscitation (CPR), what is the correct chest compression depth and rate when resuscitating an adult patient?",
+    "options": [
+      "Depth: 1.5 inches; Rate: 80–100/minute",
+      "Depth: 2.0 to 2.4 inches; Rate: 100–120/minute",
+      "Depth: 3.0 inches; Rate: 130–150/minute",
+      "Depth: 1.0 inch; Rate: 90/minute"
+    ],
+    "correct_answer": 1,
+    "explanation": "Standard ACLS/BLS guidelines mandate adult chest compressions at a depth of 2 to 2.4 inches (5-6 cm) and a rapid rate of 100–120 beats per minute to optimize coronary artery perfusion.",
+    "difficulty": "Easy",
+    "tags": [
+      "CPR",
+      "cardiac arrest",
+      "resuscitation"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.432Z"
+  },
+  {
+    "id": 57,
+    "subject": "Fundamentals of Nursing",
+    "topic": "Invasive Procedures (NG Tube)",
+    "question": "A nurse is preparing to insert a nasogastric (NG) tube. Which landmark measurement sequence is correct for estimating the proper insertion depth?",
+    "options": [
+      "From the tip of the nose to the umbilicus",
+      "From the tip of the nose to the earlobe, then down to the xiphoid process",
+      "From the mouth directly to the stomach margin",
+      "From the bridge of the nose to the sternal notch, then to the pubis"
+    ],
+    "correct_answer": 1,
+    "explanation": "This NEX (Nose-Earlobe-Xiphoid) measurement sequence provides an accurate estimate of the anatomical distance needed to reach the stomach lumen in adult patients.",
+    "difficulty": "Easy",
+    "tags": [
+      "NG tube",
+      "NEX measurement",
+      "fundamentals"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.500Z"
+  },
+  {
+    "id": 77,
+    "subject": "Fundamentals of Nursing",
+    "topic": "Safety (Transmission Precautions)",
+    "question": "Under the standard transmission-based precaution guidelines, which personal protective equipment (PPE) combination is required when entering the room of a patient with active pulmonary tuberculosis?",
+    "options": [
+      "Surgical mask, gloves, and protective gown",
+      "N95 particulate respirator mask and hand hygiene",
+      "Face shield, sterile gloves, and shoe covers",
+      "Standard paper mask and protective goggles"
+    ],
+    "correct_answer": 1,
+    "explanation": "Tuberculosis is transmitted via small airborne droplet nuclei (< 5 microns). Airborne precautions require the use of a fit-tested N95 respirator and a negative-pressure isolation room.",
+    "difficulty": "Easy",
+    "tags": [
+      "PPE",
+      "tuberculosis",
+      "airborne precautions"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.667Z"
+  },
+  {
+    "id": 99,
+    "subject": "Fundamentals of Nursing",
+    "topic": "Safety (Biomedical Glass)",
+    "question": "According to national biomedical waste management rules, into which color-coded container should a nurse discard a broken glass drug ampoule?",
+    "options": [
+      "Red bag",
+      "Yellow bag",
+      "Blue box or blue-marked cardboard container",
+      "White translucent sharps container"
+    ],
+    "correct_answer": 2,
+    "explanation": "Waste glass, including contaminated ampoules, vials, and broken glassware, must be segregated into Blue-coded boxes or containers for specific decontamination and recycling.",
+    "difficulty": "Easy",
+    "tags": [
+      "biomedical waste",
+      "glass waste",
+      "ampoule"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.870Z"
+  }
+]

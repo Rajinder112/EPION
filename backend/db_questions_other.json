@@ -1,0 +1,1241 @@
+[
+  {
+    "id": 11,
+    "subject": "Nutrition",
+    "topic": "Vitamins",
+    "question": "Wernicke-Korsakoff syndrome is caused by a severe deficiency of which of the following vitamins?",
+    "options": [
+      "Vitamin B12 (Cobalamin)",
+      "Vitamin B1 (Thiamine)",
+      "Vitamin B3 (Niacin)",
+      "Vitamin C (Ascorbic acid)"
+    ],
+    "correct_answer": 1,
+    "explanation": "Wernicke-Korsakoff syndrome is a neurological disorder caused by a severe deficiency of Vitamin B1 (Thiamine), most commonly observed in individuals with chronic alcohol abuse.",
+    "difficulty": "Medium",
+    "tags": [
+      "vitamins",
+      "thiamine deficiency",
+      "nutrition"
+    ],
+    "previous_year_indicator": "DSSSB 2021",
+    "created_at": "2026-06-16T17:04:58.056Z"
+  },
+  {
+    "id": 12,
+    "subject": "Microbiology",
+    "topic": "Bacteriology",
+    "question": "Which staining technique is specifically used to identify Mycobacterium tuberculosis?",
+    "options": [
+      "Gram staining",
+      "Acid-fast (Ziehl-Neelsen) staining",
+      "Negative staining",
+      "Spore staining"
+    ],
+    "correct_answer": 1,
+    "explanation": "Mycobacterium tuberculosis has a waxy cell wall containing mycolic acid, which makes it resistant to standard Gram staining. It is identified using Acid-Fast Staining, also known as the Ziehl-Neelsen staining technique.",
+    "difficulty": "Easy",
+    "tags": [
+      "microbiology",
+      "staining",
+      "tuberculosis"
+    ],
+    "previous_year_indicator": "RRB 2020",
+    "created_at": "2026-06-16T17:04:58.056Z"
+  },
+  {
+    "id": 13,
+    "subject": "Nursing Management",
+    "topic": "Leadership Styles",
+    "question": "A nurse manager involves the staff in decision-making and planning unit goals. Which leadership style is this manager demonstrating?",
+    "options": [
+      "Autocratic",
+      "Democratic",
+      "Laissez-faire",
+      "Bureaucratic"
+    ],
+    "correct_answer": 1,
+    "explanation": "Democratic leadership style involves sharing decision-making and goal-setting with group members, fostering collaboration and active participation.",
+    "difficulty": "Easy",
+    "tags": [
+      "leadership",
+      "management",
+      "nursing administration"
+    ],
+    "previous_year_indicator": "SGPGI 2022",
+    "created_at": "2026-06-16T17:04:58.056Z"
+  },
+  {
+    "id": 14,
+    "subject": "Research & Statistics",
+    "topic": "Research Methodology",
+    "question": "Which type of research design is considered the gold standard for testing the efficacy of a clinical intervention?",
+    "options": [
+      "Descriptive study",
+      "Cohort study",
+      "Randomized Controlled Trial (RCT)",
+      "Case-control study"
+    ],
+    "correct_answer": 2,
+    "explanation": "Randomized Controlled Trials (RCTs) are the gold standard of clinical research design due to random assignment and control groups, which minimize confounding variables and biases.",
+    "difficulty": "Medium",
+    "tags": [
+      "research design",
+      "RCT",
+      "statistics"
+    ],
+    "previous_year_indicator": "AIIMS NORCET 2023",
+    "created_at": "2026-06-16T17:04:58.056Z"
+  },
+  {
+    "id": 15,
+    "subject": "General Knowledge",
+    "topic": "Indian Healthcare System",
+    "question": "Under the Ayushman Bharat Yojana (PM-JAY), what is the health cover provided per family per year for secondary and tertiary care hospitalization?",
+    "options": [
+      "Rs. 2 Lakhs",
+      "Rs. 3 Lakhs",
+      "Rs. 5 Lakhs",
+      "Rs. 10 Lakhs"
+    ],
+    "correct_answer": 2,
+    "explanation": "Ayushman Bharat - Pradhan Mantri Jan Arogya Yojana (PM-JAY) provides a health cover of Rs. 5 Lakhs per family per year for secondary and tertiary care hospitalization to over 12 crore poor and vulnerable families.",
+    "difficulty": "Easy",
+    "tags": [
+      "general knowledge",
+      "health schemes",
+      "GK"
+    ],
+    "previous_year_indicator": "SGPGI 2023",
+    "created_at": "2026-06-16T17:04:58.056Z"
+  },
+  {
+    "id": 16,
+    "subject": "General English",
+    "topic": "Grammar",
+    "question": "Choose the correct preposition to complete the sentence: \"The nurse is responsible ___ administering medications to the patients in Ward A.\"",
+    "options": [
+      "to",
+      "for",
+      "with",
+      "at"
+    ],
+    "correct_answer": 1,
+    "explanation": "The adjective \"responsible\" takes the preposition \"for\" when referring to tasks or duties (e.g., \"responsible for administering...\").",
+    "difficulty": "Easy",
+    "tags": [
+      "english",
+      "preposition",
+      "grammar"
+    ],
+    "previous_year_indicator": "SGPGI 2022",
+    "created_at": "2026-06-16T17:04:58.056Z"
+  },
+  {
+    "id": 17,
+    "subject": "Reasoning",
+    "topic": "Series Completion",
+    "question": "Complete the series: 3, 5, 9, 17, 33, ?",
+    "options": [
+      "45",
+      "55",
+      "65",
+      "68"
+    ],
+    "correct_answer": 2,
+    "explanation": "The pattern is adding successive powers of 2. 3 + 2 = 5; 5 + 4 = 9; 9 + 8 = 17; 17 + 16 = 33; 33 + 32 = 65. Alternatively, each number is (2 * previous number) - 1.",
+    "difficulty": "Medium",
+    "tags": [
+      "reasoning",
+      "number series"
+    ],
+    "previous_year_indicator": "SGPGI 2021",
+    "created_at": "2026-06-16T17:04:58.056Z"
+  },
+  {
+    "id": 18,
+    "subject": "Aptitude",
+    "topic": "Percentage",
+    "question": "If 15% of a nursing student cohort failed a pharmacology exam, and 68 students passed, what is the total number of students in the cohort?",
+    "options": [
+      "80",
+      "90",
+      "100",
+      "75"
+    ],
+    "correct_answer": 0,
+    "explanation": "If 15% failed, then 85% passed. Let the total number of students be X. 0.85 * X = 68 => X = 68 / 0.85 = 80 total students.",
+    "difficulty": "Medium",
+    "tags": [
+      "aptitude",
+      "percentage",
+      "math"
+    ],
+    "previous_year_indicator": "SGPGI 2022",
+    "created_at": "2026-06-16T17:04:58.056Z"
+  },
+  {
+    "id": 25,
+    "subject": "Mental Health Nursing",
+    "topic": "Pharmacotherapy Side Effects",
+    "question": "A patient with schizophrenia who is taking Chlorpromazine develops a permanent adverse effect characterized by involuntary lip-smacking, tongue protrusion, and choreiform movements of the limbs. What is this condition?",
+    "options": [
+      "Akathisia",
+      "Tardive Dyskinesia",
+      "Pseudoparkinsonism",
+      "Acute Dystonia"
+    ],
+    "correct_answer": 1,
+    "explanation": "Tardive Dyskinesia is a late-onset, frequently irreversible extrapyramidal side effect (EPS) caused by long-term dopamine receptor blockade from typical antipsychotics.",
+    "difficulty": "Medium",
+    "tags": [
+      "chlorpromazine",
+      "tardive dyskinesia",
+      "antipsychotic",
+      "EPS"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.332Z"
+  },
+  {
+    "id": 27,
+    "subject": "Community Health Nursing",
+    "topic": "Immunization (Cold Chain)",
+    "question": "During a home health visit, the nurse reviews the vaccination chart of an infant. Which vaccine must be maintained strictly at the coldest temperature in the freezing compartment of a cold chain system?",
+    "options": [
+      "Hepatitis B vaccine",
+      "DPT vaccine",
+      "Oral Polio Vaccine (OPV)",
+      "Tetanus Toxoid"
+    ],
+    "correct_answer": 2,
+    "explanation": "OPV is highly heat-sensitive and must be stored in the freezer compartment at -20°C. Vaccines like DPT, Hep B, and Tetanus are freeze-sensitive and should be kept in the refrigerator compartment (+2°C to +8°C); freezing destroys their potency.",
+    "difficulty": "Medium",
+    "tags": [
+      "cold chain",
+      "OPV",
+      "vaccines",
+      "immunization"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.344Z"
+  },
+  {
+    "id": 29,
+    "subject": "Aptitude",
+    "topic": "Percentage",
+    "question": "A hospital nursing superintendent notes that 30% of the beds in a 450-bed specialty ward are currently vacant. What is the total number of occupied beds in this ward?",
+    "options": [
+      "135",
+      "315",
+      "270",
+      "350"
+    ],
+    "correct_answer": 1,
+    "explanation": "If 30% are vacant, then 100% - 30% = 70% are occupied. Occupied beds = 70 / 100 * 450 = 315.",
+    "difficulty": "Easy",
+    "tags": [
+      "math",
+      "percentage",
+      "beds"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.351Z"
+  },
+  {
+    "id": 30,
+    "subject": "Aptitude",
+    "topic": "Ratio and Proportion",
+    "question": "The ratio of patients in the OPD to IPD on a given Monday was 5:2. If there were 250 patients in the OPD, find the number of patients admitted to the IPD.",
+    "options": [
+      "100",
+      "50",
+      "125",
+      "75"
+    ],
+    "correct_answer": 0,
+    "explanation": "OPD units = 5. So, 5x = 250 => x = 50. IPD patients = 2x = 2 * 50 = 100.",
+    "difficulty": "Easy",
+    "tags": [
+      "math",
+      "ratio",
+      "OPD"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.357Z"
+  },
+  {
+    "id": 31,
+    "subject": "General Knowledge",
+    "topic": "Indian Constitution",
+    "question": "Which Article of the Indian Constitution empowers the President to declare a Financial Emergency if the financial stability of India is threatened?",
+    "options": [
+      "Article 352",
+      "Article 356",
+      "Article 360",
+      "Article 370"
+    ],
+    "correct_answer": 2,
+    "explanation": "Article 360 deals with Financial Emergency, Article 352 governs National Emergency, and Article 356 governs State Emergency (President’s Rule).",
+    "difficulty": "Medium",
+    "tags": [
+      "GK",
+      "emergency",
+      "constitution"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.362Z"
+  },
+  {
+    "id": 32,
+    "subject": "General Knowledge",
+    "topic": "Healthcare Schemes",
+    "question": "The flagship healthcare scheme of India, Ayushman Bharat PM-JAY, was officially launched by Prime Minister Narendra Modi in which year?",
+    "options": [
+      "2015",
+      "2018",
+      "2020",
+      "2022"
+    ],
+    "correct_answer": 1,
+    "explanation": "Ayushman Bharat PM-JAY was launched on September 23, 2018, from Ranchi, Jharkhand, aiming to provide health cover up to ₹5 lakh per family per year.",
+    "difficulty": "Easy",
+    "tags": [
+      "GK",
+      "PMJAY",
+      "schemes"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.365Z"
+  },
+  {
+    "id": 33,
+    "subject": "General English",
+    "topic": "Subject-Verb Agreement",
+    "question": "Identify the part of the sentence that contains a grammatical error: \"The team of neurosurgeons were preparing for a complex operation when the power supply failed.\"",
+    "options": [
+      "The team of neurosurgeons",
+      "were preparing for",
+      "a complex operation",
+      "when the power supply failed"
+    ],
+    "correct_answer": 1,
+    "explanation": "The true subject of the sentence is \"The team,\" which is singular. Therefore, the helping verb must also be singular (\"was preparing,\" not \"were preparing\").",
+    "difficulty": "Medium",
+    "tags": [
+      "english",
+      "grammar",
+      "subject-verb"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.369Z"
+  },
+  {
+    "id": 34,
+    "subject": "General English",
+    "topic": "Synonyms",
+    "question": "Select the word that is closest in meaning (synonym) to the medical term: PROGNOSIS",
+    "options": [
+      "Diagnosis",
+      "Forecast",
+      "Etiology",
+      "Pathogenesis"
+    ],
+    "correct_answer": 1,
+    "explanation": "Prognosis refers to predicting the likely course and outcome of a disease medical condition, making \"forecast\" the correct synonym.",
+    "difficulty": "Easy",
+    "tags": [
+      "english",
+      "vocabulary",
+      "synonyms"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.374Z"
+  },
+  {
+    "id": 35,
+    "subject": "Reasoning",
+    "topic": "Analogies",
+    "question": "Complete the missing term in the sequence: Bradycardia : Heart :: Bradypnea : ___",
+    "options": [
+      "Kidneys",
+      "Lungs",
+      "Liver",
+      "Brain"
+    ],
+    "correct_answer": 1,
+    "explanation": "Bradycardia is an abnormally slow heart rate, directly involving the heart. Bradypnea is an abnormally slow respiratory rate, directly involving the lungs.",
+    "difficulty": "Easy",
+    "tags": [
+      "reasoning",
+      "analogy"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.377Z"
+  },
+  {
+    "id": 36,
+    "subject": "Reasoning",
+    "topic": "Coding-Decoding",
+    "question": "If the term BLOOD is coded as EORrg in an examination room cipher, how will the word VEIN be written?",
+    "options": [
+      "YHLQ",
+      "YGLM",
+      "XFKP",
+      "ZIMR"
+    ],
+    "correct_answer": 0,
+    "explanation": "The letters are shifted forward by 3 positions (B+3=E, L+3=O, etc.). Shifting VEIN forward by 3 letters gives: V+3=Y, E+3=H, I+3=L, N+3=Q.",
+    "difficulty": "Medium",
+    "tags": [
+      "reasoning",
+      "coding"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.381Z"
+  },
+  {
+    "id": 41,
+    "subject": "Mental Health Nursing",
+    "topic": "Pharmacotherapy Side Effects (MAOIs)",
+    "question": "A psychiatric nurse is caring for a patient with severe depression who has been prescribed Phenelzine, a Monoamine Oxidase Inhibitor (MAOI). The nurse instructs the patient to strictly avoid which food item to prevent a hypertensive crisis?",
+    "options": [
+      "Fresh green leafy vegetables",
+      "Canned citrus fruit juices",
+      "Aged cheddar cheese and red wine",
+      "Refined white flour bread products"
+    ],
+    "correct_answer": 2,
+    "explanation": "Foods rich in tyramine (aged cheeses, cured meats, red wine, fermented products) must be completely avoided when taking MAOIs. MAOIs block tyramine breakdown, allowing it to enter the systemic circulation and cause a massive release of norepinephrine, triggering a life-threatening hypertensive crisis.",
+    "difficulty": "Hard",
+    "tags": [
+      "MAOIs",
+      "phenelzine",
+      "tyramine",
+      "hypertensive crisis"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.406Z"
+  },
+  {
+    "id": 47,
+    "subject": "Aptitude",
+    "topic": "Dosage Flow Rates",
+    "question": "A nurse needs to administer 1,000 mL of Normal Saline over 8 hours. The drop factor of the IV administration set is 15 drops/mL. Calculate the correct flow rate in drops per minute.",
+    "options": [
+      "21 drops/minute",
+      "31 drops/minute",
+      "42 drops/minute",
+      "50 drops/minute"
+    ],
+    "correct_answer": 1,
+    "explanation": "Flow Rate = (Volume * Drop Factor) / Time in minutes. Flow Rate = (1000 * 15) / (8 * 60) = 15000 / 480 ≈ 31.25 drops/min.",
+    "difficulty": "Medium",
+    "tags": [
+      "math",
+      "flow rate",
+      "IV drops"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.439Z"
+  },
+  {
+    "id": 48,
+    "subject": "Aptitude",
+    "topic": "Unitary Method",
+    "question": "If the cost of 12 boxes of surgical sterile gloves is ₹3,600, what will be the total price of 7 boxes of the same gloves?",
+    "options": [
+      "₹2,100",
+      "₹1,800",
+      "₹2,400",
+      "₹1,500"
+    ],
+    "correct_answer": 0,
+    "explanation": "Cost of one box = 3600 / 12 = 300. Cost of 7 boxes = 7 * 300 = ₹2,100.",
+    "difficulty": "Easy",
+    "tags": [
+      "math",
+      "unitary method",
+      "gloves"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.444Z"
+  },
+  {
+    "id": 49,
+    "subject": "General Knowledge",
+    "topic": "Indian Government Structure",
+    "question": "Who is recognized as the ex-officio Chairman of the NITI Aayog in India?",
+    "options": [
+      "The President of India",
+      "The Prime Minister of India",
+      "The Union Finance Minister",
+      "The Union Health Minister"
+    ],
+    "correct_answer": 1,
+    "explanation": "The National Institution for Transforming India (NITI Aayog) was established in 2015 to replace the Planning Commission, with the Prime Minister serving as its ex-officio Chairman.",
+    "difficulty": "Easy",
+    "tags": [
+      "GK",
+      "NITI Aayog"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.448Z"
+  },
+  {
+    "id": 50,
+    "subject": "General Knowledge",
+    "topic": "National Health Schemes",
+    "question": "The central government health scheme \"Mission Indradhanush\" focuses primarily on achieving high national coverage in which health area?",
+    "options": [
+      "Maternal Nutrition",
+      "Full Immunization for Children and Pregnant Women",
+      "Free Distribution of Iron Tablets",
+      "Rural Sanitation Infrastructure"
+    ],
+    "correct_answer": 1,
+    "explanation": "Mission Indradhanush was launched to ensure full vaccination coverage for children up to two years of age and pregnant women against vaccine-preventable diseases.",
+    "difficulty": "Easy",
+    "tags": [
+      "GK",
+      "immunization",
+      "Mission Indradhanush"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.454Z"
+  },
+  {
+    "id": 51,
+    "subject": "General English",
+    "topic": "Prepositions",
+    "question": "Select the most appropriate preposition to complete the sentence: \"The recovery room nurse was placed ___ charge of the pediatric emergency division.\"",
+    "options": [
+      "at",
+      "in",
+      "under",
+      "with"
+    ],
+    "correct_answer": 1,
+    "explanation": "\"In charge of\" is the standard idiomatic English prepositional phrase used to denote responsibility or leadership over an area.",
+    "difficulty": "Easy",
+    "tags": [
+      "english",
+      "prepositions"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.460Z"
+  },
+  {
+    "id": 52,
+    "subject": "General English",
+    "topic": "Antonyms",
+    "question": "What is the correct antonym for the word: CHRONIC",
+    "options": [
+      "Acute",
+      "Persistent",
+      "Prolonged",
+      "Latent"
+    ],
+    "correct_answer": 0,
+    "explanation": "Chronic describes long-term, slow-progressing conditions, while acute describes sudden-onset, short-duration events, making them direct antonyms.",
+    "difficulty": "Easy",
+    "tags": [
+      "english",
+      "vocabulary",
+      "antonyms"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.466Z"
+  },
+  {
+    "id": 53,
+    "subject": "Reasoning",
+    "topic": "Classification",
+    "question": "Find the odd one out from the provided list of medical terms:",
+    "options": [
+      "Arteries",
+      "Veins",
+      "Capillaries",
+      "Alveoli"
+    ],
+    "correct_answer": 3,
+    "explanation": "Arteries, veins, and capillaries are structural components of the vascular/circulatory system, whereas alveoli belong to the respiratory system.",
+    "difficulty": "Easy",
+    "tags": [
+      "reasoning",
+      "odd one out"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.473Z"
+  },
+  {
+    "id": 54,
+    "subject": "Reasoning",
+    "topic": "Number Series",
+    "question": "Complete the number pattern logic: 5, 11, 23, 47, ___",
+    "options": [
+      "95",
+      "98",
+      "102",
+      "85"
+    ],
+    "correct_answer": 0,
+    "explanation": "The underlying mathematical progression multiplies the previous number by 2 and adds 1. 47 * 2 + 1 = 95.",
+    "difficulty": "Easy",
+    "tags": [
+      "reasoning",
+      "number series"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.478Z"
+  },
+  {
+    "id": 65,
+    "subject": "Aptitude",
+    "topic": "Drug Calculation",
+    "question": "A patient is prescribed 0.125 mg of Digoxin orally. The pharmacy dispenses Digoxin tablets labeled 250 micrograms per tablet. How many tablets should the nurse administer?",
+    "options": [
+      "0.5 tablet",
+      "1 tablet",
+      "2 tablets",
+      "1.5 tablets"
+    ],
+    "correct_answer": 0,
+    "explanation": "0.125 mg = 125 mcg. Dose = Desired / Have = 125 / 250 = 0.5 tablet.",
+    "difficulty": "Easy",
+    "tags": [
+      "math",
+      "drug calculation",
+      "digoxin"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.555Z"
+  },
+  {
+    "id": 66,
+    "subject": "Aptitude",
+    "topic": "Average Weight",
+    "question": "The average weight of 5 neonatal infants in an ICU nursery is 2.4 kg. If a sixth infant weighing 3.6 kg is added to the nursery group, what is the new average weight of the infants?",
+    "options": [
+      "2.6 kg",
+      "2.8 kg",
+      "3.0 kg",
+      "2.5 kg"
+    ],
+    "correct_answer": 0,
+    "explanation": "Sum of 5 = 5 * 2.4 = 12 kg. New Sum = 12 + 3.6 = 15.6 kg. New Average = 15.6 / 6 = 2.6 kg.",
+    "difficulty": "Medium",
+    "tags": [
+      "math",
+      "average",
+      "infants"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.561Z"
+  },
+  {
+    "id": 67,
+    "subject": "General Knowledge",
+    "topic": "Indian Constitution Leaders",
+    "question": "Who was the chief architect and is widely revered as the \"Father of the Indian Constitution\"?",
+    "options": [
+      "Mahatma Gandhi",
+      "Dr. B.R. Ambedkar",
+      "Jawaharlal Nehru",
+      "Dr. Rajendra Prasad"
+    ],
+    "correct_answer": 1,
+    "explanation": "Dr. Bhimrao Ramji Ambedkar served as the Chairman of the Drafting Committee for the Constitution of India and played a key role in its creation.",
+    "difficulty": "Easy",
+    "tags": [
+      "GK",
+      "constitution",
+      "Ambedkar"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.571Z"
+  },
+  {
+    "id": 68,
+    "subject": "General Knowledge",
+    "topic": "Global Health Organizations",
+    "question": "The specialized global international organization UNICEF focuses its humanitarian programs primarily on which population?",
+    "options": [
+      "Industrial Labors",
+      "Children and Mothers",
+      "Military Veterans",
+      "Agricultural Farmers"
+    ],
+    "correct_answer": 1,
+    "explanation": "UNICEF (United Nations International Children's Emergency Fund) is a UN agency dedicated to providing humanitarian and developmental aid to children and mothers worldwide.",
+    "difficulty": "Easy",
+    "tags": [
+      "GK",
+      "UNICEF",
+      "child health"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.580Z"
+  },
+  {
+    "id": 69,
+    "subject": "General English",
+    "topic": "Spelling",
+    "question": "Select the correctly spelled word from the options below:",
+    "options": [
+      "Amniscentis",
+      "Amniocentesis",
+      "Amniocentisis",
+      "Amniocenteces"
+    ],
+    "correct_answer": 1,
+    "explanation": "Amniocentesis is the correct medical spelling for the transabdominal aspiration of amniotic fluid for diagnostic analysis.",
+    "difficulty": "Medium",
+    "tags": [
+      "english",
+      "spelling"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.590Z"
+  },
+  {
+    "id": 70,
+    "subject": "General English",
+    "topic": "Prepositions",
+    "question": "Complete the sentence: \"The nurse administrator was proud ___ the clinical achievements of her unit.\"",
+    "options": [
+      "by",
+      "of",
+      "at",
+      "with"
+    ],
+    "correct_answer": 1,
+    "explanation": "\"Proud of\" is the correct grammatical prepositional pairing in English.",
+    "difficulty": "Easy",
+    "tags": [
+      "english",
+      "prepositions"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.599Z"
+  },
+  {
+    "id": 71,
+    "subject": "Reasoning",
+    "topic": "Analogies (Organs)",
+    "question": "Select the word that best completes the analogy: Lungs : Pleura :: Heart : ___",
+    "options": [
+      "Endocardium",
+      "Myocardium",
+      "Pericardium",
+      "Mediastinum"
+    ],
+    "correct_answer": 2,
+    "explanation": "The pleura is the protective serous membrane surrounding the lungs. The pericardium is the corresponding protective sac enclosing the heart.",
+    "difficulty": "Easy",
+    "tags": [
+      "reasoning",
+      "analogy"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.608Z"
+  },
+  {
+    "id": 72,
+    "subject": "Reasoning",
+    "topic": "Direction Sense",
+    "question": "If a nurse walks 10 meters East from the nursing station, turns left and walks 5 meters, which direction is she facing relative to her starting point?",
+    "options": [
+      "North-East",
+      "North-West",
+      "South-East",
+      "North"
+    ],
+    "correct_answer": 0,
+    "explanation": "Moving East and then North places the nurse North-East of her original starting coordinates.",
+    "difficulty": "Medium",
+    "tags": [
+      "reasoning",
+      "direction"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.616Z"
+  },
+  {
+    "id": 74,
+    "subject": "Nursing Management",
+    "topic": "Quality (Sentinel Events)",
+    "question": "While monitoring a multi-hospital database for quality metrics, a nurse administrator reviews indicators of \"Sentinel Events.\" Which clinical occurrence meets the criteria for a sentinel event?",
+    "options": [
+      "A patient experiencing a minor rash after receiving a scheduled antibiotic",
+      "An inpatient attempting to leave the unit against medical advice",
+      "Surgery performed on the wrong limb of a patient",
+      "A delay of 30 minutes in delivering a routine morning diet tray"
+    ],
+    "correct_answer": 2,
+    "explanation": "A sentinel event is an unexpected occurrence involving death or serious physical or psychological injury, or the risk thereof. Wrong-site surgery is a classic example of a preventable sentinel event.",
+    "difficulty": "Medium",
+    "tags": [
+      "sentinel event",
+      "quality",
+      "management"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.639Z"
+  },
+  {
+    "id": 76,
+    "subject": "Mental Health Nursing",
+    "topic": "Paranoid Disorders",
+    "question": "A patient is admitted to the psychiatric unit with severe paranoid delusions, stating that the hospital food is poisoned. Which nursing intervention is most effective for managing this behavior during initial meal times?",
+    "options": [
+      "Tasting the food in front of the patient to prove its safety",
+      "Providing pre-packaged, sealed food containers or individually wrapped items",
+      "Telling the patient that their thoughts are irrational and completely false",
+      "Restricting food access until the patient complies out of hunger"
+    ],
+    "correct_answer": 1,
+    "explanation": "Providing sealed or pre-packaged foods helps reduce the patient's anxiety and suspicion without directly validating or confronting the delusion, ensuring adequate nutritional intake.",
+    "difficulty": "Medium",
+    "tags": [
+      "delusions",
+      "paranoia",
+      "interventions"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.658Z"
+  },
+  {
+    "id": 81,
+    "subject": "Mental Health Nursing",
+    "topic": "Somatic Treatments (ECT)",
+    "question": "Which medication is classified as a short-acting muscle relaxant and is routinely administered before Electroconvulsive Therapy (ECT) to prevent musculoskeletal injuries?",
+    "options": [
+      "Atropine Sulfate",
+      "Succinylcholine",
+      "Diazepam",
+      "Haloperidol"
+    ],
+    "correct_answer": 1,
+    "explanation": "Succinylcholine is a depolarizing neuromuscular blocker given during ECT to paralyze skeletal muscles, preventing fractures and severe muscle strain during the induced seizure. Atropine is given beforehand to dry secretions and prevent bradycardia.",
+    "difficulty": "Medium",
+    "tags": [
+      "ECT",
+      "succinylcholine",
+      "muscle relaxant"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.707Z"
+  },
+  {
+    "id": 82,
+    "subject": "Research & Statistics",
+    "topic": "Measurement Scales",
+    "question": "A clinical trial protocol requires the collection of ordinal data. Which parameter is an example of an ordinal scale of measurement?",
+    "options": [
+      "Patient’s exact body temperature in Celsius",
+      "Blood pressure readings in mmHg",
+      "Pain intensity rating on a scale of Mild, Moderate, or Severe",
+      "Patient's national health registration number"
+    ],
+    "correct_answer": 2,
+    "explanation": "Ordinal data involves categories that can be logically ranked or ordered (e.g., Mild < Moderate < Severe), but the mathematical distance between categories is not fixed.",
+    "difficulty": "Medium",
+    "tags": [
+      "research",
+      "ordinal scale",
+      "statistics"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.716Z"
+  },
+  {
+    "id": 83,
+    "subject": "Aptitude",
+    "topic": "Percentage increase",
+    "question": "A nurse manager is preparing a budget report. The department's expenditure increased from ₹40,000 to ₹50,000. Calculate the percentage increase in expenditure.",
+    "options": [
+      "20%",
+      "25%",
+      "10%",
+      "30%"
+    ],
+    "correct_answer": 1,
+    "explanation": "Increase = 10,000. Percentage Increase = (10,000 / 40,000) * 100 = 25%.",
+    "difficulty": "Easy",
+    "tags": [
+      "math",
+      "percentage",
+      "budget"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.725Z"
+  },
+  {
+    "id": 84,
+    "subject": "Aptitude",
+    "topic": "Profit and Loss",
+    "question": "By selling a medical diagnostic machine for ₹18,000, a vendor incurs a loss of 10%. What was the original cost price of the machine?",
+    "options": [
+      "₹20,000",
+      "₹19,800",
+      "₹22,000",
+      "₹21,000"
+    ],
+    "correct_answer": 0,
+    "explanation": "Selling Price = Cost Price * (100% - Loss%). 18000 = CP * 0.90 => CP = 18000 / 0.90 = ₹20,000.",
+    "difficulty": "Medium",
+    "tags": [
+      "math",
+      "loss",
+      "cost price"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.733Z"
+  },
+  {
+    "id": 85,
+    "subject": "General Knowledge",
+    "topic": "National Societies leadership",
+    "question": "Who serves as the ex-officio President of the Indian Red Cross Society?",
+    "options": [
+      "The Prime Minister of India",
+      "The President of India",
+      "The Union Health Minister",
+      "The Director General of Health Services"
+    ],
+    "correct_answer": 1,
+    "explanation": "The President of India serves as the ex-officio President of the Indian Red Cross Society, while the Union Health Minister acts as its Chairman.",
+    "difficulty": "Medium",
+    "tags": [
+      "GK",
+      "Red Cross",
+      "leadership"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.741Z"
+  },
+  {
+    "id": 86,
+    "subject": "General Knowledge",
+    "topic": "Maternal health schemes",
+    "question": "The central government scheme \"Janani Suraksha Yojana\" (JSY) is aimed primarily at reducing maternal and neonatal mortality by encouraging which practice?",
+    "options": [
+      "Home deliveries by untrained relatives",
+      "Institutional deliveries in healthcare facilities",
+      "Free supply of infant milk formulations",
+      "Electronic registration of marriages"
+    ],
+    "correct_answer": 1,
+    "explanation": "JSY is a 100% centrally sponsored scheme under the National Health Mission (NHM) that provides cash incentives to eligible pregnant women to promote institutional delivery and reduce maternal-neonatal mortality.",
+    "difficulty": "Easy",
+    "tags": [
+      "GK",
+      "JSY",
+      "maternal health"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.749Z"
+  },
+  {
+    "id": 87,
+    "subject": "General English",
+    "topic": "Medical Terminology Definitions",
+    "question": "Give a one-word substitution for: \"A physician who specializes in the treatment of mental health disorders and can prescribe medications.\"",
+    "options": [
+      "Psychologist",
+      "Psychiatrist",
+      "Neurologist",
+      "Pathologist"
+    ],
+    "correct_answer": 1,
+    "explanation": "A psychiatrist is a medical doctor (MD) specializing in mental health who has the legal authority to prescribe pharmacotherapy, unlike a psychologist.",
+    "difficulty": "Easy",
+    "tags": [
+      "english",
+      "definitions"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.758Z"
+  },
+  {
+    "id": 88,
+    "subject": "General English",
+    "topic": "Vocabulary",
+    "question": "Fill in the blank with the appropriate word: \"The intensive care unit environment must be kept completely ___ to safeguard vulnerable post-op patients.\"",
+    "options": [
+      "Sterile",
+      "Polluted",
+      "Chaotic",
+      "Antiseptic"
+    ],
+    "correct_answer": 0,
+    "explanation": "\"Sterile\" is the grammatically and clinically appropriate adjective to describe an environment completely free of viable microorganisms.",
+    "difficulty": "Easy",
+    "tags": [
+      "english",
+      "vocabulary"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.766Z"
+  },
+  {
+    "id": 89,
+    "subject": "Reasoning",
+    "topic": "Letter Series",
+    "question": "Complete the missing term in the alphabet sequence: A, C, F, J, ___",
+    "options": [
+      "L",
+      "M",
+      "O",
+      "P"
+    ],
+    "correct_answer": 2,
+    "explanation": "The skips between letters increase: +1, +2, +3, +4. J + 4 = O.",
+    "difficulty": "Medium",
+    "tags": [
+      "reasoning",
+      "letter series"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.774Z"
+  },
+  {
+    "id": 90,
+    "subject": "Reasoning",
+    "topic": "Syllogism",
+    "question": "Statement: \"All critical care units require high hand hygiene compliance.\"\nConclusion: \"Some areas with low compliance are not critical care units.\"\nBased on the statement, is this conclusion logically valid?",
+    "options": [
+      "Yes, it follows logically",
+      "No, it contradicts the statement",
+      "The data is insufficient to determine",
+      "None of the above"
+    ],
+    "correct_answer": 0,
+    "explanation": "If all critical care units require high compliance, any unit with low compliance cannot be a critical care unit, making the conclusion logically valid.",
+    "difficulty": "Medium",
+    "tags": [
+      "reasoning",
+      "logic"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.783Z"
+  },
+  {
+    "id": 98,
+    "subject": "Mental Health Nursing",
+    "topic": "Pharmacotherapy Side Effects (Oculogyric)",
+    "question": "A psychiatric patient is receiving Haloperidol for acute psychosis. During the morning assessment, the nurse notes that the patient's eyes are locked in an involuntary upward gaze. How should this extrapyramidal symptom (EPS) be documented?",
+    "options": [
+      "Akathisia",
+      "Oculogyric crisis",
+      "Tardive dyskinesia",
+      "Micrographia"
+    ],
+    "correct_answer": 1,
+    "explanation": "An oculogyric crisis is an acute dystonic reaction characterized by the involuntary, fixed deviation of the eyes, typically upward. It is an extrapyramidal side effect managed with anticholinergic medications like Benztropine.",
+    "difficulty": "Medium",
+    "tags": [
+      "haloperidol",
+      "oculogyric crisis",
+      "EPS"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.862Z"
+  },
+  {
+    "id": 100,
+    "subject": "Research & Statistics",
+    "topic": "Variable Scales",
+    "question": "A clinical research study measures the baseline pulse rates of 100 individuals. What type of data does this variable represent?",
+    "options": [
+      "Nominal data",
+      "Qualitative data",
+      "Ratio data",
+      "Ordinal data"
+    ],
+    "correct_answer": 2,
+    "explanation": "Pulse rate is a continuous quantitative variable with a true absolute zero point (0 bpm equals no pulse), classifying it as ratio scale data.",
+    "difficulty": "Medium",
+    "tags": [
+      "statistics",
+      "ratio data",
+      "pulse rate"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.879Z"
+  },
+  {
+    "id": 101,
+    "subject": "Aptitude",
+    "topic": "Work and Time",
+    "question": "A contractor can build an isolation clinic unit in 15 days using 8 workers. How many days will it take to build the identical unit if he employs 10 workers working at the same pace?",
+    "options": [
+      "12 days",
+      "10 days",
+      "9 days",
+      "14 days"
+    ],
+    "correct_answer": 0,
+    "explanation": "Inverse variation: M1 * D1 = M2 * D2. 8 * 15 = 10 * D2 => D2 = 120 / 10 = 12 days.",
+    "difficulty": "Easy",
+    "tags": [
+      "math",
+      "work time",
+      "ratio"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.887Z"
+  },
+  {
+    "id": 102,
+    "subject": "Aptitude",
+    "topic": "BODMAS",
+    "question": "Evaluate the following mathematical expression following standard ordering rules: 45 - [3 * (8 + 4)] / 2.",
+    "options": [
+      "27",
+      "36",
+      "18",
+      "41"
+    ],
+    "correct_answer": 0,
+    "explanation": "BODMAS: 8 + 4 = 12. 3 * 12 = 36. 36 / 2 = 18. 45 - 18 = 27.",
+    "difficulty": "Easy",
+    "tags": [
+      "math",
+      "BODMAS",
+      "operators"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.896Z"
+  },
+  {
+    "id": 103,
+    "subject": "General Knowledge",
+    "topic": "Professional Anniversaries",
+    "question": "On which date is International Nurses Day celebrated globally every year?",
+    "options": [
+      "April 7",
+      "May 12",
+      "December 1",
+      "October 2"
+    ],
+    "correct_answer": 1,
+    "explanation": "International Nurses Day is celebrated on May 12th to mark the birth anniversary of Florence Nightingale, the founder of modern nursing.",
+    "difficulty": "Easy",
+    "tags": [
+      "GK",
+      "Nurses Day"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.905Z"
+  },
+  {
+    "id": 104,
+    "subject": "General Knowledge",
+    "topic": "Health Organizations headquarters",
+    "question": "Which city serves as the international headquarters of the World Health Organization (WHO)?",
+    "options": [
+      "New York, USA",
+      "Geneva, Switzerland",
+      "Paris, France",
+      "New Delhi, India"
+    ],
+    "correct_answer": 1,
+    "explanation": "The World Health Organization is headquartered in Geneva, Switzerland, where it was established on April 7, 1948.",
+    "difficulty": "Easy",
+    "tags": [
+      "GK",
+      "WHO",
+      "headquarters"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.912Z"
+  },
+  {
+    "id": 105,
+    "subject": "General English",
+    "topic": "Antonyms",
+    "question": "Select the word that is most opposite in meaning (antonym) to: BENIGN",
+    "options": [
+      "Innocent",
+      "Malignant",
+      "Harmless",
+      "Chronic"
+    ],
+    "correct_answer": 1,
+    "explanation": "Benign denotes a non-threatening, mild, or non-cancerous condition, whereas malignant indicates a dangerous, invasive, or cancerous state, making them antonyms.",
+    "difficulty": "Easy",
+    "tags": [
+      "english",
+      "vocabulary",
+      "antonyms"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.922Z"
+  },
+  {
+    "id": 106,
+    "subject": "General English",
+    "topic": "Indirect Questions",
+    "question": "Choose the correct option to fix the underlined phrase: \"The nurse asked the patient where did he feel the acute pain.\"",
+    "options": [
+      "where he felt",
+      "where he does feel",
+      "that where he feels",
+      "where did he felt"
+    ],
+    "correct_answer": 0,
+    "explanation": "In indirect questions, sentence structure shifts back to standard declarative ordering (Subject + Verb) instead of interrogative inversion, making \"where he felt\" the correct choice.",
+    "difficulty": "Medium",
+    "tags": [
+      "english",
+      "grammar",
+      "indirect speech"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.930Z"
+  },
+  {
+    "id": 107,
+    "subject": "Reasoning",
+    "topic": "Number Patterns",
+    "question": "Find the next number in the logical series: 3, 6, 11, 18, 27, ___",
+    "options": [
+      "38",
+      "36",
+      "42",
+      "35"
+    ],
+    "correct_answer": 0,
+    "explanation": "Differences are consecutive odd numbers: +3, +5, +7, +9. Next is +11. 27 + 11 = 38.",
+    "difficulty": "Easy",
+    "tags": [
+      "reasoning",
+      "number series"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.940Z"
+  },
+  {
+    "id": 108,
+    "subject": "Reasoning",
+    "topic": "Blood Relations",
+    "question": "Introducing a man, a nurse says, \"His father is the only son of my grandfather.\" How is the man related to the nurse?",
+    "options": [
+      "Brother",
+      "Uncle",
+      "Father",
+      "Cousin"
+    ],
+    "correct_answer": 0,
+    "explanation": "The only son of the nurse's grandfather is the nurse's father. If this man's father is the nurse's father, the man must be the nurse's brother.",
+    "difficulty": "Medium",
+    "tags": [
+      "reasoning",
+      "blood relation"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.948Z"
+  }
+]

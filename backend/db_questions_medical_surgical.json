@@ -1,0 +1,3075 @@
+[
+  {
+    "id": 1,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Cardiovascular System",
+    "question": "A patient is admitted with a diagnosis of left-sided heart failure. Which clinical manifestation should the nurse expect to find during assessment?",
+    "options": [
+      "Jugular vein distention",
+      "Dyspnea and crackles",
+      "Splenomegaly",
+      "Peripheral edema"
+    ],
+    "correct_answer": 1,
+    "explanation": "Left-sided heart failure leads to pulmonary congestion. Fluid backs up into the lungs, causing dyspnea, orthopnea, cough, and crackles on auscultation. Jugular vein distention, peripheral edema, and splenomegaly are signs of right-sided heart failure due to systemic venous congestion.",
+    "difficulty": "Medium",
+    "tags": [
+      "cardiology",
+      "heart failure",
+      "assessment"
+    ],
+    "previous_year_indicator": "SGPGI 2022",
+    "created_at": "2026-06-16T17:04:58.056Z"
+  },
+  {
+    "id": 2,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Endocrine System",
+    "question": "Which of the following clinical findings is a hallmark sign of Diabetic Ketoacidosis (DKA)?",
+    "options": [
+      "Bradycardia and hypertension",
+      "Kussmaul respirations and fruity breath odor",
+      "Profuse sweating and tremors",
+      "Severe peripheral edema"
+    ],
+    "correct_answer": 1,
+    "explanation": "Hallmark signs of DKA include Kussmaul respirations (rapid, deep breathing to blow off CO2 to compensate for metabolic acidosis) and a fruity breath odor (due to acetone release). Sweating and tremors are associated with hypoglycemia, not DKA.",
+    "difficulty": "Easy",
+    "tags": [
+      "diabetes",
+      "DKA",
+      "endocrine"
+    ],
+    "previous_year_indicator": "AIIMS NORCET 2023",
+    "created_at": "2026-06-16T17:04:58.056Z"
+  },
+  {
+    "id": 19,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Cardiology (Post-CABG)",
+    "question": "A patient in the ICU post-CABG surgery has a Pulmonary Artery Wedge Pressure (PAWP) reading of 22 mmHg, a blood pressure of 88/54 mmHg, and bilateral crackles on auscultation. What is the most likely pathological state?",
+    "options": [
+      "Hypovolemic Shock",
+      "Cardiogenic Shock",
+      "Septic Shock",
+      "Neurogenic Shock"
+    ],
+    "correct_answer": 1,
+    "explanation": "Normal PAWP ranges from 6 to 12 mmHg. An elevated PAWP (> 18-20 mmHg) combined with systemic hypotension and pulmonary congestion (crackles) points directly to left ventricular failure and cardiogenic shock. Hypovolemic shock would present with a low PAWP.",
+    "difficulty": "Hard",
+    "tags": [
+      "CABG",
+      "PAWP",
+      "cardiogenic shock",
+      "ICU"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.307Z"
+  },
+  {
+    "id": 20,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Critical Care (Ventilator)",
+    "question": "While monitoring a patient on a mechanical ventilator in Synchronized Intermittent Mandatory Ventilation (SIMV) mode, the low tidal volume alarm sounds. The nurse notes that the patient is agitated and the ventilator tubing is disconnected from the tracheostomy tube. What is the immediate priority action?",
+    "options": [
+      "Reconnect the ventilator tubing to the patient's tracheostomy tube",
+      "Assess the patient’s oxygen saturation using a pulse oximeter",
+      "Call the respiratory therapist to check the ventilator circuit settings",
+      "Manually ventilate the patient with an Ambu bag connected to 100% O2"
+    ],
+    "correct_answer": 0,
+    "explanation": "The immediate threat is a total lack of ventilation due to circuit disconnection. Reconnecting the tubing instantly fixes the root problem. If the patient remains distressed or the equipment is faulty, manual ventilation with an Ambu bag becomes the next step.",
+    "difficulty": "Medium",
+    "tags": [
+      "ventilator",
+      "SIMV",
+      "tracheostomy",
+      "ICU"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.310Z"
+  },
+  {
+    "id": 22,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Gastrointestinal (Pancreatitis)",
+    "question": "A patient with severe acute pancreatitis displays bluish discoloration around the flank region. How should the nurse accurately document this specific physical assessment finding?",
+    "options": [
+      "Cullen's sign",
+      "Grey Turner's sign",
+      "Kehr's sign",
+      "Homans' sign"
+    ],
+    "correct_answer": 1,
+    "explanation": "Grey Turner's sign is ecchymosis of the flanks, indicating retroperitoneal hemorrhage from pancreatic necrosis. Cullen's sign represents periumbilical bruising.",
+    "difficulty": "Easy",
+    "tags": [
+      "pancreatitis",
+      "Grey Turners sign",
+      "assessment"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.318Z"
+  },
+  {
+    "id": 28,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Cardiology (ECG)",
+    "question": "A patient presents to the emergency room with a crushing chest pain radiating down the left arm. The ECG reveals ST-segment elevation in leads II, III, and aVF. Which region of the myocardium is affected?",
+    "options": [
+      "Anterior wall MI",
+      "Lateral wall MI",
+      "Inferior wall MI",
+      "Septal wall MI"
+    ],
+    "correct_answer": 2,
+    "explanation": "ST elevations in leads II, III, and aVF correspond directly to an inferior wall myocardial infarction, typically involving tissue supplied by the Right Coronary Artery (RCA).",
+    "difficulty": "Medium",
+    "tags": [
+      "ECG",
+      "inferior wall MI",
+      "cardiology"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.348Z"
+  },
+  {
+    "id": 37,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Electrolytes (Hyperkalemia)",
+    "question": "A patient with a severe crush injury to both lower limbs is admitted to the emergency department. The nurse notes tall, peaked T waves and a widened QRS complex on the telemetry monitor. Which laboratory level requires immediate verification?",
+    "options": [
+      "Serum Calcium",
+      "Serum Sodium",
+      "Serum Potassium",
+      "Serum Magnesium"
+    ],
+    "correct_answer": 2,
+    "explanation": "Tissue crushing causes massive intracellular potassium release into the bloodstream. Peaked T waves, prolonged PR intervals, and a widening QRS complex are classic cardiac manifestations of hyperkalemia (> 5.0 mEq/L), risking ventricular fibrillation if left untreated.",
+    "difficulty": "Medium",
+    "tags": [
+      "hyperkalemia",
+      "crush injury",
+      "electrolytes",
+      "potassium"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.389Z"
+  },
+  {
+    "id": 38,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Neurology (Cushing's Triad)",
+    "question": "While assessing a patient with increased intracranial pressure (ICP) following a motor vehicle accident, the nurse notes a blood pressure of 190/60 mmHg, a pulse rate of 48 beats/minute, and an irregular respiratory pattern. What is this clinical triad called?",
+    "options": [
+      "Beck's Triad",
+      "Virchow's Triad",
+      "Cushing's Triad",
+      "Whipple's Triad"
+    ],
+    "correct_answer": 2,
+    "explanation": "Cushing's Triad consists of systolic hypertension (with a widened pulse pressure), bradycardia, and irregular respirations (Bradypnea). It represents a late sign of brainstem compression from increased ICP.",
+    "difficulty": "Easy",
+    "tags": [
+      "Cushings triad",
+      "ICP",
+      "neurology"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.393Z"
+  },
+  {
+    "id": 42,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Wound Care (Evisceration)",
+    "question": "The nurse is caring for a patient who returned from an abdominal surgery 2 hours ago. The patient reports a sudden \"popping\" sensation after coughing, and the nurse notes that surgical loops of the bowel are visible through the opened incision. What is the immediate priority nursing action?",
+    "options": [
+      "Apply a tight abdominal binder to hold the organs in place",
+      "Cover the protruding organs with sterile dressings soaked in warm normal saline",
+      "Use sterile gloved hands to gently push the organs back into the abdominal cavity",
+      "Place the patient in a high-Fowler's position to assist breathing"
+    ],
+    "correct_answer": 1,
+    "explanation": "This represents an emergency evisceration. Protruding abdominal contents must be kept moist with sterile, warm normal saline dressings to prevent tissue drying and necrosis. Never push organs back inside or apply pressure, and keep the patient flat with knees flexed to lower abdominal wall tension.",
+    "difficulty": "Hard",
+    "tags": [
+      "evisceration",
+      "surgery",
+      "complications"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.411Z"
+  },
+  {
+    "id": 44,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Acid-Base Balances (ABG)",
+    "question": "A nurse is documenting a patient's arterial blood gas (ABG) values: pH 7.50, PaCO2 30 mmHg, and HCO3- 24 mEq/L. How should this status be interpreted?",
+    "options": [
+      "Uncompensated Metabolic Alkalosis",
+      "Uncompensated Respiratory Alkalosis",
+      "Partially Compensated Respiratory Acidosis",
+      "Fully Compensated Metabolic Acidosis"
+    ],
+    "correct_answer": 1,
+    "explanation": "The pH is high (> 7.45), indicating alkalosis. The PaCO2 is low (< 35 mmHg), matching the direction of the alkalotic pH and pointing to a respiratory cause. The HCO3- is normal, meaning no metabolic compensation has taken place.",
+    "difficulty": "Medium",
+    "tags": [
+      "ABG",
+      "respiratory alkalosis",
+      "acid-base"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.423Z"
+  },
+  {
+    "id": 45,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Hemodynamic Monitoring (CVP)",
+    "question": "While monitoring a central venous pressure (CVP) line, the nurse notes a reading of 1 cm H2O. Which primary fluid modification should the nurse expect the physician to order?",
+    "options": [
+      "Restrict intravenous fluids to 50 mL/hour",
+      "Administer a rapid bolus of isotonic crystalloid solutions",
+      "Infuse 20% Mannitol over 30 minutes",
+      "Start an immediate continuous infusion of Furosemide"
+    ],
+    "correct_answer": 1,
+    "explanation": "Normal CVP ranges from 5 to 10 cm H2O (or 2–6 mmHg). A very low reading indicates hypovolemia, requiring fluid resuscitation to restore adequate preload and venous return.",
+    "difficulty": "Medium",
+    "tags": [
+      "CVP",
+      "hypovolemia",
+      "fluid resuscitation"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.427Z"
+  },
+  {
+    "id": 55,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Critical Care (Chest Tube)",
+    "question": "A patient in the emergency unit has a chest tube placed for a large pneumothorax. While turning the patient, the connection breaks, cracking the drainage unit. What is the immediate priority nursing action?",
+    "options": [
+      "Clamp the chest tube close to the patient's chest wall using a padded hemostat",
+      "Submerge the distal end of the chest tube 2 cm into a bottle of sterile water",
+      "Cover the insertion site with an occlusive vaseline gauze dressing",
+      "Stripping the chest tube vigorously to clear potential clots"
+    ],
+    "correct_answer": 1,
+    "explanation": "Submerging the open end of the tube 2 cm into sterile water or saline creates a temporary water seal, preventing atmospheric air from entering the pleural space and causing a tension pneumothorax. Clamping the tube should be avoided as it can cause air entrapment and worsen a pneumothorax.",
+    "difficulty": "Hard",
+    "tags": [
+      "chest tube",
+      "water seal",
+      "pneumothorax"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.488Z"
+  },
+  {
+    "id": 58,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Infectious Diseases (Tuberculosis)",
+    "question": "Which diagnostic test serves as the gold standard for verifying the definitive eradication of Mycobacterium tuberculosis in a patient completing therapy?",
+    "options": [
+      "Serial Chest X-ray clearing",
+      "Sputum culture conversion to negative",
+      "Mantoux skin test induration decrease",
+      "Disappearance of a morning fever"
+    ],
+    "correct_answer": 1,
+    "explanation": "While a clear chest X-ray indicates improvement, a negative sputum culture is the gold standard for confirming that viable bacilli have been eradicated from the lungs.",
+    "difficulty": "Medium",
+    "tags": [
+      "tuberculosis",
+      "sputum culture",
+      "diagnostic"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.506Z"
+  },
+  {
+    "id": 59,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Hemodynamic Monitoring (Transducer)",
+    "question": "A clinical instructor asks a student nurse to identify the specific anatomical location of the phlebostatic axis used to calibrate pressure transducers for invasive hemodynamic monitoring. What is the correct location?",
+    "options": [
+      "Second intercostal space, right sternal border",
+      "Fourth intercostal space, mid-axillary line",
+      "Fifth intercostal space, mid-clavicular line",
+      "Third intercostal space, anterior axillary line"
+    ],
+    "correct_answer": 1,
+    "explanation": "The phlebostatic axis represents the theoretical location of the right atrium, found at the intersection of the fourth intercostal space and the mid-axillary line. Aligning the transducer here avoids hydrostatic errors in blood pressure readings.",
+    "difficulty": "Hard",
+    "tags": [
+      "phlebostatic axis",
+      "hemodynamics",
+      "monitoring"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.512Z"
+  },
+  {
+    "id": 60,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Endocrine (DKA)",
+    "question": "A patient with type 1 diabetes mellitus presents with a blood glucose level of 450 mg/dL, positive serum ketones, and deep, rapid, sighing respirations. How should the nurse accurately document this respiratory pattern?",
+    "options": [
+      "Cheyne-Stokes respirations",
+      "Kussmaul respirations",
+      "Biot's respirations",
+      "Apneustic breathing"
+    ],
+    "correct_answer": 1,
+    "explanation": "Kussmaul respirations are deep, rapid, sighing breaths that represent a compensatory mechanism to blow off carbon dioxide (CO2) and mitigate metabolic acidosis in Diabetic Ketoacidosis (DKA).",
+    "difficulty": "Easy",
+    "tags": [
+      "DKA",
+      "Kussmaul",
+      "respiratory"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.518Z"
+  },
+  {
+    "id": 63,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Cardiology (Beck's Triad)",
+    "question": "Which classic physical assessment triad indicates the presence of cardiac tamponade, requiring immediate needle pericardiocentesis?",
+    "options": [
+      "Bradycardia, Hypertension, Irregular Breathing",
+      "Jugular Venous Distension, Muffled Heart Sounds, Hypotension",
+      "Tachycardia, Splenomegaly, Systolic Murmur",
+      "Widened Pulse Pressure, Fever, Bilateral Crackles"
+    ],
+    "correct_answer": 1,
+    "explanation": "This clinical triad is known as Beck's Triad. Fluid accumulation in the pericardial sac restricts ventricular filling, leading to jugular venous distension, distant or muffled heart sounds, and a drop in systemic blood pressure.",
+    "difficulty": "Medium",
+    "tags": [
+      "cardiac tamponade",
+      "Becks triad",
+      "cardiology"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.541Z"
+  },
+  {
+    "id": 73,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Renal (Osteodystrophy)",
+    "question": "A patient with chronic kidney disease (CKD) on maintenance hemodialysis is at risk for developing severe osteodystrophy. Which reciprocal electrolyte pattern typical of renal failure drives this bone pathology?",
+    "options": [
+      "Hypercalcemia and Hypophosphatemia",
+      "Hypocalcemia and Hyperphosphatemia",
+      "Hyponatremia and Hyperkalemia",
+      "Hypokalemia and Hypomagnesemia"
+    ],
+    "correct_answer": 1,
+    "explanation": "In renal failure, failing kidneys cannot excrete phosphorus, leading to hyperphosphatemia. High phosphorus binds calcium, worsening hypocalcemia. This hypocalcemia triggers chronic parathyroid hormone (PTH) secretion, causing bone resorption (osteodystrophy).",
+    "difficulty": "Hard",
+    "tags": [
+      "CKD",
+      "osteodystrophy",
+      "phosphorus",
+      "calcium"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.629Z"
+  },
+  {
+    "id": 78,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Trauma (Fat Embolism)",
+    "question": "A patient with an open femur fracture is at risk for fat embolism syndrome. Which triad of clinical manifestations should the nurse monitor for?",
+    "options": [
+      "Hematuria, Bradycardia, Hypothermia",
+      "Respiratory distress, Neurological changes, and Petechial rash",
+      "Jaundice, Abdominal rigidity, Hypertension",
+      "Splenomegaly, Peripheral edema, Joint stiffness"
+    ],
+    "correct_answer": 1,
+    "explanation": "Fat embolism syndrome typically occurs 24–72 hours after long bone fractures. Fat globules enter the circulation, obstructing microvessels and causing respiratory distress, altered mental status, and a classic petechial rash across the chest and neck.",
+    "difficulty": "Medium",
+    "tags": [
+      "fat embolism",
+      "fractures",
+      "orthopedics"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.677Z"
+  },
+  {
+    "id": 79,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Renal (Diagnostics)",
+    "question": "A nurse is preparing a patient for an intravenous pyelogram (IVP). Which baseline laboratory parameter must be verified before administering the intravenous contrast dye?",
+    "options": [
+      "Serum Amylase",
+      "Serum Creatinine",
+      "Total Bilirubin",
+      "Platelet Count"
+    ],
+    "correct_answer": 1,
+    "explanation": "Intravenous contrast media can be nephrotoxic, risking contrast-induced nephropathy. Verifying baseline serum creatinine ensures the kidneys have adequate clearance capacity before contrast administration.",
+    "difficulty": "Easy",
+    "tags": [
+      "IVP",
+      "contrast dye",
+      "creatinine",
+      "renal"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.688Z"
+  },
+  {
+    "id": 91,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Cardiology (DVT)",
+    "question": "A patient with a suspected deep vein thrombosis (DVT) is admitted to the ward. While inspecting the leg, a junior nurse attempts to forcibly dorsiflex the patient's foot. A senior nurse stops this action immediately. Why is this maneuver contraindicated?",
+    "options": [
+      "It causes severe permanent damage to the ankle joint",
+      "It can dislodge the thrombus, potentially causing a pulmonary embolism",
+      "It falsely lowers the calculated clinical clotting factor scores",
+      "It alters local arterial pulses, invalidating subsequent Doppler studies"
+    ],
+    "correct_answer": 1,
+    "explanation": "Eliciting Homans' sign (forcible dorsiflexion) carries a risk of dislodging a clot from the deep veins of the leg into the systemic circulation, where it can travel to the lungs and cause a fatal pulmonary embolism.",
+    "difficulty": "Medium",
+    "tags": [
+      "DVT",
+      "Homans sign",
+      "pulmonary embolism"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.795Z"
+  },
+  {
+    "id": 92,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Critical Care (Ventilator Alarms)",
+    "question": "While managing a patient on a mechanical ventilator, the high-pressure alarm sounds. After ruling out patient coughing and biting on the tube, the nurse auscultates coarse crackles and notes thick secretions in the ET tube. What is the priority nursing action?",
+    "options": [
+      "Immediately lower the respiratory rate setting on the ventilator control panel",
+      "Perform endotracheal suctioning after pre-oxygenating with 100% O2",
+      "Administer an immediate dose of an intravenous loop diuretic",
+      "Disconnect the circuit and manually bag the patient with room air"
+    ],
+    "correct_answer": 1,
+    "explanation": "Secretion accumulation increases airway resistance, triggering the high-pressure alarm. Targeted suctioning resolves the obstruction. Pre-oxygenation prevents suction-induced hypoxia.",
+    "difficulty": "Medium",
+    "tags": [
+      "ventilator",
+      "high pressure alarm",
+      "suctioning"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.807Z"
+  },
+  {
+    "id": 94,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Gastrointestinal (Liver Biopsy)",
+    "question": "A patient with severe hepatic cirrhosis is scheduled for a percutaneous liver biopsy. In which position should the nurse place the patient immediately following the procedure to minimize the risk of internal bleeding?",
+    "options": [
+      "Left lateral position with a pillow behind the back",
+      "Flat supine with the head of the bed elevated 45 degrees",
+      "Right side-lying (lateral) position with a rolled towel under the puncture site",
+      "Prone position with a small sandbag under the abdomen"
+    ],
+    "correct_answer": 2,
+    "explanation": "Positioning the patient on their right side uses their own body weight to apply continuous pressure to the liver capsule puncture site, helping prevent internal hemorrhage.",
+    "difficulty": "Medium",
+    "tags": [
+      "liver biopsy",
+      "patient positioning",
+      "cirrhosis"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.825Z"
+  },
+  {
+    "id": 95,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Acid-Base (Metabolic Acidosis)",
+    "question": "A nurse is reviewing a patient's arterial blood gas (ABG) values: pH 7.28, PaCO2 38 mmHg, and HCO3- 18 mEq/L. How should this metabolic imbalance be interpreted?",
+    "options": [
+      "Uncompensated Respiratory Acidosis",
+      "Uncompensated Metabolic Acidosis",
+      "Fully Compensated Metabolic Alkalosis",
+      "Partially Compensated Respiratory Alkalosis"
+    ],
+    "correct_answer": 1,
+    "explanation": "The pH is acidotic (< 7.35). The HCO3- is low (< 22 mEq/L), matching the acidosis and indicating a metabolic cause. The PaCO2 is within the normal range (35–45 mmHg), showing that respiratory compensation has not yet occurred.",
+    "difficulty": "Medium",
+    "tags": [
+      "ABG",
+      "metabolic acidosis",
+      "interpretation"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.836Z"
+  },
+  {
+    "id": 109,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Cardiovascular System (Aortic Dissection)",
+    "question": "Which of the following conditions is most commonly associated with the development of aortic dissection?",
+    "options": [
+      "Asthma",
+      "Diabetes Mellitus",
+      "Hypertension",
+      "COPD"
+    ],
+    "correct_answer": 2,
+    "explanation": "Detailed Rationale\nAortic dissection occurs when a tear develops in the intimal layer of the aorta, allowing blood to enter the medial layer and create a false lumen.\nHypertension is the most important risk factor because chronic high pressure damages the aortic wall, weakens elastic fibers, and increases shear stress, making the vessel prone to tearing.\nKey Points\n•\tMost common risk factor = Hypertension\n•\tMost common site = Ascending aorta\n•\tSudden tearing chest pain radiating to the back\n•\tMedical emergency\n•\tMay cause unequal BP in both arms",
+    "difficulty": "Medium",
+    "tags": [
+      "cardiovascular_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 110,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Cardiovascular System (Aortic Dissection)",
+    "question": "A patient presents with sudden severe tearing chest pain radiating to the back. Which condition should be suspected first?",
+    "options": [
+      "Stable angina",
+      "Aortic dissection",
+      "Gastritis",
+      "Pericarditis"
+    ],
+    "correct_answer": 1,
+    "explanation": "Exam Tip \"Tearing/Ripping pain → Aortic Dissection\"",
+    "difficulty": "Medium",
+    "tags": [
+      "cardiovascular_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 111,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Cardiovascular System (Aortic Dissection)",
+    "question": "The most important modifiable risk factor for aortic dissection is:",
+    "options": [
+      "Smoking",
+      "Hyperlipidemia",
+      "Hypertension",
+      "Obesity"
+    ],
+    "correct_answer": 2,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "cardiovascular_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 112,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Cardiovascular System (Aortic Dissection)",
+    "question": "A 58-year-old male with uncontrolled hypertension develops sudden severe chest pain radiating between the scapulae. The nurse suspects:",
+    "options": [
+      "Myocardial infarction",
+      "Pulmonary edema",
+      "Aortic dissection",
+      "Cardiac tamponade"
+    ],
+    "correct_answer": 2,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "cardiovascular_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 113,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Cardiovascular System (Aortic Dissection)",
+    "question": "Which layer of the aorta is initially torn in aortic dissection?",
+    "options": [
+      "Adventitia",
+      "Intima",
+      "Media",
+      "Endocardium"
+    ],
+    "correct_answer": 1,
+    "explanation": "Remember Dissection = Intimal tear → Blood enters media",
+    "difficulty": "Medium",
+    "tags": [
+      "cardiovascular_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 114,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Cardiovascular System (Aortic Dissection)",
+    "question": "Aortic dissection is most commonly associated with which syndrome in young patients?",
+    "options": [
+      "Down syndrome",
+      "Turner syndrome",
+      "Marfan syndrome",
+      "Klinefelter syndrome"
+    ],
+    "correct_answer": 2,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "cardiovascular_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "NORCET Previous Year",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 115,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Cardiovascular System (Aortic Dissection)",
+    "question": "The classical description of pain in aortic dissection is:",
+    "options": [
+      "Burning pain",
+      "Crushing pain",
+      "Tearing pain",
+      "Colicky pain"
+    ],
+    "correct_answer": 2,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "cardiovascular_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 116,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Cardiovascular System (Aortic Dissection)",
+    "question": "Hypertension is the most important risk factor for aortic dissection. Reason (R) Chronic hypertension weakens the aortic wall and increases shear stress.",
+    "options": [
+      "Both A and R are true and R explains A",
+      "Both A and R are true but R does not explain A",
+      "A true, R false",
+      "Both false"
+    ],
+    "correct_answer": 0,
+    "explanation": "High-Yield One-Liners\n🔴 Most common risk factor → Hypertension\n🔴 Most common inherited cause → Marfan syndrome\n🔴 Pain → Sudden tearing/ripping chest pain\n🔴 Diagnostic test of choice → CT Angiography\n🔴 Emergency drug → IV Beta-blocker (Esmolol/Labetalol)\n🔴 Stanford Type A → Surgical emergency\n🔴 Stanford Type B → Usually managed medically\n\nMemory Trick\n\"HTN TEARS THE AORTA\"\nHTN → Hypertension\nTEARS → Tearing chest pain\nAORTA → Aortic Dissection",
+    "difficulty": "Medium",
+    "tags": [
+      "cardiovascular_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 117,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Cardiovascular System (Aortic Dissection)",
+    "question": "Rapid Fire (Answer Only) Q1. Most common site of aortic dissection?",
+    "options": [
+      "Ascending aorta",
+      "Descending aorta",
+      "Abdominal aorta",
+      "Renal artery"
+    ],
+    "correct_answer": 1,
+    "explanation": "Detailed Rationale\nAcute pancreatitis is inflammation of the pancreas caused most commonly by:\n\"GET SMASHED\"\n•\tGallstones\n•\tEthanol (Alcohol)\n•\tTrauma\n•\tSteroids\n•\tMumps\n•\tAutoimmune disease\n•\tScorpion sting\n•\tHypertriglyceridemia\n•\tERCP\n•\tDrugs\nThe hallmark symptom is:\n✅ Severe epigastric/left upper quadrant pain radiating to the back\nPain often:\n•\tStarts suddenly\n•\tBecomes severe within hours\n•\tWorsens after meals\n•\tRelieved by leaning forward",
+    "difficulty": "Medium",
+    "tags": [
+      "cardiovascular_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 118,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Gastrointestinal System (Acute Pancreatitis)",
+    "question": "A patient with acute pancreatitis usually obtains maximum relief in which position?",
+    "options": [
+      "Supine",
+      "Trendelenburg",
+      "Sitting and leaning forward",
+      "Prone"
+    ],
+    "correct_answer": 2,
+    "explanation": "Exam Pearl Pancreatitis → Lean Forward → Pain Relief",
+    "difficulty": "Medium",
+    "tags": [
+      "gastrointestinal_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 119,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Gastrointestinal System (Acute Pancreatitis)",
+    "question": "Most common causes of acute pancreatitis are:",
+    "options": [
+      "Alcohol and gallstones",
+      "Asthma and COPD",
+      "Diabetes and hypertension",
+      "TB and pneumonia"
+    ],
+    "correct_answer": 0,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "gastrointestinal_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 120,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Gastrointestinal System (Acute Pancreatitis)",
+    "question": "A 45-year-old alcoholic male presents with severe epigastric pain radiating to the back, nausea and vomiting. Which laboratory finding is expected?",
+    "options": [
+      "Increased Troponin-I",
+      "Increased Serum Amylase",
+      "Increased TSH",
+      "Increased Hemoglobin"
+    ],
+    "correct_answer": 1,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "gastrointestinal_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 121,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Gastrointestinal System (Acute Pancreatitis)",
+    "question": "Which enzyme remains elevated longer in acute pancreatitis?",
+    "options": [
+      "Amylase",
+      "Lipase",
+      "ALT",
+      "AST"
+    ],
+    "correct_answer": 1,
+    "explanation": "Remember Enzyme\tElevation Amylase\t24–48 hr Lipase\t7–14 days",
+    "difficulty": "Medium",
+    "tags": [
+      "gastrointestinal_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 122,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Gastrointestinal System (Acute Pancreatitis)",
+    "question": "Grey Turner's sign indicates:",
+    "options": [
+      "Periumbilical ecchymosis",
+      "Flank ecchymosis",
+      "Jaundice",
+      "Ascites"
+    ],
+    "correct_answer": 1,
+    "explanation": "Important •\tGrey Turner Sign = Flank bruising •\tCullen Sign = Periumbilical bruising These indicate hemorrhagic pancreatitis.",
+    "difficulty": "Medium",
+    "tags": [
+      "gastrointestinal_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "NORCET Previous Year",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 123,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Gastrointestinal System (Acute Pancreatitis)",
+    "question": "The most specific diagnostic marker for acute pancreatitis is:",
+    "options": [
+      "Serum amylase",
+      "Lipase",
+      "WBC count",
+      "ESR"
+    ],
+    "correct_answer": 1,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "gastrointestinal_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 124,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Gastrointestinal System (Acute Pancreatitis)",
+    "question": "Serum lipase is more specific than serum amylase for diagnosing acute pancreatitis. Reason (R) Lipase remains elevated longer and is mainly produced by the pancreas.",
+    "options": [
+      "Both true and R explains A",
+      "Both true but R does not explain A",
+      "A true, R false",
+      "Both false"
+    ],
+    "correct_answer": 0,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "gastrointestinal_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 125,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Gastrointestinal System (Acute Pancreatitis)",
+    "question": "Q1 A patient with pancreatitis develops hypocalcemia. The cause is:",
+    "options": [
+      "Hyperparathyroidism",
+      "Fat necrosis causing calcium binding",
+      "Renal failure",
+      "Hypothyroidism"
+    ],
+    "correct_answer": 1,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "gastrointestinal_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "SGPGI Previous Year",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 126,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Gastrointestinal System (Acute Pancreatitis)",
+    "question": "Which electrolyte abnormality is commonly seen in severe acute pancreatitis?",
+    "options": [
+      "Hypercalcemia",
+      "Hypernatremia",
+      "Hypocalcemia",
+      "Hypermagnesemia"
+    ],
+    "correct_answer": 2,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "gastrointestinal_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 127,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Gastrointestinal System (Acute Pancreatitis)",
+    "question": "Which scoring system predicts severity of acute pancreatitis?",
+    "options": [
+      "Glasgow Coma Scale",
+      "APGAR Score",
+      "Ranson Criteria",
+      "Bishop Score"
+    ],
+    "correct_answer": 2,
+    "explanation": "Memory Trick\nPANCREAS\nPain radiates to back\nAmylase elevated\nNausea/Vomiting\nCullen sign\nRanson criteria\nEthanol (alcohol)\nAbdominal tenderness\nSerum lipase ↑",
+    "difficulty": "Medium",
+    "tags": [
+      "gastrointestinal_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 128,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Respiratory System (Pleural Effusion)",
+    "question": "Pleural effusion caused by CHF is usually:",
+    "options": [
+      "Exudative",
+      "Transudative",
+      "Hemorrhagic",
+      "Chylous"
+    ],
+    "correct_answer": 1,
+    "explanation": "Exam Pearl CHF = Transudate Infection/Cancer/TB = Exudate",
+    "difficulty": "Medium",
+    "tags": [
+      "respiratory_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 129,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Respiratory System (Pleural Effusion)",
+    "question": "Which Starling force is primarily responsible for pleural effusion in CHF?",
+    "options": [
+      "Decreased oncotic pressure",
+      "Increased hydrostatic pressure",
+      "Increased lymphatic drainage",
+      "Increased osmotic pressure"
+    ],
+    "correct_answer": 1,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "respiratory_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 130,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Respiratory System (Pleural Effusion)",
+    "question": "A patient with CHF presents with dyspnea and decreased breath sounds at the lung bases. Chest X-ray shows blunting of the costophrenic angle. The most likely diagnosis is:",
+    "options": [
+      "Pneumothorax",
+      "Pleural effusion",
+      "Pulmonary embolism",
+      "Atelectasis"
+    ],
+    "correct_answer": 1,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "respiratory_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 131,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Respiratory System (Pleural Effusion)",
+    "question": "The earliest symptom of pleural effusion is:",
+    "options": [
+      "Hemoptysis",
+      "Dyspnea",
+      "Cyanosis",
+      "Clubbing"
+    ],
+    "correct_answer": 1,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "respiratory_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "SGPGI Previous Year",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 132,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Respiratory System (Pleural Effusion)",
+    "question": "On percussion, pleural effusion produces:",
+    "options": [
+      "Hyperresonance",
+      "Resonance",
+      "Tympany",
+      "Stony dullness"
+    ],
+    "correct_answer": 3,
+    "explanation": "High-Yield Pleural Effusion = Stony Dull Percussion Note",
+    "difficulty": "Medium",
+    "tags": [
+      "respiratory_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "NORCET Previous Year",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 133,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Respiratory System (Pleural Effusion)",
+    "question": "Which finding is most characteristic of pleural effusion?",
+    "options": [
+      "Bronchial breath sounds",
+      "Increased tactile fremitus",
+      "Stony dull percussion",
+      "Wheezing"
+    ],
+    "correct_answer": 2,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "respiratory_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 134,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Respiratory System (Pleural Effusion)",
+    "question": "Pleural effusion commonly occurs in CHF. Reason (R) Increased pulmonary capillary hydrostatic pressure causes fluid leakage into the pleural space.",
+    "options": [
+      "Both A and R are true and R explains A",
+      "Both true but R does not explain A",
+      "A true, R false",
+      "Both false"
+    ],
+    "correct_answer": 0,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "respiratory_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 135,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Respiratory System (Pleural Effusion)",
+    "question": "Q1 Which investigation confirms pleural effusion?",
+    "options": [
+      "ECG",
+      "CBC",
+      "Chest X-ray",
+      "ABG"
+    ],
+    "correct_answer": 2,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "respiratory_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "SGPGI Previous Year",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 136,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Respiratory System (Pleural Effusion)",
+    "question": "Which position provides maximum relief to a patient with massive pleural effusion?",
+    "options": [
+      "Trendelenburg",
+      "Supine",
+      "High Fowler's",
+      "Prone"
+    ],
+    "correct_answer": 2,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "respiratory_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 137,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Respiratory System (Pleural Effusion)",
+    "question": "Procedure used to remove pleural fluid:",
+    "options": [
+      "Pericardiocentesis",
+      "Thoracentesis",
+      "Paracentesis",
+      "Bronchoscopy"
+    ],
+    "correct_answer": 1,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "respiratory_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 138,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Respiratory System (Pleural Effusion)",
+    "question": "Normal pleural space contains approximately:",
+    "options": [
+      "5–15 mL fluid",
+      "100 mL fluid",
+      "500 mL fluid",
+      "1000 mL fluid"
+    ],
+    "correct_answer": 0,
+    "explanation": "One-Liners for NORCET\n🔴 CHF → Transudative pleural effusion\n🔴 TB → Exudative pleural effusion\n🔴 Percussion → Stony dull\n🔴 Breath sounds → Decreased/Absent\n🔴 X-ray finding → Blunting of costophrenic angle\n🔴 Diagnostic procedure → Thoracentesis\n🔴 Large effusion → Mediastinal shift away\n🔴 Most common symptom → Dyspnea",
+    "difficulty": "Medium",
+    "tags": [
+      "respiratory_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 139,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Respiratory System (Pleural Effusion)",
+    "question": "Clinical Case (Exam Favorite) A 65-year-old patient with CHF develops shortness of breath. On examination: •\tDecreased breath sounds •\tReduced chest expansion •\tStony dull percussion Most likely diagnosis?",
+    "options": [
+      "Asthma",
+      "Pleural effusion",
+      "COPD",
+      "Pulmonary embolism"
+    ],
+    "correct_answer": 1,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "respiratory_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 140,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Respiratory System (Pleural Effusion)",
+    "question": "X-ray finding:",
+    "options": [
+      "Air bronchogram",
+      "Blunting of costophrenic angle",
+      "Cavitation",
+      "Honeycombing"
+    ],
+    "correct_answer": 1,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "respiratory_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 141,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Respiratory System (Pleural Effusion)",
+    "question": "SGPGI Memory Trick \"CHF PUSHES FLUID\" •\tCHF •\tHydrostatic pressure ↑ •\tFluid leaks •\tPleural effusion •\tStony dullness •\tFowler's position •\tLow breath sounds •\tUltrasound confirms •\tIntercostal drainage (if needed) •\tDyspnea   ()  Which of the following diagnostic tests is most appropriate for confirming Deep Vein Thrombosis (DVT)?",
+    "options": [
+      "Chest X-ray",
+      "ECG",
+      "Doppler Ultrasound",
+      "CBC"
+    ],
+    "correct_answer": 2,
+    "explanation": "Detailed Rationale\nDeep Vein Thrombosis (DVT) refers to the formation of a blood clot in a deep vein, most commonly in the lower extremities.\nWhy Doppler Ultrasound?\n•\tNon-invasive\n•\tHighly sensitive\n•\tVisualizes blood flow\n•\tDetects thrombus location\n•\tFirst-line investigation for suspected DVT\nIt is considered the investigation of choice in most patients.",
+    "difficulty": "Medium",
+    "tags": [
+      "respiratory_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "SGPGI Previous Year",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 142,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Cardiovascular System (DVT)",
+    "question": "The most common site for DVT is:",
+    "options": [
+      "Femoral vein",
+      "Radial vein",
+      "Jugular vein",
+      "Axillary vein"
+    ],
+    "correct_answer": 0,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "cardiovascular_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 143,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Cardiovascular System (DVT)",
+    "question": "The classic triad predisposing to DVT is called:",
+    "options": [
+      "Beck's triad",
+      "Virchow's triad",
+      "Charcot's triad",
+      "Cushing's triad"
+    ],
+    "correct_answer": 1,
+    "explanation": "Virchow's Triad (VERY IMPORTANT)\nCauses of DVT\n1.\tVenous stasis\n2.\tEndothelial injury\n3.\tHypercoagulability\nMemory Trick\n\"SHE\"\nS = Stasis\nH = Hypercoagulability\nE = Endothelial injury",
+    "difficulty": "Medium",
+    "tags": [
+      "cardiovascular_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 144,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Cardiovascular System (DVT)",
+    "question": "A postoperative patient develops unilateral calf pain, swelling, redness and warmth. The nurse should suspect:",
+    "options": [
+      "Cellulitis",
+      "DVT",
+      "Varicose vein",
+      "Lymphedema"
+    ],
+    "correct_answer": 1,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "cardiovascular_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 145,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Cardiovascular System (DVT)",
+    "question": "Most dangerous complication of DVT is:",
+    "options": [
+      "Cellulitis",
+      "Gangrene",
+      "Pulmonary embolism",
+      "Varicose veins"
+    ],
+    "correct_answer": 2,
+    "explanation": "Exam Pearl DVT Kills by PE",
+    "difficulty": "Medium",
+    "tags": [
+      "cardiovascular_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "SGPGI Previous Year",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 146,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Cardiovascular System (DVT)",
+    "question": "Which sign is classically associated with DVT?",
+    "options": [
+      "Murphy's sign",
+      "Homan's sign",
+      "Kernig's sign",
+      "Rovsing's sign"
+    ],
+    "correct_answer": 1,
+    "explanation": "Homan's Sign Pain in calf on dorsiflexion of foot ⚠️ Not routinely used now due to poor sensitivity.",
+    "difficulty": "Medium",
+    "tags": [
+      "cardiovascular_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "NORCET Previous Year",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 147,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Cardiovascular System (DVT)",
+    "question": "A patient with DVT suddenly develops dyspnea, tachycardia and chest pain. The nurse should suspect:",
+    "options": [
+      "MI",
+      "Pulmonary embolism",
+      "Pneumonia",
+      "Asthma"
+    ],
+    "correct_answer": 1,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "cardiovascular_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 148,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Cardiovascular System (DVT)",
+    "question": "Doppler ultrasound is the preferred investigation for DVT. Reason (R) It can directly assess venous blood flow and identify thrombi.",
+    "options": [
+      "Both A and R are true and R explains A",
+      "Both true but R does not explain A",
+      "A true, R false",
+      "Both false"
+    ],
+    "correct_answer": 0,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "cardiovascular_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 149,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Cardiovascular System (DVT)",
+    "question": "Q1 Which laboratory marker is elevated in DVT?",
+    "options": [
+      "Troponin",
+      "D-Dimer",
+      "CK-MB",
+      "BNP"
+    ],
+    "correct_answer": 1,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "cardiovascular_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "SGPGI Previous Year",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 150,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Cardiovascular System (DVT)",
+    "question": "Anticoagulant commonly started immediately in acute DVT:",
+    "options": [
+      "Digoxin",
+      "Heparin",
+      "Aspirin",
+      "Atenolol"
+    ],
+    "correct_answer": 1,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "cardiovascular_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 151,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Cardiovascular System (DVT)",
+    "question": "Oral anticoagulant used for long-term management:",
+    "options": [
+      "Warfarin",
+      "Atropine",
+      "Furosemide",
+      "Mannitol"
+    ],
+    "correct_answer": 0,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "cardiovascular_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 152,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Cardiovascular System (DVT)",
+    "question": "Normal therapeutic INR for DVT treatment:",
+    "options": [
+      "0.5–1",
+      "1–1.5",
+      "2–3",
+      "4–5"
+    ],
+    "correct_answer": 2,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "cardiovascular_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 153,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Cardiovascular System (DVT)",
+    "question": "Clinical Case (Exam Favorite) A 60-year-old woman is on bed rest following hip replacement surgery. On day 4 she develops: •\tCalf swelling •\tWarmth •\tTenderness •\tPositive D-Dimer Most likely diagnosis?",
+    "options": [
+      "Cellulitis",
+      "DVT",
+      "CHF",
+      "Varicose vein"
+    ],
+    "correct_answer": 1,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "cardiovascular_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 154,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Cardiovascular System (DVT)",
+    "question": "Therapeutic INR?",
+    "options": [
+      "1",
+      "1.5",
+      "2–3",
+      "5"
+    ],
+    "correct_answer": 2,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "cardiovascular_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 155,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Cardiovascular System (DVT)",
+    "question": "SGPGI Super Trick \"DVT = SWELL\" S = Swelling W = Warmth E = Embolus risk L = Leg pain L = Low flow (stasis)   ()  Which of the following is the most likely complication of untreated severe Chronic Kidney Disease (CKD)?",
+    "options": [
+      "Hypoglycemia",
+      "Osteoporosis",
+      "Hyperkalemia",
+      "Hyperthyroidism"
+    ],
+    "correct_answer": 2,
+    "explanation": "Detailed Rationale\nThe kidneys are responsible for excreting excess potassium.\nIn severe CKD:\n•\tGFR decreases\n•\tPotassium excretion decreases\n•\tPotassium accumulates in blood\n•\tHyperkalemia develops\nHyperkalemia is one of the most dangerous complications because it can cause:\n⚠️ Fatal cardiac arrhythmias\n⚠️ Cardiac arrest\n⚠️ Sudden death",
+    "difficulty": "Medium",
+    "tags": [
+      "cardiovascular_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "SGPGI Previous Year",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 156,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Cardiovascular System (DVT)",
+    "question": "Normal serum potassium level is:",
+    "options": [
+      "2–3 mEq/L",
+      "3.5–5.0 mEq/L",
+      "5.5–7 mEq/L",
+      "7–9 mEq/L"
+    ],
+    "correct_answer": 1,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "cardiovascular_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 157,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Cardiovascular System (DVT)",
+    "question": "Which ECG change is the earliest sign of hyperkalemia?",
+    "options": [
+      "U wave",
+      "ST elevation",
+      "Tall peaked T waves",
+      "Pathological Q wave"
+    ],
+    "correct_answer": 2,
+    "explanation": "Exam Pearl Hyperkalemia = Tall Tent-Shaped T Waves",
+    "difficulty": "Medium",
+    "tags": [
+      "cardiovascular_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 158,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Renal System (Chronic Kidney Disease)",
+    "question": "A CKD patient presents with: •\tMuscle weakness •\tPalpitations •\tTall peaked T waves on ECG Most likely electrolyte abnormality?",
+    "options": [
+      "Hyponatremia",
+      "Hypercalcemia",
+      "Hyperkalemia",
+      "Hypokalemia"
+    ],
+    "correct_answer": 2,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "renal_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 159,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Renal System (Chronic Kidney Disease)",
+    "question": "Which electrolyte abnormality is most immediately life-threatening in CKD?",
+    "options": [
+      "Hypernatremia",
+      "Hyperkalemia",
+      "Hypercalcemia",
+      "Hypermagnesemia"
+    ],
+    "correct_answer": 1,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "renal_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "SGPGI Previous Year",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 160,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Renal System (Chronic Kidney Disease)",
+    "question": "A serum potassium level above which value is considered severe hyperkalemia?",
+    "options": [
+      ">4",
+      ">5",
+      ">6.5",
+      ">7.5"
+    ],
+    "correct_answer": 2,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "renal_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "NORCET Previous Year",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 161,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Renal System (Chronic Kidney Disease)",
+    "question": "A CKD patient develops widened QRS complexes and absent P waves. Which electrolyte imbalance is suspected?",
+    "options": [
+      "Hypocalcemia",
+      "Hypernatremia",
+      "Hyperkalemia",
+      "Hypomagnesemia"
+    ],
+    "correct_answer": 2,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "renal_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 162,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Renal System (Chronic Kidney Disease)",
+    "question": "Hyperkalemia is a major cause of death in untreated CKD. Reason (R) Failing kidneys cannot adequately excrete potassium.",
+    "options": [
+      "Both A and R are true and R explains A",
+      "Both true but R does not explain A",
+      "A true, R false",
+      "Both false"
+    ],
+    "correct_answer": 0,
+    "explanation": "ECG Changes in Hyperkalemia (VERY IMPORTANT)\nPotassium Level\tECG Finding\nMild\tTall peaked T waves\nModerate\tProlonged PR interval\nSevere\tWide QRS\nVery Severe\tSine wave pattern\nTerminal\tCardiac arrest\nMemory Trick\n\"T → P → Q → Die\"\nTall T\nPR prolonged\nQRS widened\nDeath",
+    "difficulty": "Medium",
+    "tags": [
+      "renal_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 163,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Renal System (Chronic Kidney Disease)",
+    "question": "Q1 Emergency drug that stabilizes cardiac membrane in hyperkalemia:",
+    "options": [
+      "Sodium bicarbonate",
+      "Calcium gluconate",
+      "Insulin",
+      "Furosemide"
+    ],
+    "correct_answer": 1,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "renal_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "SGPGI Previous Year",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 164,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Renal System (Chronic Kidney Disease)",
+    "question": "Drug combination commonly used to shift potassium into cells:",
+    "options": [
+      "Insulin + Glucose",
+      "Digoxin + Furosemide",
+      "Mannitol + Insulin",
+      "Aspirin + Heparin"
+    ],
+    "correct_answer": 0,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "renal_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 165,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Renal System (Chronic Kidney Disease)",
+    "question": "Definitive treatment for severe CKD with refractory hyperkalemia:",
+    "options": [
+      "Blood transfusion",
+      "Hemodialysis",
+      "Oxygen therapy",
+      "Antibiotics"
+    ],
+    "correct_answer": 1,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "renal_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 166,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Renal System (Chronic Kidney Disease)",
+    "question": "Which food should be restricted in CKD with hyperkalemia?",
+    "options": [
+      "Rice",
+      "Apple",
+      "Banana",
+      "Chapati"
+    ],
+    "correct_answer": 2,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "renal_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 167,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Renal System (Chronic Kidney Disease)",
+    "question": "Clinical Case (Exam Favorite) A patient with ESRD arrives in emergency with: •\tK⁺ = 7.2 mEq/L •\tTall T waves •\tMuscle weakness What is the nurse's priority action?",
+    "options": [
+      "Give banana juice",
+      "Administer calcium gluconate as ordered",
+      "Encourage ambulation",
+      "Restrict fluids only"
+    ],
+    "correct_answer": 1,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "renal_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 168,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Renal System (Chronic Kidney Disease)",
+    "question": "Potassium-rich food?",
+    "options": [
+      "Apple",
+      "Banana",
+      "Rice",
+      "Cucumber"
+    ],
+    "correct_answer": 1,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "renal_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 169,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Renal System (Chronic Kidney Disease)",
+    "question": "Memory Trick \"KILLER K\" K = Kidney failure I = Irregular rhythm L = Large T waves L = Life-threatening E = ECG changes R = Renal dialysis K = Potassium ↑  Which electrolyte imbalance is most commonly associated with Addison's disease?",
+    "options": [
+      "Hypernatremia",
+      "Hypokalemia",
+      "Hyperkalemia",
+      "Hypercalcemia"
+    ],
+    "correct_answer": 2,
+    "explanation": "Detailed Rationale\nAddison's disease (Primary Adrenal Insufficiency) occurs due to decreased secretion of:\n•\tAldosterone\n•\tCortisol\nEffect of Aldosterone Deficiency\nNormally aldosterone:\n✅ Retains sodium\n✅ Excretes potassium\nIn Addison's disease:\n❌ Sodium loss occurs → Hyponatremia\n❌ Potassium retention occurs → Hyperkalemia\nTherefore:\nClassic Electrolyte Pattern\n🔴 Hyponatremia\n🔴 Hyperkalemia\n🔴 Hypotension\n🔴 Dehydration",
+    "difficulty": "Medium",
+    "tags": [
+      "renal_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 170,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Renal System (Chronic Kidney Disease)",
+    "question": "The hormone primarily responsible for potassium excretion is:",
+    "options": [
+      "Cortisol",
+      "Aldosterone",
+      "Insulin",
+      "ADH"
+    ],
+    "correct_answer": 1,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "renal_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 171,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Endocrine System (Addison's Disease)",
+    "question": "A patient with Addison's disease is most likely to have:",
+    "options": [
+      "Hypernatremia and hypokalemia",
+      "Hyponatremia and hyperkalemia",
+      "Hypernatremia and hyperkalemia",
+      "Normal electrolytes"
+    ],
+    "correct_answer": 1,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "endocrine_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 172,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Endocrine System (Addison's Disease)",
+    "question": "A patient presents with: •\tWeight loss •\tFatigue •\tHypotension •\tHyperpigmentation •\tHyperkalemia Most likely diagnosis?",
+    "options": [
+      "Cushing syndrome",
+      "Diabetes mellitus",
+      "Addison's disease",
+      "Hyperthyroidism"
+    ],
+    "correct_answer": 2,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "endocrine_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 173,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Endocrine System (Addison's Disease)",
+    "question": "Bronze pigmentation of skin is characteristic of:",
+    "options": [
+      "Cushing syndrome",
+      "SIADH",
+      "Addison's disease",
+      "Diabetes insipidus"
+    ],
+    "correct_answer": 2,
+    "explanation": "Exam Pearl Addison = Bronze Skin",
+    "difficulty": "Medium",
+    "tags": [
+      "endocrine_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "SGPGI Previous Year",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 174,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Endocrine System (Addison's Disease)",
+    "question": "The most common cause of Addison's disease worldwide is:",
+    "options": [
+      "Hypertension",
+      "Autoimmune adrenal destruction",
+      "Diabetes",
+      "Hyperthyroidism"
+    ],
+    "correct_answer": 1,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "endocrine_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "NORCET Previous Year",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 175,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Endocrine System (Addison's Disease)",
+    "question": "A patient with Addisonian crisis is most likely to present with:",
+    "options": [
+      "Hypertension",
+      "Hyperglycemia",
+      "Shock and severe hypotension",
+      "Bradycardia"
+    ],
+    "correct_answer": 2,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "endocrine_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 176,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Renal System (Chronic Kidney Disease)",
+    "question": "Hyperkalemia occurs in Addison's disease. Reason (R) Aldosterone deficiency decreases renal potassium excretion.",
+    "options": [
+      "Both A and R are true and R explains A",
+      "Both true but R does not explain A",
+      "A true, R false",
+      "Both false"
+    ],
+    "correct_answer": 0,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "renal_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 177,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Endocrine System (Addison's Disease)",
+    "question": "Q1 Drug of choice for Addison's disease replacement therapy:",
+    "options": [
+      "Insulin",
+      "Hydrocortisone",
+      "Propranolol",
+      "Furosemide"
+    ],
+    "correct_answer": 1,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "endocrine_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "SGPGI Previous Year",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 178,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Endocrine System (Addison's Disease)",
+    "question": "Addisonian crisis is treated initially with:",
+    "options": [
+      "Insulin",
+      "IV Hydrocortisone",
+      "Digoxin",
+      "Atropine"
+    ],
+    "correct_answer": 1,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "endocrine_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 179,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Endocrine System (Addison's Disease)",
+    "question": "Which ECG finding may occur due to hyperkalemia in Addison's disease?",
+    "options": [
+      "U waves",
+      "Tall peaked T waves",
+      "ST elevation",
+      "Pathological Q waves"
+    ],
+    "correct_answer": 1,
+    "explanation": "High-Yield One-Liners\n🔴 Addison's = Adrenal insufficiency\n🔴 Hyperpigmentation = Increased ACTH\n🔴 Sodium ↓\n🔴 Potassium ↑\n🔴 Blood pressure ↓\n🔴 Cortisol ↓\n🔴 Aldosterone ↓\n🔴 Crisis treatment = IV Hydrocortisone\n🔴 Autoimmune destruction = Most common cause\n🔴 Hyperkalemia may cause arrhythmias\n\nMemory Trick\n\"ADDISON = ADD POTASSIUM\"\nA = Aldosterone ↓\nD = Dehydration\nD = Dark skin\nI = Increased ACTH\nS = Sodium ↓\nO = Orthostatic hypotension\nN = Na⁺ low\nPotassium ↑",
+    "difficulty": "Medium",
+    "tags": [
+      "endocrine_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 180,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Endocrine System (Addison's Disease)",
+    "question": "Hormone deficient causing hyperkalemia?",
+    "options": [
+      "ADH",
+      "TSH",
+      "Aldosterone",
+      "GH"
+    ],
+    "correct_answer": 1,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "endocrine_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 181,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Endocrine System (Addison's Disease)",
+    "question": "NORCET Super Fact Addison's Disease = \"Bronze + Low Salt + High Potassium + Low BP\"  Myasthenia Gravis is caused by antibodies against:",
+    "options": [
+      "Dopamine receptors",
+      "Acetylcholine receptors",
+      "GABA receptors",
+      "Serotonin receptors"
+    ],
+    "correct_answer": 1,
+    "explanation": "Detailed Rationale\nMyasthenia Gravis (MG) is an autoimmune neuromuscular disorder characterized by weakness and fatigability of skeletal muscles.\nThe body produces antibodies against:\n➡️ Postsynaptic acetylcholine (ACh) receptors\nThis reduces neuromuscular transmission resulting in muscle weakness.\nKey Feature\n🔴 Weakness worsens with activity\n🔴 Improves with rest",
+    "difficulty": "Medium",
+    "tags": [
+      "endocrine_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "NORCET Previous Year",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 182,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Neurological System (Myasthenia Gravis)",
+    "question": "The first symptom in most patients with Myasthenia Gravis is:",
+    "options": [
+      "Dysuria",
+      "Ptosis",
+      "Hematuria",
+      "Seizure"
+    ],
+    "correct_answer": 1,
+    "explanation": "Exam Pearl MG = Ptosis + Diplopia",
+    "difficulty": "Medium",
+    "tags": [
+      "neurological_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 183,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Neurological System (Myasthenia Gravis)",
+    "question": "Which muscle group is commonly affected first?",
+    "options": [
+      "Cardiac muscle",
+      "Ocular muscle",
+      "Smooth muscle",
+      "Respiratory muscle"
+    ],
+    "correct_answer": 1,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "neurological_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 184,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Neurological System (Myasthenia Gravis)",
+    "question": "A 28-year-old woman develops: •\tDrooping eyelids in evening •\tDouble vision •\tSymptoms improve after sleep Most likely diagnosis?",
+    "options": [
+      "Bell's palsy",
+      "Stroke",
+      "Myasthenia Gravis",
+      "Multiple sclerosis"
+    ],
+    "correct_answer": 2,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "neurological_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 185,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Neurological System (Myasthenia Gravis)",
+    "question": "Drug of choice for symptomatic treatment of Myasthenia Gravis:",
+    "options": [
+      "Atropine",
+      "Pyridostigmine",
+      "Propranolol",
+      "Phenytoin"
+    ],
+    "correct_answer": 1,
+    "explanation": "Remember Pyridostigmine = Anticholinesterase ↑ Acetylcholine at NMJ",
+    "difficulty": "Medium",
+    "tags": [
+      "neurological_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "SGPGI Previous Year",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 186,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Neurological System (Myasthenia Gravis)",
+    "question": "Diagnostic test classically used for Myasthenia Gravis:",
+    "options": [
+      "Mantoux test",
+      "Tensilon (Edrophonium) test",
+      "Allen test",
+      "Schilling test"
+    ],
+    "correct_answer": 1,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "neurological_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "NORCET Previous Year",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 187,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Neurological System (Myasthenia Gravis)",
+    "question": "A patient with Myasthenia Gravis develops severe respiratory distress. This condition is called:",
+    "options": [
+      "Addisonian crisis",
+      "Myasthenic crisis",
+      "Thyroid storm",
+      "Neuroleptic syndrome"
+    ],
+    "correct_answer": 1,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "neurological_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 188,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Neurological System (Myasthenia Gravis)",
+    "question": "Myasthenia Gravis causes muscle weakness that worsens with activity. Reason (R) Autoantibodies destroy acetylcholine receptors at the neuromuscular junction.",
+    "options": [
+      "Both A and R are true and R explains A",
+      "Both true but R does not explain A",
+      "A true, R false",
+      "Both false"
+    ],
+    "correct_answer": 0,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "neurological_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 189,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Neurological System (Myasthenia Gravis)",
+    "question": "Q1 Which gland is commonly abnormal in Myasthenia Gravis?",
+    "options": [
+      "Thyroid",
+      "Pituitary",
+      "Thymus",
+      "Pineal"
+    ],
+    "correct_answer": 2,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "neurological_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "SGPGI Previous Year",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 190,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Neurological System (Myasthenia Gravis)",
+    "question": "Definitive surgical treatment in selected patients:",
+    "options": [
+      "Thyroidectomy",
+      "Thymectomy",
+      "Splenectomy",
+      "Lobectomy"
+    ],
+    "correct_answer": 1,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "neurological_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 191,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Neurological System (Myasthenia Gravis)",
+    "question": "Investigation showing decremental response in MG:",
+    "options": [
+      "EEG",
+      "EMG",
+      "MRI",
+      "CT Abdomen"
+    ],
+    "correct_answer": 1,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "neurological_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 192,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Neurological System (Myasthenia Gravis)",
+    "question": "Which medication may worsen Myasthenia Gravis?",
+    "options": [
+      "Pyridostigmine",
+      "Aminoglycosides",
+      "Neostigmine",
+      "Prednisolone"
+    ],
+    "correct_answer": 1,
+    "explanation": "High-Yield One-Liners\n🔴 Autoimmune disease\n🔴 Antibodies against ACh receptors\n🔴 Ptosis = Most common initial symptom\n🔴 Diplopia common\n🔴 Weakness worsens during day\n🔴 Improves with rest\n🔴 Drug of choice = Pyridostigmine\n🔴 Associated with thymoma\n🔴 Thymectomy improves symptoms\n🔴 Myasthenic crisis = Respiratory failure",
+    "difficulty": "Medium",
+    "tags": [
+      "neurological_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 193,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Neurological System (Myasthenia Gravis)",
+    "question": "Clinical Case (Exam Favorite) A nurse notices that a patient has: •\tBilateral ptosis •\tDifficulty chewing •\tNasal speech •\tSymptoms worsen by evening Most likely diagnosis?",
+    "options": [
+      "Stroke",
+      "Parkinson disease",
+      "Myasthenia Gravis",
+      "Meningitis"
+    ],
+    "correct_answer": 2,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "neurological_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 194,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Neurological System (Myasthenia Gravis)",
+    "question": "Life-threatening complication?",
+    "options": [
+      "Thyroid storm",
+      "Myasthenic crisis",
+      "SIADH",
+      "DKA"
+    ],
+    "correct_answer": 1,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "neurological_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 195,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Neurological System (Multiple Sclerosis)",
+    "question": "NORCET Memory Trick \"MYASTHENIA\" M = Muscle weakness Y = Worse through the day A = ACh receptor antibodies S = Speech difficulty T = Thymoma H = Heavy eyelids (Ptosis) E = Extraocular muscles affected N = Neostigmine/Pyridostigmine I = Improves with rest A = Autoimmune   ()  Multiple Sclerosis (MS) is characterized by:",
+    "options": [
+      "Degeneration of basal ganglia",
+      "Demyelination of CNS neurons",
+      "Destruction of peripheral nerves",
+      "Excess acetylcholine production"
+    ],
+    "correct_answer": 1,
+    "explanation": "Detailed Rationale\nMultiple Sclerosis (MS) is a chronic autoimmune disease affecting the:\n✅ Brain\n✅ Spinal cord\n✅ Optic nerves\nThe immune system attacks the myelin sheath of CNS neurons causing:\n•\tPlaque formation\n•\tDelayed nerve conduction\n•\tNeurological deficits\nImportant\nMS affects the Central Nervous System\nNot the peripheral nervous system.",
+    "difficulty": "Medium",
+    "tags": [
+      "neurological_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "NORCET Previous Year",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 196,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Neurological System (Multiple Sclerosis)",
+    "question": "Which cells produce myelin in the CNS?",
+    "options": [
+      "Schwann cells",
+      "Oligodendrocytes",
+      "Astrocytes",
+      "Microglia"
+    ],
+    "correct_answer": 1,
+    "explanation": "Exam Pearl CNS → Oligodendrocyte PNS → Schwann Cell",
+    "difficulty": "Medium",
+    "tags": [
+      "neurological_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 197,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Neurological System (Multiple Sclerosis)",
+    "question": "The most common age group affected by MS is:",
+    "options": [
+      "Children",
+      "Young adults (20–40 years)",
+      "Elderly (>70 years)",
+      "Neonates"
+    ],
+    "correct_answer": 1,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "neurological_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 198,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Neurological System (Multiple Sclerosis)",
+    "question": "A 26-year-old woman experiences: •\tBlurred vision •\tWeakness •\tNumbness •\tSymptoms improve and recur later Most likely diagnosis?",
+    "options": [
+      "Parkinson disease",
+      "Stroke",
+      "Multiple Sclerosis",
+      "Epilepsy"
+    ],
+    "correct_answer": 2,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "neurological_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 199,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Neurological System (Multiple Sclerosis)",
+    "question": "The most common visual disturbance in Multiple Sclerosis is:",
+    "options": [
+      "Cataract",
+      "Glaucoma",
+      "Optic neuritis",
+      "Retinal detachment"
+    ],
+    "correct_answer": 2,
+    "explanation": "High-Yield Optic neuritis often presents as: 🔴 Painful vision loss 🔴 Blurred vision 🔴 Decreased color perception",
+    "difficulty": "Medium",
+    "tags": [
+      "neurological_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "SGPGI Previous Year",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 200,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Neurological System (Multiple Sclerosis)",
+    "question": "Investigation of choice for diagnosing Multiple Sclerosis:",
+    "options": [
+      "CT Scan",
+      "MRI",
+      "EEG",
+      "X-ray"
+    ],
+    "correct_answer": 1,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "neurological_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "NORCET Previous Year",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 201,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Neurological System (Multiple Sclerosis)",
+    "question": "Which finding in CSF supports Multiple Sclerosis?",
+    "options": [
+      "Increased glucose",
+      "Oligoclonal bands",
+      "Increased bilirubin",
+      "Ketone bodies"
+    ],
+    "correct_answer": 1,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "neurological_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 202,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Neurological System (Multiple Sclerosis)",
+    "question": "Multiple Sclerosis is an autoimmune demyelinating disease. Reason (R) The immune system attacks CNS myelin.",
+    "options": [
+      "Both A and R are true and R explains A",
+      "Both true but R does not explain A",
+      "A true, R false",
+      "Both false"
+    ],
+    "correct_answer": 0,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "neurological_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 203,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Neurological System (Multiple Sclerosis)",
+    "question": "Q1 Which symptom is classically associated with MS?",
+    "options": [
+      "Resting tremor",
+      "Intention tremor",
+      "Mask face",
+      "Rigidity"
+    ],
+    "correct_answer": 1,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "neurological_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "SGPGI Previous Year",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 204,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Neurological System (Multiple Sclerosis)",
+    "question": "Lhermitte's sign in MS refers to:",
+    "options": [
+      "Facial paralysis",
+      "Electric shock sensation down spine on neck flexion",
+      "Loss of hearing",
+      "Diplopia"
+    ],
+    "correct_answer": 1,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "neurological_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 205,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Neurological System (Multiple Sclerosis)",
+    "question": "Disease-modifying drug commonly used in MS:",
+    "options": [
+      "Interferon-beta",
+      "Digoxin",
+      "Insulin",
+      "Atropine"
+    ],
+    "correct_answer": 0,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "neurological_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 206,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Neurological System (Multiple Sclerosis)",
+    "question": "Acute exacerbation of MS is treated with:",
+    "options": [
+      "Aspirin",
+      "IV Methylprednisolone",
+      "Warfarin",
+      "Mannitol"
+    ],
+    "correct_answer": 1,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "neurological_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 207,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Neurological System (Myasthenia Gravis)",
+    "question": "Clinical Case (Exam Favorite) A 30-year-old female reports: •\tEpisodes of blurred vision •\tTingling sensation •\tWeakness •\tSymptoms come and go MRI shows multiple plaques. Diagnosis?",
+    "options": [
+      "Parkinson disease",
+      "Multiple Sclerosis",
+      "ALS",
+      "Myasthenia Gravis"
+    ],
+    "correct_answer": 1,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "neurological_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 208,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Neurological System (Multiple Sclerosis)",
+    "question": "CSF finding?",
+    "options": [
+      "Ketones",
+      "Proteinuria",
+      "Oligoclonal bands",
+      "Bilirubin"
+    ],
+    "correct_answer": 1,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "neurological_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 209,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Neurological System (Parkinson's Disease)",
+    "question": "SGPGI Super Memory Trick \"MS = MANY SCARS\" M = Myelin destroyed A = Autoimmune N = Neurological deficits Y = Young adults S = Steroids for attack C = CNS disease A = Attacks and remissions R = Relapsing-remitting S = Scattered plaques  Parkinson's disease is primarily caused by degeneration of:",
+    "options": [
+      "Serotonergic neurons",
+      "Dopaminergic neurons in substantia nigra",
+      "Motor cortex neurons",
+      "Acetylcholine receptors"
+    ],
+    "correct_answer": 1,
+    "explanation": "Detailed Rationale\nParkinson's Disease (PD) is a progressive neurodegenerative disorder characterized by:\n➡️ Loss of dopamine-producing neurons in the Substantia Nigra Pars Compacta\n➡️ Reduced dopamine in the basal ganglia\n➡️ Impaired control of voluntary movement\nPathophysiology\nNormally:\nDopamine ↔ Acetylcholine balance\nIn Parkinson's:\n❌ Dopamine ↓\n⬆ Relative Acetylcholine activity\nLeading to motor symptoms.",
+    "difficulty": "Medium",
+    "tags": [
+      "neurological_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "SGPGI Previous Year",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 210,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Neurological System (Parkinson's Disease)",
+    "question": "The classic tremor in Parkinson's disease is:",
+    "options": [
+      "Intention tremor",
+      "Resting tremor",
+      "Action tremor",
+      "Essential tremor"
+    ],
+    "correct_answer": 1,
+    "explanation": "Exam Pearl Parkinson = Tremor at Rest Cerebellar disease = Intention Tremor",
+    "difficulty": "Medium",
+    "tags": [
+      "neurological_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 211,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Neurological System (Parkinson's Disease)",
+    "question": "The characteristic gait of Parkinson's disease is:",
+    "options": [
+      "Ataxic gait",
+      "Scissor gait",
+      "Festinating gait",
+      "Waddling gait"
+    ],
+    "correct_answer": 2,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "neurological_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 212,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Neurological System (Parkinson's Disease)",
+    "question": "A 68-year-old man presents with: •\tPill-rolling tremor •\tMask-like face •\tShuffling gait •\tBradykinesia Most likely diagnosis?",
+    "options": [
+      "Huntington disease",
+      "Parkinson disease",
+      "Stroke",
+      "ALS"
+    ],
+    "correct_answer": 1,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "neurological_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 213,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Neurological System (Parkinson's Disease)",
+    "question": "The neurotransmitter deficient in Parkinson's disease is:",
+    "options": [
+      "Serotonin",
+      "Acetylcholine",
+      "Dopamine",
+      "GABA"
+    ],
+    "correct_answer": 2,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "neurological_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "SGPGI Previous Year",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 214,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Neurological System (Myasthenia Gravis)",
+    "question": "\"Pill-rolling tremor\" is characteristic of:",
+    "options": [
+      "Multiple sclerosis",
+      "Parkinson disease",
+      "Epilepsy",
+      "Myasthenia gravis"
+    ],
+    "correct_answer": 1,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "neurological_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "NORCET Previous Year",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 215,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Neurological System (Parkinson's Disease)",
+    "question": "A Parkinson's patient develops sudden freezing while walking through a doorway. This is due to:",
+    "options": [
+      "Increased dopamine",
+      "Bradykinesia",
+      "Hyperreflexia",
+      "Seizure activity"
+    ],
+    "correct_answer": 1,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "neurological_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 216,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Neurological System (Parkinson's Disease)",
+    "question": "Parkinson disease results from dopamine deficiency. Reason (R) Degeneration of substantia nigra reduces dopamine production.",
+    "options": [
+      "Both A and R are true and R explains A",
+      "Both true but R does not explain A",
+      "A true, R false",
+      "Both false"
+    ],
+    "correct_answer": 0,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "neurological_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 217,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Neurological System (Parkinson's Disease)",
+    "question": "Q1 Drug considered the gold standard for Parkinson disease:",
+    "options": [
+      "Diazepam",
+      "Levodopa-Carbidopa",
+      "Digoxin",
+      "Atropine"
+    ],
+    "correct_answer": 1,
+    "explanation": "Why Carbidopa? Prevents peripheral conversion of levodopa Allows more levodopa to reach brain",
+    "difficulty": "Medium",
+    "tags": [
+      "neurological_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "SGPGI Previous Year",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 218,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Neurological System (Parkinson's Disease)",
+    "question": "Which symptom usually appears first?",
+    "options": [
+      "Dementia",
+      "Resting tremor",
+      "Blindness",
+      "Hemiplegia"
+    ],
+    "correct_answer": 1,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "neurological_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 219,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Neurological System (Parkinson's Disease)",
+    "question": "Which surgery may be performed in advanced Parkinson disease?",
+    "options": [
+      "CABG",
+      "Deep Brain Stimulation (DBS)",
+      "Craniotomy",
+      "Laminectomy"
+    ],
+    "correct_answer": 1,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "neurological_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 220,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Neurological System (Parkinson's Disease)",
+    "question": "Common facial expression seen in Parkinson disease:",
+    "options": [
+      "Moon face",
+      "Mask-like face",
+      "Bell's face",
+      "Plethoric face"
+    ],
+    "correct_answer": 1,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "neurological_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 221,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Neurological System (Parkinson's Disease)",
+    "question": "Clinical Case (Exam Favorite) A nurse observes: •\tSoft monotonous speech •\tStooped posture •\tShuffling gait •\tTremors disappear during sleep Diagnosis?",
+    "options": [
+      "Huntington disease",
+      "Parkinson disease",
+      "Meningitis",
+      "ALS"
+    ],
+    "correct_answer": 1,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "neurological_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 222,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Neurological System (Myasthenia Gravis)",
+    "question": "Super High-Yield NORCET Questions Q1 Cogwheel rigidity is seen in:",
+    "options": [
+      "Myasthenia gravis",
+      "Parkinson disease",
+      "Stroke",
+      "Meningitis"
+    ],
+    "correct_answer": 1,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "neurological_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "NORCET Previous Year",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 223,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Neurological System (Parkinson's Disease)",
+    "question": "Tremors in Parkinson disease disappear during:",
+    "options": [
+      "Exercise",
+      "Stress",
+      "Sleep",
+      "Walking"
+    ],
+    "correct_answer": 2,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "neurological_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 224,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Neurological System (Myasthenia Gravis)",
+    "question": "Most common neurotransmitter deficiency?",
+    "options": [
+      "GABA",
+      "Dopamine",
+      "Serotonin",
+      "Histamine"
+    ],
+    "correct_answer": 1,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "neurological_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 225,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Neurological System (Parkinson's Disease)",
+    "question": "Parkinson disease primarily affects which system?",
+    "options": [
+      "Basal ganglia",
+      "Cerebellum",
+      "Spinal cord",
+      "Peripheral nerves"
+    ],
+    "correct_answer": 0,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "neurological_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 226,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Neurological System (Myasthenia Gravis)",
+    "question": "Brain area affected?",
+    "options": [
+      "Cerebellum",
+      "Thalamus",
+      "Substantia nigra",
+      "Medulla"
+    ],
+    "correct_answer": 1,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "neurological_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 227,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Neurological System (Parkinson's Disease)",
+    "question": "SGPGI Super Memory Trick \"TRAP\" T = Tremor (Resting) R = Rigidity (Cogwheel) A = Akinesia/Bradykinesia P = Postural instability 🔥 If you see pill-rolling tremor + mask face + shuffling gait, mark Parkinson Disease immediately.   ()  A patient with acute ischemic stroke arrives within the therapeutic window. Which drug is used for thrombolytic therapy?",
+    "options": [
+      "Heparin",
+      "Aspirin",
+      "Alteplase (tPA)",
+      "Warfarin"
+    ],
+    "correct_answer": 2,
+    "explanation": "Detailed Rationale\nStroke (CVA) occurs when blood supply to the brain is interrupted.\nTypes of Stroke\n1. Ischemic Stroke (≈85%)\nCaused by:\n•\tThrombus\n•\tEmbolus\n2. Hemorrhagic Stroke (≈15%)\nCaused by:\n•\tIntracerebral bleed\n•\tSAH",
+    "difficulty": "Medium",
+    "tags": [
+      "neurological_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "SGPGI Previous Year",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 228,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Neurological System (Stroke)",
+    "question": "Before administering Alteplase, which investigation is mandatory?",
+    "options": [
+      "ECG",
+      "Chest X-ray",
+      "CT Scan Brain",
+      "CBC"
+    ],
+    "correct_answer": 2,
+    "explanation": "Why? Must rule out hemorrhagic stroke first. Giving tPA in hemorrhagic stroke can be fatal.",
+    "difficulty": "Medium",
+    "tags": [
+      "neurological_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 229,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Neurological System (Stroke)",
+    "question": "The most important risk factor for stroke is:",
+    "options": [
+      "Asthma",
+      "Hypertension",
+      "Cataract",
+      "Peptic ulcer"
+    ],
+    "correct_answer": 1,
+    "explanation": "🔥 Most common modifiable risk factor",
+    "difficulty": "Medium",
+    "tags": [
+      "neurological_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  },
+  {
+    "id": 230,
+    "subject": "Medical Surgical Nursing",
+    "topic": "Neurological System (Stroke)",
+    "question": "A 62-year-old male suddenly develops: •\tRight-sided weakness •\tSlurred speech •\tFacial drooping Symptoms started 2 hours ago. Most appropriate treatment?",
+    "options": [
+      "Warfarin",
+      "Alteplase",
+      "Digoxin",
+      "Insulin"
+    ],
+    "correct_answer": 1,
+    "explanation": "No detailed explanation provided.",
+    "difficulty": "Medium",
+    "tags": [
+      "neurological_system",
+      "msn_revision"
+    ],
+    "previous_year_indicator": "High Yield",
+    "created_at": "2026-06-19T04:18:29.000Z"
+  }
+]

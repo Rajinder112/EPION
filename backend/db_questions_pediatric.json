@@ -1,0 +1,201 @@
+[
+  {
+    "id": 3,
+    "subject": "Pediatric Nursing",
+    "topic": "Growth & Development",
+    "question": "At what age does a normal infant typically double their birth weight?",
+    "options": [
+      "3 months",
+      "6 months",
+      "9 months",
+      "12 months"
+    ],
+    "correct_answer": 1,
+    "explanation": "A normal infant typically doubles their birth weight by 5 to 6 months of age and triples it by 1 year (12 months) of age.",
+    "difficulty": "Easy",
+    "tags": [
+      "infant growth",
+      "pediatrics",
+      "development"
+    ],
+    "previous_year_indicator": "DSSSB 2021",
+    "created_at": "2026-06-16T17:04:58.056Z"
+  },
+  {
+    "id": 4,
+    "subject": "Pediatric Nursing",
+    "topic": "Congenital Heart Defects",
+    "question": "Which of the following is NOT a component of the Tetralogy of Fallot?",
+    "options": [
+      "Ventricular septal defect",
+      "Right ventricular hypertrophy",
+      "Pulmonary stenosis",
+      "Atrial septal defect"
+    ],
+    "correct_answer": 3,
+    "explanation": "Tetralogy of Fallot consists of four components: 1) Pulmonary artery stenosis, 2) Ventricular septal defect (VSD), 3) Overriding aorta, and 4) Right ventricular hypertrophy. Atrial septal defect (ASD) is not part of this tetralogy.",
+    "difficulty": "Hard",
+    "tags": [
+      "tetralogy of fallot",
+      "congenital defects",
+      "pediatric cardiac"
+    ],
+    "previous_year_indicator": "SGPGI 2023",
+    "created_at": "2026-06-16T17:04:58.056Z"
+  },
+  {
+    "id": 23,
+    "subject": "Pediatric Nursing",
+    "topic": "Neurology (Lumbar Puncture)",
+    "question": "While preparing a 3-year-old child for a lumbar puncture, which anatomical site should the nurse expect the healthcare provider to use to safely avoid spinal cord injury?",
+    "options": [
+      "Between L1 and L2",
+      "Between L2 and L3",
+      "Between L4 and L5",
+      "Between T12 and L1"
+    ],
+    "correct_answer": 2,
+    "explanation": "In children, the spinal cord terminates lower down the vertebral column (around L2–L3) than in adults (around L1). Inserting the needle between L4–L5 or L5–S1 prevents direct spinal cord trauma.",
+    "difficulty": "Medium",
+    "tags": [
+      "lumbar puncture",
+      "pediatrics",
+      "anatomy"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.324Z"
+  },
+  {
+    "id": 39,
+    "subject": "Pediatric Nursing",
+    "topic": "Growth & Development (Milestones)",
+    "question": "A nurse is evaluating a 9-month-old infant in the pediatric outpatient clinic. Which fine motor developmental milestone should the nurse expect the child to have successfully achieved?",
+    "options": [
+      "Building a tower of six blocks",
+      "Using a neat pincer grasp to pick up small objects",
+      "Transferring objects from one hand to another",
+      "Drinking completely from a cup without spilling"
+    ],
+    "correct_answer": 1,
+    "explanation": "A crude pincer grasp develops around 8–9 months, refining into a neat pincer grasp by 10–11 months. Transferring objects happens around 7 months, while building block towers occurs well into toddlerhood (15–18 months).",
+    "difficulty": "Medium",
+    "tags": [
+      "milestones",
+      "pincer grasp",
+      "pediatrics"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.397Z"
+  },
+  {
+    "id": 56,
+    "subject": "Pediatric Nursing",
+    "topic": "Gastrointestinal (Pyloric Stenosis)",
+    "question": "An infant is diagnosed with congenital pyloric stenosis. Which hallmark clinical sign should the nurse expect to find during the intake assessment?",
+    "options": [
+      "Malodorous ribbon-like stools",
+      "Projectile, non-bilious vomiting immediately after feeding",
+      "Severe abdominal distension with greenish emesis",
+      "Chronic loose watery diarrhea mixed with mucus"
+    ],
+    "correct_answer": 1,
+    "explanation": "Hypertrophy of the pyloric sphincter mechanical blocks gastric emptying, leading to forceful, projectile, non-bilious vomiting after feeding. Ribbon-like stools point to Hirschsprung's disease.",
+    "difficulty": "Easy",
+    "tags": [
+      "pyloric stenosis",
+      "projectile vomiting",
+      "pediatrics"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.494Z"
+  },
+  {
+    "id": 64,
+    "subject": "Pediatric Nursing",
+    "topic": "Growth & Development (Theories)",
+    "question": "According to Erikson’s stages of psychosocial development, what is the primary developmental task for an adolescent patient aged 12 to 18 years?",
+    "options": [
+      "Autonomy vs. Shame and Doubt",
+      "Industry vs. Inferiority",
+      "Identity vs. Role Confusion",
+      "Intimacy vs. Isolation"
+    ],
+    "correct_answer": 2,
+    "explanation": "Adolescents focus on developing a sense of self and personal identity. Failure to navigate this stage results in role confusion. Industry vs. Inferiority applies to school-aged children (6–12 years).",
+    "difficulty": "Easy",
+    "tags": [
+      "Erikson",
+      "adolescence",
+      "milestones"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.547Z"
+  },
+  {
+    "id": 75,
+    "subject": "Pediatric Nursing",
+    "topic": "Neonatology (APGAR Score)",
+    "question": "A neonate born at 39 weeks gestation is undergoing APGAR scoring. At 1 minute post-birth, the infant has a heart rate of 110 bpm, a weak cry with hypoventilation, some flexion of the extremities, grimacing upon suctioning, and a pink body with blue extremities. What is the calculated APGAR score?",
+    "options": [
+      "5",
+      "6",
+      "7",
+      "8"
+    ],
+    "correct_answer": 1,
+    "explanation": "Heart rate > 100 = 2; Respiratory effort (weak/irregular) = 1; Muscle tone (some flexion) = 1; Reflex irritability (grimace) = 1; Color (acrocyanosis) = 1. Total score = 2 + 1 + 1 + 1 + 1 = 6.",
+    "difficulty": "Easy",
+    "tags": [
+      "APGAR",
+      "newborn",
+      "neonates"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.648Z"
+  },
+  {
+    "id": 93,
+    "subject": "Pediatric Nursing",
+    "topic": "Gastrointestinal (Intussusception)",
+    "question": "An infant is admitted with suspected intussusception. Which classic stool characteristics should the nurse expect to find during assessment?",
+    "options": [
+      "Hard, dry marble-like stools",
+      "Stools resembling currant jelly, mixed with blood and mucus",
+      "Large, pale, frothy greasy stools",
+      "Thin, clay-colored pale stools"
+    ],
+    "correct_answer": 1,
+    "explanation": "Intussusception involves the telescoping of one bowel segment into another, obstructing venous return. This leads to mucosal swelling and hemorrhage, which mixes with mucus to produce characteristic currant jelly stools.",
+    "difficulty": "Easy",
+    "tags": [
+      "intussusception",
+      "currant jelly",
+      "pediatrics"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.816Z"
+  },
+  {
+    "id": 97,
+    "subject": "Pediatric Nursing",
+    "topic": "Respiratory (Epiglottitis)",
+    "question": "A child is admitted to the pediatric unit with a diagnosis of acute epiglottitis. Which assessment action is strictly contraindicated for the nurse to perform?",
+    "options": [
+      "Assessing the child's oxygen saturation via a pulse oximeter",
+      "Inspecting the throat using a tongue depressor",
+      "Monitoring the respiratory rate and looking for chest wall retractions",
+      "Placing the child in an upright, sitting position"
+    ],
+    "correct_answer": 1,
+    "explanation": "Inserting a tongue depressor into the throat of a child with epiglottitis can irritate the inflamed tissues and trigger a sudden, fatal laryngospasm. Throat inspection should only be performed in a controlled operating theater equipped for emergency intubation or tracheostomy.",
+    "difficulty": "Hard",
+    "tags": [
+      "epiglottitis",
+      "safety warning",
+      "contraindicated",
+      "pediatrics"
+    ],
+    "previous_year_indicator": "SGPGI 2026 Blueprint",
+    "created_at": "2026-06-16T17:08:22.855Z"
+  }
+]
