@@ -1065,7 +1065,7 @@ async function seedPostgresAdmin() {
       const password_hash = await bcrypt.hash('#@!Raji#@!1', salt);
       await pool.query(
         'INSERT INTO users (name, email, password_hash, google_id, role, xp_points, streak, is_paid) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)',
-        ['Rajinder Singh (Admin)', adminEmail, password_hash, null, 'admin', 500, 5, true]
+        ['Rajinder Singh (Admin)', adminEmail, password_hash, null, 'admin', 500, 1, true]
       );
       console.log('PostgreSQL admin user seeded successfully.');
     }
@@ -1092,7 +1092,7 @@ async function seedLocalDbAdmin(dbData) {
         google_id: null,
         role: 'admin',
         xp_points: 500,
-        streak: 5,
+        streak: 1,
         is_paid: true,
         last_active_date: new Date().toISOString().split('T')[0],
         created_at: new Date().toISOString()
