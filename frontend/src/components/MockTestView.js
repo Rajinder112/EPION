@@ -5,7 +5,7 @@ import { api } from '../utils/api';
 import { 
   Trophy, Clock, FileText, ChevronLeft, ChevronRight, 
   Flag, AlertCircle, ArrowLeft, RotateCcw, Check, X, 
-  TrendingUp, Download, Eye, Sparkles, LogOut, Lock
+  TrendingUp, Download, Eye, Sparkles, LogOut, Lock, Upload
 } from 'lucide-react';
 
 export default function MockTestView({ onNavigateHome, user }) {
@@ -36,6 +36,9 @@ export default function MockTestView({ onNavigateHome, user }) {
   const [editIsLocked, setEditIsLocked] = useState(false);
   const [editAllowedBatches, setEditAllowedBatches] = useState([]);
   const [batches, setBatches] = useState([]);
+  const [csvUploading, setCsvUploading] = useState(false);
+  const [csvError, setCsvError] = useState(null);
+  const [csvSuccess, setCsvSuccess] = useState(null);
 
   const timerRef = useRef(null);
 
@@ -86,6 +89,9 @@ export default function MockTestView({ onNavigateHome, user }) {
       }
     }
     setEditAllowedBatches(Array.isArray(allowed) ? allowed.map(Number) : []);
+    setCsvUploading(false);
+    setCsvError(null);
+    setCsvSuccess(null);
     setIsEditModalOpen(true);
   };
 
@@ -107,6 +113,31 @@ export default function MockTestView({ onNavigateHome, user }) {
       alert(err.message || 'Failed to update mock test');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleCsvUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setCsvUploading(true);
+    setCsvError(null);
+    setCsvSuccess(null);
+
+    try {
+      const response = await api.importMockTestQuestionsCsv(editingTest.id, file);
+      setCsvSuccess(response.message || 'Questions uploaded and replaced successfully!');
+      fetchMockTests();
+    } catch (err) {
+      if (err.errors && Array.isArray(err.errors)) {
+        setCsvError(err.errors);
+      } else {
+        setCsvError(err.message || 'Failed to upload CSV file.');
+      }
+    } finally {
+      setCsvUploading(false);
+      // Clear file input value so it can be re-uploaded if same file is edited
+      e.target.value = '';
     }
   };
 
@@ -760,6 +791,86 @@ export default function MockTestView({ onNavigateHome, user }) {
                 Save Exam Configuration
               </button>
             </form>
+
+            <hr className="border-border/60 my-4" />
+
+            {/* CSV Questions Management */}
+            <div className="space-y-3">
+              <span className="text-xs font-bold text-muted-text uppercase tracking-wider block">Bulk Manage Questions (CSV)</span>
+              
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  type="button"
+                  onClick={async () => {
+                    try {
+                      await api.downloadMockTestTemplateCsv();
+                    } catch (err) {
+                      alert('Error downloading template: ' + err.message);
+                    }
+                  }}
+                  className="py-2 px-3 border border-border bg-card hover:bg-muted-bg/50 rounded-xl text-[10px] font-bold text-foreground transition-colors flex items-center justify-center gap-1.5"
+                >
+                  <FileText className="w-3.5 h-3.5 text-primary" />
+                  <span>Download Template</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={async () => {
+                    try {
+                      await api.downloadMockTestQuestionsCsv(editingTest.id, editingTest.title);
+                    } catch (err) {
+                      alert('Error exporting questions: ' + err.message);
+                    }
+                  }}
+                  className="py-2 px-3 border border-border bg-card hover:bg-muted-bg/50 rounded-xl text-[10px] font-bold text-foreground transition-colors flex items-center justify-center gap-1.5"
+                >
+                  <Download className="w-3.5 h-3.5 text-primary" />
+                  <span>Export Questions</span>
+                </button>
+              </div>
+
+              {/* Upload CSV Input */}
+              <div className="relative">
+                <label className="border border-dashed border-border hover:border-primary/60 bg-muted-bg/10 hover:bg-muted-bg/30 p-3 rounded-xl flex flex-col items-center justify-center gap-1.5 cursor-pointer transition-all">
+                  <input
+                    type="file"
+                    accept=".csv"
+                    className="hidden"
+                    onChange={handleCsvUpload}
+                    disabled={csvUploading}
+                  />
+                  <div className="flex items-center gap-2">
+                    <Upload className="w-4 h-4 text-muted-text" />
+                    <span className="text-xs font-bold text-foreground">
+                      {csvUploading ? 'Uploading & Replacing...' : 'Upload & Replace Questions (.csv)'}
+                    </span>
+                  </div>
+                  <span className="text-[10px] text-muted-text text-center leading-snug">
+                    Warning: This will overwrite and replace all current questions in this mock test.
+                  </span>
+                </label>
+              </div>
+
+              {csvError && (
+                <div className="p-3 bg-red-500/10 border border-red-500/20 text-red-600 rounded-xl flex gap-2 items-start text-[10px] leading-relaxed">
+                  <AlertCircle className="w-3.5 h-3.5 shrink-0 mt-0.5" />
+                  <div className="space-y-1 w-full">
+                    <span className="font-bold block">CSV Import Failed:</span>
+                    <ul className="list-disc pl-3.5 space-y-0.5 max-h-24 overflow-y-auto w-full">
+                      {Array.isArray(csvError) ? csvError.map((err, idx) => <li key={idx}>{err}</li>) : <li>{csvError}</li>}
+                    </ul>
+                  </div>
+                </div>
+              )}
+
+              {csvSuccess && (
+                <div className="p-3 bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 rounded-xl flex gap-2 items-center text-[10px] font-bold">
+                  <Check className="w-4 h-4 shrink-0" />
+                  <span>{csvSuccess}</span>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}

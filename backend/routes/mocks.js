@@ -3,6 +3,11 @@ const router = express.Router();
 const db = require('../db');
 const auth = require('../middleware/auth');
 const trial = require('../middleware/trial');
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
+const csv = require('csv-parser');
+const fs = require('fs');
+
 
 // Helper to check if admin
 const isAdmin = (req, res, next) => {
@@ -24,6 +29,211 @@ router.get('/', [auth, trial], async (req, res) => {
     console.error('Fetch mock tests error:', err.message);
     res.status(500).send('Server error');
   }
+});
+
+// Helper to escape CSV values
+function escapeCSV(val) {
+  if (val === null || val === undefined) return '';
+  let str = String(val);
+  if (str.includes(',') || str.includes('"') || str.includes('\n') || str.includes('\r')) {
+    str = '"' + str.replace(/"/g, '""') + '"';
+  }
+  return str;
+}
+
+// @route   GET api/mocks/questions/template
+// @desc    Download CSV template for mock test questions (Admin only)
+// @access  Private (Admin only)
+router.get('/questions/template', [auth, trial, isAdmin], (req, res) => {
+  const csvHeaders = 'subject,topic,question,optionA,optionB,optionC,optionD,correctAnswerIndex,explanation,difficulty,tags,previousYearIndicator\n';
+  const csvSample = 'Medical Surgical Nursing,Cardiovascular System,A patient is admitted with a diagnosis of left-sided heart failure. Which clinical manifestation should the nurse expect to find during assessment?,Jugular vein distention,Dyspnea and crackles,Splenomegaly,Peripheral edema,1,Left-sided heart failure leads to pulmonary congestion.,Medium,cardiology;heart failure,SGPGI 2022\n';
+  
+  res.setHeader('Content-Type', 'text/csv');
+  res.setHeader('Content-Disposition', 'attachment; filename="mock_test_questions_template.csv"');
+  res.status(200).send(csvHeaders + csvSample);
+});
+
+// @route   GET api/mocks/:id/questions/export
+// @desc    Export mock test questions as CSV (Admin only)
+// @access  Private (Admin only)
+router.get('/:id/questions/export', [auth, trial, isAdmin], async (req, res) => {
+  const mockId = parseInt(req.params.id);
+  try {
+    const testResult = await db.query('SELECT title FROM mock_tests WHERE id = $1', [mockId]);
+    if (testResult.rows.length === 0) {
+      return res.status(404).json({ message: 'Mock test not found' });
+    }
+    const test = testResult.rows[0];
+
+    const questionsResult = await db.query(
+      `SELECT q.subject, q.topic, q.question, q.options, q.correct_answer, q.explanation, q.difficulty, q.tags, q.previous_year_indicator 
+       FROM questions q 
+       JOIN mock_test_questions mq ON q.id = mq.question_id 
+       WHERE mq.mock_test_id = $1 
+       ORDER BY mq.order_index ASC`,
+      [mockId]
+    );
+
+    let csvContent = 'subject,topic,question,optionA,optionB,optionC,optionD,correctAnswerIndex,explanation,difficulty,tags,previousYearIndicator\n';
+
+    for (const q of questionsResult.rows) {
+      let opts = [];
+      if (Array.isArray(q.options)) {
+        opts = q.options;
+      } else if (typeof q.options === 'string') {
+        try {
+          opts = JSON.parse(q.options);
+        } catch (e) {
+          opts = [];
+        }
+      }
+
+      const optA = opts[0] || '';
+      const optB = opts[1] || '';
+      const optC = opts[2] || '';
+      const optD = opts[3] || '';
+      
+      const tagsStr = Array.isArray(q.tags) ? q.tags.join(';') : '';
+
+      csvContent += `${escapeCSV(q.subject)},${escapeCSV(q.topic)},${escapeCSV(q.question)},${escapeCSV(optA)},${escapeCSV(optB)},${escapeCSV(optC)},${escapeCSV(optD)},${q.correct_answer},${escapeCSV(q.explanation)},${escapeCSV(q.difficulty)},${escapeCSV(tagsStr)},${escapeCSV(q.previous_year_indicator)}\n`;
+    }
+
+    const safeTitle = test.title.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader('Content-Disposition', `attachment; filename="mock_test_${mockId}_${safeTitle}_questions.csv"`);
+    res.status(200).send(csvContent);
+  } catch (err) {
+    console.error('Export mock test CSV error:', err.message);
+    res.status(500).send('Server error');
+  }
+});
+
+// @route   POST api/mocks/:id/questions/import
+// @desc    Import/Replace mock test questions via CSV (Admin only)
+// @access  Private (Admin only)
+router.post('/:id/questions/import', [auth, trial, isAdmin, upload.single('file')], async (req, res) => {
+  const mockId = parseInt(req.params.id);
+
+  if (!req.file) {
+    return res.status(400).json({ message: 'No CSV file uploaded' });
+  }
+
+  const results = [];
+  const errors = [];
+  let rowNum = 1;
+
+  fs.createReadStream(req.file.path)
+    .pipe(csv())
+    .on('data', (data) => {
+      rowNum++;
+      const {
+        subject,
+        topic,
+        question,
+        optionA,
+        optionB,
+        optionC,
+        optionD,
+        correctAnswerIndex,
+        explanation,
+        difficulty,
+        tags,
+        previousYearIndicator
+      } = data;
+
+      if (!subject || !topic || !question || !optionA || !optionB || !optionC || !optionD || correctAnswerIndex === undefined || !explanation || !difficulty) {
+        errors.push(`Row ${rowNum}: Missing required columns.`);
+        return;
+      }
+
+      const options = [optionA, optionB, optionC, optionD];
+      const correctIdx = parseInt(correctAnswerIndex);
+      if (isNaN(correctIdx) || correctIdx < 0 || correctIdx > 3) {
+        errors.push(`Row ${rowNum}: Correct Answer Index must be a number between 0 and 3.`);
+        return;
+      }
+
+      const parsedTags = tags ? tags.split(';').map(t => t.trim()).filter(Boolean) : [];
+
+      results.push({
+        subject,
+        topic,
+        question,
+        options,
+        correct_answer: correctIdx,
+        explanation,
+        difficulty,
+        tags: parsedTags,
+        previous_year_indicator: previousYearIndicator || null
+      });
+    })
+    .on('end', async () => {
+      // Remove temporary file
+      try {
+        fs.unlinkSync(req.file.path);
+      } catch (unlinkErr) {
+        console.error('Multer file deletion error:', unlinkErr);
+      }
+
+      if (errors.length > 0) {
+        return res.status(400).json({ message: 'CSV Validation failed', errors });
+      }
+
+      if (results.length === 0) {
+        return res.status(400).json({ message: 'No valid questions parsed from CSV.' });
+      }
+
+      // Run as transaction using pg or sequential wrapper calls
+      try {
+        const isPg = !db.isUsingLocalDb();
+        
+        if (isPg) {
+          await db.query('BEGIN');
+        }
+
+        const insertedIds = [];
+
+        for (const q of results) {
+          const insertResult = await db.query(
+            'INSERT INTO questions (subject, topic, question, options, correct_answer, explanation, difficulty, tags, previous_year_indicator) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id',
+            [q.subject, q.topic, q.question, JSON.stringify(q.options), q.correct_answer, q.explanation, q.difficulty, q.tags, q.previous_year_indicator]
+          );
+          insertedIds.push(insertResult.rows[0].id);
+        }
+
+        // Delete old mappings
+        await db.query('DELETE FROM mock_test_questions WHERE mock_test_id = $1', [mockId]);
+
+        // Insert new mappings
+        for (let i = 0; i < insertedIds.length; i++) {
+          await db.query(
+            'INSERT INTO mock_test_questions (mock_test_id, question_id, order_index) VALUES ($1, $2, $3)',
+            [mockId, insertedIds[i], i]
+          );
+        }
+
+        // Update total questions in mock_tests
+        await db.query(
+          'UPDATE mock_tests SET total_questions = $1 WHERE id = $2',
+          [insertedIds.length, mockId]
+        );
+
+        if (isPg) {
+          await db.query('COMMIT');
+        }
+
+        res.json({
+          message: `Successfully imported and mapped ${insertedIds.length} questions.`,
+          totalParsed: results.length
+        });
+      } catch (err) {
+        console.error('Import database transaction error:', err.message);
+        if (!db.isUsingLocalDb()) {
+          try { await db.query('ROLLBACK'); } catch (rbErr) {}
+        }
+        res.status(500).json({ message: 'Database transaction failed during CSV import.', error: err.message });
+      }
+    });
 });
 
 // @route   GET api/mocks/:id

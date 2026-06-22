@@ -193,6 +193,78 @@ export const api = {
   deleteMockTest: (id) => 
     request(`/mocks/${id}`, { method: 'DELETE' }),
 
+  downloadMockTestTemplateCsv: async () => {
+    const token = localStorage.getItem('token');
+    const headers = {};
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+    const response = await fetch(`${BASE_URL}/mocks/questions/template`, {
+      headers
+    });
+    if (!response.ok) {
+      throw new Error('Failed to download template');
+    }
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `mock_test_questions_template.csv`;
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+  },
+
+  downloadMockTestQuestionsCsv: async (id, title) => {
+    const token = localStorage.getItem('token');
+    const headers = {};
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+    const response = await fetch(`${BASE_URL}/mocks/${id}/questions/export`, {
+      headers
+    });
+    if (!response.ok) {
+      throw new Error('Failed to export questions');
+    }
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `mock_test_${id}_${title.replace(/\s+/g, '_')}_questions.csv`;
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+  },
+
+  importMockTestQuestionsCsv: async (id, file) => {
+    const token = localStorage.getItem('token');
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const headers = {};
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    const response = await fetch(`${BASE_URL}/mocks/${id}/questions/import`, {
+      method: 'POST',
+      headers,
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      const error = new Error(errorData.message || 'Mock Test CSV Import failed');
+      error.errors = errorData.errors || null;
+      throw error;
+    }
+
+    return response.json();
+  },
+
   // Analytics
   getAnalyticsSummary: () => 
     request('/analytics/summary'),
