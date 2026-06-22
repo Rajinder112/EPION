@@ -216,7 +216,7 @@ INSERT INTO questions (subject, topic, question, options, correct_answer, explan
 
 -- Seed a Mock Test
 INSERT INTO mock_tests (title, duration_minutes, total_questions, negative_marking) VALUES
-('SGPGI Nursing Officer Full Mock Test - 01', 120, 100, 0.25);
+('SGPGI Nursing Officer Full Mock Test - 01', 120, 18, 0.25);
 
 -- Link mock test questions
 INSERT INTO mock_test_questions (mock_test_id, question_id, order_index)

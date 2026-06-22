@@ -39,7 +39,7 @@ const defaultLocalDb = {
       id: 1,
       title: "SGPGI Nursing Officer Full Mock Test - 01",
       duration_minutes: 120,
-      total_questions: 100,
+      total_questions: 18,
       negative_marking: 0.25,
       created_at: new Date().toISOString()
     }
