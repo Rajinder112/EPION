@@ -313,6 +313,7 @@ if (process.env.DATABASE_URL) {
     ALTER TABLE users ADD COLUMN IF NOT EXISTS is_email_verified BOOLEAN DEFAULT FALSE;
     ALTER TABLE users ADD COLUMN IF NOT EXISTS email_verification_token VARCHAR(255);
     ALTER TABLE users ADD COLUMN IF NOT EXISTS batch_id INT;
+    ALTER TABLE users ADD COLUMN IF NOT EXISTS profile_pic TEXT;
     
     ALTER TABLE mock_tests ADD COLUMN IF NOT EXISTS is_locked BOOLEAN DEFAULT FALSE;
     ALTER TABLE mock_tests ADD COLUMN IF NOT EXISTS allowed_batches TEXT;

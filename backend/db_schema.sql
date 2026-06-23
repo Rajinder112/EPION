@@ -14,6 +14,15 @@ CREATE TABLE IF NOT EXISTS users (
     xp_points INT DEFAULT 0,
     streak INT DEFAULT 0,
     is_paid BOOLEAN DEFAULT FALSE,
+    phone VARCHAR(50),
+    country VARCHAR(100),
+    address TEXT,
+    security_question TEXT,
+    security_answer TEXT,
+    is_email_verified BOOLEAN DEFAULT FALSE,
+    email_verification_token VARCHAR(255),
+    batch_id INT,
+    profile_pic TEXT,
     last_active_date DATE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );

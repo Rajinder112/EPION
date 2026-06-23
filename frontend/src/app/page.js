@@ -157,8 +157,10 @@ export default function Home() {
         else if (shortcut === 'mocks') setActiveTab('mocks');
       }
     } catch (err) {
-      console.warn('Session hydration failed, logging out:', err);
-      handleLogout();
+      console.warn('Session hydration failed:', err);
+      if (err.status === 401 || err.status === 403) {
+        handleLogout();
+      }
     } finally {
       setLoading(false);
     }
