@@ -1243,7 +1243,7 @@ export default function RevisionView({ onStartQuestionPractice, user }) {
   ];
 
   // Filtering concepts based on search
-  const currentConcepts = conceptsLoaded ? conceptsList : coreConcepts;
+  const currentConcepts = (conceptsLoaded && conceptsList.length > 0) ? conceptsList : coreConcepts;
   const filteredConcepts = currentConcepts.filter(c => 
     c.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
     c.category.toLowerCase().includes(searchQuery.toLowerCase()) ||

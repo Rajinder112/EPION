@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const fs = require('fs');
+const path = require('path');
 const multer = require('multer');
 const csv = require('csv-parser');
 const db = require('../db');
@@ -401,7 +402,29 @@ router.get('/revision', [auth, trial], async (req, res) => {
 // @access  Private
 router.get('/concepts', [auth, trial], async (req, res) => {
   try {
-    const result = await db.query('SELECT * FROM concepts ORDER BY id ASC');
+    let result = await db.query('SELECT * FROM concepts ORDER BY id ASC');
+    if (result.rows.length === 0) {
+      console.log('Concepts table is empty. Seeding from db_concepts.json backup...');
+      const conceptsPath = path.join(__dirname, '../db_concepts.json');
+      if (fs.existsSync(conceptsPath)) {
+        const localConcepts = JSON.parse(fs.readFileSync(conceptsPath, 'utf8'));
+        if (localConcepts && localConcepts.length > 0) {
+          const isPg = !db.isUsingLocalDb();
+          for (const c of localConcepts) {
+            await db.query(
+              'INSERT INTO concepts (title, category, highlight, bullets) VALUES ($1, $2, $3, $4)',
+              [c.title, c.category, c.highlight || null, JSON.stringify(c.bullets)]
+            );
+          }
+          if (isPg) {
+            await db.query(`SELECT setval('concepts_id_seq', (SELECT MAX(id) FROM concepts))`).catch(e => {
+              console.error('Failed to reset concepts_id_seq:', e.message);
+            });
+          }
+          result = await db.query('SELECT * FROM concepts ORDER BY id ASC');
+        }
+      }
+    }
     res.json(result.rows);
   } catch (err) {
     console.error('Fetch concepts error:', err.message);
