@@ -376,6 +376,7 @@ export default function PracticeView({ initialFilters = null, directLaunchQuesti
                 const meta = subjectsMetadata[subject] || {};
                 const isComingSoon = meta.status === 'coming_soon';
                 const isInactive = meta.status === 'inactive';
+                const isActive = meta.status === 'active' || !meta.status;
                 return (
                   <div
                     key={idx}
@@ -386,6 +387,11 @@ export default function PracticeView({ initialFilters = null, directLaunchQuesti
                     <div className="space-y-1.5 pr-4">
                       <h4 className="font-bold text-foreground group-hover:text-primary transition-colors text-sm md:text-base flex items-center flex-wrap gap-1.5">
                         <span>{subject}</span>
+                        {isActive && (
+                          <span className="px-1.5 py-0.5 text-[8px] bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-black rounded uppercase tracking-wider border border-emerald-500/10 shrink-0">
+                            Active
+                          </span>
+                        )}
                         {isComingSoon && (
                           <span className="px-1.5 py-0.5 text-[8px] bg-amber-500/10 text-amber-600 dark:text-amber-400 font-black rounded uppercase tracking-wider border border-amber-500/10 shrink-0">
                             Coming Soon

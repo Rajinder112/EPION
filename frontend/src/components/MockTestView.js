@@ -284,6 +284,7 @@ export default function MockTestView({ onNavigateHome, user }) {
                 } catch(e) {}
               }
               const isBatchRestricted = Array.isArray(allowedBatchesList) && allowedBatchesList.length > 0;
+              const testStatus = test.status || 'active';
 
               return (
                 <div 
@@ -306,17 +307,17 @@ export default function MockTestView({ onNavigateHome, user }) {
                           Restricted ({allowedBatchesList.length} Batches)
                         </span>
                       )}
-                      {test.status === 'active' && (
+                      {testStatus === 'active' && (
                         <span className="text-[9px] font-extrabold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/10 uppercase tracking-wider">
                           Active
                         </span>
                       )}
-                      {test.status === 'coming_soon' && (
+                      {testStatus === 'coming_soon' && (
                         <span className="text-[9px] font-extrabold text-amber-600 dark:text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/10 uppercase tracking-wider">
                           Coming Soon
                         </span>
                       )}
-                      {test.status === 'inactive' && (
+                      {testStatus === 'inactive' && (
                         <span className="text-[9px] font-extrabold text-red-600 dark:text-red-400 bg-red-500/10 px-2 py-0.5 rounded-full border border-red-500/10 uppercase tracking-wider">
                           Inactive (Admin Only)
                         </span>
@@ -334,7 +335,7 @@ export default function MockTestView({ onNavigateHome, user }) {
                   </div>
                   
                   <div className="flex flex-col sm:flex-row gap-2 shrink-0 w-full md:w-auto">
-                    {test.status === 'coming_soon' && user?.role !== 'admin' ? (
+                    {testStatus === 'coming_soon' && user?.role !== 'admin' ? (
                       <button
                         disabled
                         className="px-5 py-2.5 bg-muted-bg text-muted-text text-sm font-semibold rounded-xl flex items-center justify-center gap-2 border border-border cursor-not-allowed"
@@ -764,11 +765,15 @@ export default function MockTestView({ onNavigateHome, user }) {
                 <select
                   value={editStatus}
                   onChange={(e) => setEditStatus(e.target.value)}
-                  className="w-full py-2 px-3 bg-muted-bg border border-border rounded-lg text-sm text-foreground focus:outline-none focus:border-primary"
+                  className={`w-full py-2 px-3 bg-muted-bg border rounded-lg text-sm focus:outline-none focus:border-primary font-semibold transition-colors ${
+                    editStatus === 'active' ? 'text-success border-success/30' :
+                    editStatus === 'coming_soon' ? 'text-amber-500 border-amber-500/30' :
+                    'text-danger border-danger/30'
+                  }`}
                 >
-                  <option value="active">Active (Visible & Playable)</option>
-                  <option value="coming_soon">Coming Soon (Visible but Disabled)</option>
-                  <option value="inactive">Inactive (Hidden from Candidates)</option>
+                  <option value="active" className="text-success font-semibold">Active (Visible & Playable)</option>
+                  <option value="coming_soon" className="text-amber-500 font-semibold">Coming Soon (Visible but Disabled)</option>
+                  <option value="inactive" className="text-danger font-semibold">Inactive (Hidden from Candidates)</option>
                 </select>
               </div>
 
