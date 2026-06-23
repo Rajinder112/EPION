@@ -642,6 +642,10 @@ export default function RevisionView({ onStartQuestionPractice, user }) {
 
   const handleDeleteSureshot = async (id, questionText, e) => {
     e.stopPropagation();
+    if (!id) {
+      alert("Preloaded template questions cannot be deleted individually unless they are first saved to the database. You can customize the entire list by uploading a CSV file.");
+      return;
+    }
     const confirmDelete = window.confirm(`Are you sure you want to delete this question?`);
     if (!confirmDelete) return;
     
@@ -1807,7 +1811,7 @@ export default function RevisionView({ onStartQuestionPractice, user }) {
                   <span className="text-[10px] font-bold text-secondary bg-secondary-light px-2.5 py-0.5 rounded-full border border-secondary/10 uppercase">
                     Sure-Shot Question {absoluteIdx + 1}
                   </span>
-                  {user?.role === 'admin' && q.id && (
+                  {user?.role === 'admin' && (
                     <div className="flex items-center gap-1 text-[10px]">
                       <button
                         onClick={(e) => openEditSureshotModal(q, e)}
