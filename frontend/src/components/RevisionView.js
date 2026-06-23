@@ -5,7 +5,8 @@ import { api } from '../utils/api';
 import { 
   Bookmark, AlertCircle, Play, Sparkles, BookOpen, Trash2, ArrowRight,
   ChevronDown, ChevronUp, Calculator, HeartPulse, Activity, HelpCircle, 
-  RotateCcw, Sparkle, Stethoscope, GraduationCap, ArrowUpRight, Check, Brain
+  RotateCcw, Sparkle, Stethoscope, GraduationCap, ArrowUpRight, Check, Brain,
+  Calendar
 } from 'lucide-react';
 
 export default function RevisionView({ onStartQuestionPractice, user }) {
@@ -65,6 +66,11 @@ export default function RevisionView({ onStartQuestionPractice, user }) {
   const [mapSbp, setMapSbp] = useState(120);
   const [mapDbp, setMapDbp] = useState(80);
   const [mapResult, setMapResult] = useState(null);
+
+  // States for Pregnancy Due Date Calculator
+  const [pregnancyLmp, setPregnancyLmp] = useState('');
+  const [pregnancyCycle, setPregnancyCycle] = useState(28);
+  const [pregnancyResult, setPregnancyResult] = useState(null);
 
   // States for Dynamic Concepts Database
   const [conceptsList, setConceptsList] = useState([]);
@@ -389,6 +395,86 @@ export default function RevisionView({ onStartQuestionPractice, user }) {
     }
 
     setMapResult({ map: mapVal, interpretation, alertClass });
+  };
+
+  // Pregnancy Due Date calculation logic
+  const calculatePregnancy = (e) => {
+    e.preventDefault();
+    if (!pregnancyLmp) return;
+
+    const lmpDate = new Date(pregnancyLmp);
+    if (isNaN(lmpDate.getTime())) {
+      setPregnancyResult({
+        edd: null,
+        gestationalAge: null,
+        errorMsg: 'Invalid date selected.',
+        alertClass: 'bg-danger-light text-danger border-danger/20'
+      });
+      return;
+    }
+
+    const cycleDays = parseInt(pregnancyCycle) || 28;
+    if (cycleDays < 20 || cycleDays > 45) {
+      setPregnancyResult({
+        edd: null,
+        gestationalAge: null,
+        errorMsg: 'Cycle length must be between 20 and 45 days.',
+        alertClass: 'bg-danger-light text-danger border-danger/20'
+      });
+      return;
+    }
+
+    const eddDate = new Date(lmpDate);
+    // Standard gestation is 280 days from LMP for a 28-day cycle.
+    eddDate.setDate(eddDate.getDate() + 252 + cycleDays);
+
+    // Calculate Gestational Age
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const lmpMidnight = new Date(lmpDate);
+    lmpMidnight.setHours(0, 0, 0, 0);
+
+    const diffTime = today.getTime() - lmpMidnight.getTime();
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+    let gestationalAgeStr = '';
+    let trimester = '';
+    let progressPercent = 0;
+
+    if (diffDays < 0) {
+      gestationalAgeStr = 'LMP date is in the future.';
+      trimester = 'N/A';
+    } else {
+      const weeks = Math.floor(diffDays / 7);
+      const days = diffDays % 7;
+      
+      if (weeks >= 42) {
+        gestationalAgeStr = `${weeks} weeks, ${days} days (Post-term)`;
+      } else {
+        gestationalAgeStr = `${weeks} weeks, ${days} days`;
+      }
+
+      if (weeks < 13) {
+        trimester = 'First Trimester (Weeks 1-12)';
+      } else if (weeks < 27) {
+        trimester = 'Second Trimester (Weeks 13-26)';
+      } else {
+        trimester = 'Third Trimester (Weeks 27-40+)';
+      }
+
+      progressPercent = Math.min(100, Math.max(0, Math.round((diffDays / 280) * 100)));
+    }
+
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    const formattedEdd = eddDate.toLocaleDateString('en-US', options);
+
+    setPregnancyResult({
+      edd: formattedEdd,
+      gestationalAge: gestationalAgeStr,
+      trimester,
+      progressPercent,
+      errorMsg: null
+    });
   };
 
   // Concepts Management Handlers
@@ -2102,6 +2188,81 @@ export default function RevisionView({ onStartQuestionPractice, user }) {
                   </>
                 ) : (
                   <p className="text-xs leading-tight font-semibold">{sfResult.interpretation}</p>
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* Pregnancy Due Dates Calculator */}
+          <div className="bg-card border border-border p-5 rounded-2xl shadow-sm space-y-4">
+            <h3 className="font-extrabold text-foreground text-sm flex items-center gap-2 border-b border-border/80 pb-2">
+              <Calendar className="w-4.5 h-4.5 text-secondary" />
+              <span>Pregnancy Due Dates & Gestational Age</span>
+            </h3>
+            <form onSubmit={calculatePregnancy} className="space-y-3 text-xs">
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-1">
+                  <label className="font-semibold text-muted-text">Last Menstrual Period (LMP)</label>
+                  <input
+                    type="date"
+                    required
+                    value={pregnancyLmp}
+                    onChange={(e) => setPregnancyLmp(e.target.value)}
+                    className="w-full py-2 px-3 bg-muted-bg border border-border rounded-lg text-foreground focus:outline-none"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="font-semibold text-muted-text">Average Cycle (Days)</label>
+                  <input
+                    type="number"
+                    required
+                    min={20}
+                    max={45}
+                    value={pregnancyCycle}
+                    onChange={(e) => setPregnancyCycle(e.target.value)}
+                    className="w-full py-2 px-3 bg-muted-bg border border-border rounded-lg text-foreground focus:outline-none"
+                  />
+                </div>
+              </div>
+              <button
+                type="submit"
+                className="w-full py-2 bg-secondary hover:bg-secondary-hover text-white text-xs font-bold rounded-lg transition-colors shadow-sm"
+              >
+                Calculate Due Date & Age
+              </button>
+            </form>
+
+            {pregnancyResult && (
+              <div className={`p-4 rounded-xl text-xs space-y-2 border animate-slide-up ${pregnancyResult.edd === null ? pregnancyResult.alertClass : 'bg-secondary-light border-secondary/20 text-foreground'}`}>
+                {pregnancyResult.edd !== null ? (
+                  <>
+                    <div className="flex justify-between items-center border-b border-secondary/10 pb-1.5 gap-2">
+                      <span className="font-semibold text-muted-text shrink-0">Expected Due Date (EDD):</span>
+                      <span className="font-black text-secondary text-right leading-tight break-words">{pregnancyResult.edd}</span>
+                    </div>
+                    <div className="flex justify-between items-center py-0.5">
+                      <span className="font-semibold text-muted-text">Gestational Age:</span>
+                      <span className="font-bold text-foreground">{pregnancyResult.gestationalAge}</span>
+                    </div>
+                    <div className="flex justify-between items-center py-0.5">
+                      <span className="font-semibold text-muted-text">Current Stage:</span>
+                      <span className="font-bold text-foreground">{pregnancyResult.trimester}</span>
+                    </div>
+                    <div className="space-y-1 pt-1.5">
+                      <div className="flex justify-between text-[10px] text-muted-text">
+                        <span>Pregnancy Progress</span>
+                        <span>{pregnancyResult.progressPercent}%</span>
+                      </div>
+                      <div className="w-full bg-muted-bg rounded-full h-1.5 overflow-hidden">
+                        <div 
+                          className="bg-secondary h-full transition-all duration-500" 
+                          style={{ width: `${pregnancyResult.progressPercent}%` }}
+                        ></div>
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <p className="text-xs leading-tight font-semibold">{pregnancyResult.errorMsg}</p>
                 )}
               </div>
             )}
