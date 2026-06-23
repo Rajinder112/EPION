@@ -84,9 +84,19 @@ export default function RevisionView({ onStartQuestionPractice, user }) {
   const [conceptHighlight, setConceptHighlight] = useState('');
   const [conceptBullets, setConceptBullets] = useState('');
 
+  // States for Sure-Shot Q&As
+  const [sureshotList, setSureshotList] = useState([]);
+  const [sureshotLoaded, setSureshotLoaded] = useState(false);
+  const [sureshotModalOpen, setSureshotModalOpen] = useState(false);
+  const [editingSureshot, setEditingSureshot] = useState(null);
+  const [sureshotQ, setSureshotQ] = useState('');
+  const [sureshotA, setSureshotA] = useState('');
+  const [sureshotExp, setSureshotExp] = useState('');
+
   useEffect(() => {
     fetchRevisionData();
     fetchConcepts();
+    fetchSureshotQuestions();
   }, []);
 
   const fetchConcepts = async () => {
@@ -96,6 +106,16 @@ export default function RevisionView({ onStartQuestionPractice, user }) {
       setConceptsLoaded(true);
     } catch (err) {
       console.error('Error fetching concepts:', err);
+    }
+  };
+
+  const fetchSureshotQuestions = async () => {
+    try {
+      const data = await api.getSureshotQuestions();
+      setSureshotList(data || []);
+      setSureshotLoaded(true);
+    } catch (err) {
+      console.error('Error fetching sureshot questions:', err);
     }
   };
 
@@ -110,6 +130,7 @@ export default function RevisionView({ onStartQuestionPractice, user }) {
       setBookmarkedList(data.bookmarked || []);
       setIncorrectList(data.incorrect || []);
       await fetchConcepts();
+      await fetchSureshotQuestions();
     } catch (err) {
       console.error('Error fetching revision data:', err);
     } finally {
@@ -580,6 +601,103 @@ export default function RevisionView({ onStartQuestionPractice, user }) {
     } catch (err) {
       console.error("Save concept error:", err);
       alert("Failed to save concept.");
+    }
+  };
+
+  // Sureshot Questions Management Handlers
+  const handleDownloadSureshotTemplate = () => {
+    const csvContent = "question,answer,explanation\n" +
+      "\"A patient with a head injury has a regular respiratory pattern followed by periods of apnea. How is this documented?\",\"Cheyne-Stokes Respiration.\",\"Characterized by a gradual crescendo-decrescendo pattern of breathing separated by apneic phases, indicating deep bilateral cerebral hemisphere or brainstem impairment.\"\n" +
+      "\"Which solution is used to clean a large blood spill on an ICU floor?\",\"10% Sodium Hypochlorite (Bleach) solution.\",\"For substantial blood spills, a 1:10 dilution of sodium hypochlorite is required to effectively neutralize bloodborne pathogens like HIV, HBV, and HCV.\"";
+      
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", "epion_sureshot_template.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleBulkUploadSureshot = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    
+    const confirmUpload = window.confirm("Are you sure you want to bulk upload? This will replace all existing sure-shot questions with the ones in the CSV file.");
+    if (!confirmUpload) return;
+    
+    setLoading(true);
+    try {
+      const response = await api.importSureshotQuestionsCsv(file);
+      alert(response.message || "Bulk upload completed successfully.");
+      await fetchSureshotQuestions();
+    } catch (err) {
+      console.error("Bulk upload error:", err);
+      alert(err.message || "Bulk upload failed.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDeleteSureshot = async (id, questionText, e) => {
+    e.stopPropagation();
+    const confirmDelete = window.confirm(`Are you sure you want to delete this question?`);
+    if (!confirmDelete) return;
+    
+    try {
+      await api.deleteSureshotQuestion(id);
+      alert("Question deleted successfully.");
+      await fetchSureshotQuestions();
+    } catch (err) {
+      console.error("Delete sureshot error:", err);
+      alert("Failed to delete question.");
+    }
+  };
+
+  const openEditSureshotModal = (q, e) => {
+    e.stopPropagation();
+    setEditingSureshot(q);
+    setSureshotQ(q.question);
+    setSureshotA(q.answer);
+    setSureshotExp(q.explanation);
+    setSureshotModalOpen(true);
+  };
+
+  const openAddSureshotModal = () => {
+    setEditingSureshot(null);
+    setSureshotQ('');
+    setSureshotA('');
+    setSureshotExp('');
+    setSureshotModalOpen(true);
+  };
+
+  const handleSaveSureshot = async (e) => {
+    e.preventDefault();
+    if (!sureshotQ.trim() || !sureshotA.trim() || !sureshotExp.trim()) {
+      alert("Please fill in all fields.");
+      return;
+    }
+    
+    const payload = {
+      question: sureshotQ.trim(),
+      answer: sureshotA.trim(),
+      explanation: sureshotExp.trim()
+    };
+    
+    try {
+      if (editingSureshot) {
+        await api.updateSureshotQuestion(editingSureshot.id, payload);
+        alert("Question updated successfully.");
+      } else {
+        await api.createSureshotQuestion(payload);
+        alert("Question created successfully.");
+      }
+      setSureshotModalOpen(false);
+      await fetchSureshotQuestions();
+    } catch (err) {
+      console.error("Save sureshot error:", err);
+      alert("Failed to save question.");
     }
   };
 
@@ -1260,9 +1378,10 @@ export default function RevisionView({ onStartQuestionPractice, user }) {
   );
 
   // Sureshot Pagination logic
+  const currentSureshotQs = (sureshotLoaded && sureshotList.length > 0) ? sureshotList : sureShotQs;
   const ITEMS_PER_PAGE_SURESHOT = 5;
-  const totalPagesSureshot = Math.max(1, Math.ceil(sureShotQs.length / ITEMS_PER_PAGE_SURESHOT));
-  const displayedSureshotQs = sureShotQs.slice(
+  const totalPagesSureshot = Math.max(1, Math.ceil(currentSureshotQs.length / ITEMS_PER_PAGE_SURESHOT));
+  const displayedSureshotQs = currentSureshotQs.slice(
     (sureshotPage - 1) * ITEMS_PER_PAGE_SURESHOT,
     sureshotPage * ITEMS_PER_PAGE_SURESHOT
   );
@@ -1643,31 +1762,86 @@ export default function RevisionView({ onStartQuestionPractice, user }) {
       {/* 5. 25 SURE SHOT QUESTIONS TAB VIEW */}
       {activeTab === 'sureshot' && (
         <div className="space-y-4 animate-slide-up max-w-2xl mx-auto">
+          {/* Search & Admin actions bar */}
+          {user?.role === 'admin' && (
+            <div className="flex flex-wrap gap-2.5 items-center justify-between bg-muted-bg/30 p-3 rounded-xl border border-border/80">
+              <span className="text-[10px] font-bold text-muted-text uppercase tracking-wider">Sure-Shot Management (Admin):</span>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  onClick={openAddSureshotModal}
+                  type="button"
+                  className="py-1.5 px-3 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-lg shadow-sm transition-colors flex items-center gap-1"
+                >
+                  <span>+ Add Question</span>
+                </button>
+                <button
+                  onClick={handleDownloadSureshotTemplate}
+                  type="button"
+                  className="py-1.5 px-3 bg-secondary/10 hover:bg-secondary/20 text-secondary text-xs font-bold rounded-lg transition-colors flex items-center gap-1"
+                >
+                  <span>Download CSV Template</span>
+                </button>
+                <label className="py-1.5 px-3 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs font-bold rounded-lg border border-emerald-500/10 cursor-pointer transition-colors flex items-center gap-1 select-none">
+                  <span>Bulk Upload CSV</span>
+                  <input
+                    type="file"
+                    accept=".csv"
+                    onChange={handleBulkUploadSureshot}
+                    className="hidden"
+                  />
+                </label>
+              </div>
+            </div>
+          )}
+
           {displayedSureshotQs.map((q, idx) => {
             const absoluteIdx = (sureshotPage - 1) * ITEMS_PER_PAGE_SURESHOT + idx;
             const isRevealed = revealedAnswers[absoluteIdx] || false;
+            const questionText = q.question || q.q;
+            const answerText = q.answer || q.a;
+            const explanationText = q.explanation || q.exp;
             return (
               <div key={absoluteIdx} className="bg-card border border-border rounded-2xl p-5 shadow-sm space-y-3 relative overflow-hidden">
                 <div className="absolute right-0 top-0 w-20 h-20 bg-secondary/5 rounded-full blur-xl"></div>
-                <div className="flex items-center gap-2">
+                <div className="flex justify-between items-center gap-2">
                   <span className="text-[10px] font-bold text-secondary bg-secondary-light px-2.5 py-0.5 rounded-full border border-secondary/10 uppercase">
                     Sure-Shot Question {absoluteIdx + 1}
                   </span>
+                  {user?.role === 'admin' && q.id && (
+                    <div className="flex items-center gap-1 text-[10px]">
+                      <button
+                        onClick={(e) => openEditSureshotModal(q, e)}
+                        type="button"
+                        className="py-0.5 px-2 bg-secondary/10 hover:bg-secondary/25 text-secondary font-bold rounded transition-colors"
+                        title="Edit Question"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={(e) => handleDeleteSureshot(q.id, questionText, e)}
+                        type="button"
+                        className="py-0.5 px-2 bg-danger-light hover:bg-danger text-danger hover:text-white font-bold rounded transition-colors"
+                        title="Delete Question"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  )}
                 </div>
-                <h4 className="font-bold text-foreground text-sm md:text-base leading-snug">{q.q}</h4>
+                <h4 className="font-bold text-foreground text-sm md:text-base leading-snug">{questionText}</h4>
                 
                 {isRevealed ? (
                   <div className="space-y-2.5 animate-slide-up pt-2 border-t border-border/80">
                     <div className="text-xs font-bold text-success flex items-center gap-1.5">
                       <Check className="w-4 h-4" /> Correct Answer:
                     </div>
-                    <div className="text-sm font-semibold text-foreground pl-1">{q.a}</div>
+                    <div className="text-sm font-semibold text-foreground pl-1">{answerText}</div>
                     
                     <div className="bg-muted-bg border border-border/80 p-3 rounded-xl space-y-1 mt-2">
                       <div className="text-[10px] font-bold uppercase text-muted-text tracking-wider flex items-center gap-1">
                         <Sparkles className="w-3.5 h-3.5 text-primary" /> Rationale Explanation
                       </div>
-                      <p className="text-xs leading-relaxed text-muted-text">{q.exp}</p>
+                      <p className="text-xs leading-relaxed text-muted-text">{explanationText}</p>
                     </div>
                   </div>
                 ) : (
@@ -2354,6 +2528,82 @@ export default function RevisionView({ onStartQuestionPractice, user }) {
                   className="px-4 py-2 bg-primary hover:bg-primary-hover text-white font-semibold rounded-xl shadow-sm transition-colors"
                 >
                   Save Concept
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+      {/* Sureshot Add/Edit Modal */}
+      {sureshotModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
+          <div className="bg-card border border-border w-full max-w-lg rounded-2xl shadow-xl overflow-hidden animate-slide-up flex flex-col max-h-[90vh]">
+            {/* Header */}
+            <div className="p-5 border-b border-border/80 flex items-center justify-between">
+              <h3 className="font-extrabold text-foreground text-base">
+                {editingSureshot ? 'Edit Sure-Shot Question' : 'Add New Sure-Shot Question'}
+              </h3>
+              <button
+                onClick={() => setSureshotModalOpen(false)}
+                type="button"
+                className="text-muted-text hover:text-foreground p-1 text-lg font-bold"
+              >
+                &times;
+              </button>
+            </div>
+            
+            {/* Form */}
+            <form onSubmit={handleSaveSureshot} className="p-5 space-y-4 overflow-y-auto flex-1 text-xs">
+              <div className="space-y-1">
+                <label className="font-bold text-muted-text uppercase tracking-wider block">Question Text</label>
+                <textarea
+                  required
+                  rows={4}
+                  placeholder="Enter the sure-shot question..."
+                  value={sureshotQ}
+                  onChange={(e) => setSureshotQ(e.target.value)}
+                  className="w-full py-2 px-3 bg-muted-bg border border-border rounded-lg text-foreground focus:outline-none text-xs leading-relaxed"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="font-bold text-muted-text uppercase tracking-wider block">Correct Answer</label>
+                <input
+                  type="text"
+                  required
+                  placeholder="Enter the correct answer..."
+                  value={sureshotA}
+                  onChange={(e) => setSureshotA(e.target.value)}
+                  className="w-full py-2 px-3 bg-muted-bg border border-border rounded-lg text-foreground focus:outline-none text-xs"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="font-bold text-muted-text uppercase tracking-wider block">Rationale / Explanation</label>
+                <textarea
+                  required
+                  rows={4}
+                  placeholder="Enter the explanation/rationale..."
+                  value={sureshotExp}
+                  onChange={(e) => setSureshotExp(e.target.value)}
+                  className="w-full py-2 px-3 bg-muted-bg border border-border rounded-lg text-foreground focus:outline-none text-xs leading-relaxed"
+                />
+              </div>
+
+              {/* Actions */}
+              <div className="flex justify-end gap-2 pt-2 border-t border-border/80">
+                <button
+                  type="button"
+                  onClick={() => setSureshotModalOpen(false)}
+                  className="px-4 py-2 border border-border hover:bg-muted-bg/30 text-foreground font-semibold rounded-xl transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-primary hover:bg-primary-hover text-white font-semibold rounded-xl shadow-sm transition-colors"
+                >
+                  Save Question
                 </button>
               </div>
             </form>

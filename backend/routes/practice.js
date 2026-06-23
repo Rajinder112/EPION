@@ -565,4 +565,163 @@ router.post('/concepts/import', [auth, isAdmin, upload.single('file')], async (r
     });
 });
 
+// @route   GET api/practice/sureshot
+// @desc    Get all sureshot questions
+// @access  Private
+router.get('/sureshot', [auth, trial], async (req, res) => {
+  try {
+    let result = await db.query('SELECT * FROM sureshot_questions ORDER BY id ASC');
+    if (result.rows.length === 0) {
+      console.log('Sureshot table is empty. Seeding from db_sureshot.json backup...');
+      const sureshotPath = path.join(__dirname, '../db_sureshot.json');
+      if (fs.existsSync(sureshotPath)) {
+        const localSureshot = JSON.parse(fs.readFileSync(sureshotPath, 'utf8'));
+        if (localSureshot && localSureshot.length > 0) {
+          const isPg = !db.isUsingLocalDb();
+          for (const q of localSureshot) {
+            await db.query(
+              'INSERT INTO sureshot_questions (question, answer, explanation) VALUES ($1, $2, $3)',
+              [q.question, q.answer, q.explanation]
+            );
+          }
+          if (isPg) {
+            await db.query(`SELECT setval('sureshot_questions_id_seq', (SELECT MAX(id) FROM sureshot_questions))`).catch(e => {
+              console.error('Failed to reset sureshot_questions_id_seq:', e.message);
+            });
+          }
+          result = await db.query('SELECT * FROM sureshot_questions ORDER BY id ASC');
+        }
+      }
+    }
+    res.json(result.rows);
+  } catch (err) {
+    console.error('Fetch sureshot error:', err.message);
+    res.status(500).send('Server error');
+  }
+});
+
+// @route   POST api/practice/sureshot
+// @desc    Create a new sureshot question
+// @access  Private (Admin only)
+router.post('/sureshot', [auth, isAdmin], async (req, res) => {
+  const { question, answer, explanation } = req.body;
+  if (!question || !answer || !explanation) {
+    return res.status(400).json({ message: 'Question, answer, and explanation are required.' });
+  }
+  try {
+    const result = await db.query(
+      'INSERT INTO sureshot_questions (question, answer, explanation) VALUES ($1, $2, $3) RETURNING *',
+      [question, answer, explanation]
+    );
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error('Create sureshot error:', err.message);
+    res.status(500).send('Server error');
+  }
+});
+
+// @route   PUT api/practice/sureshot/:id
+// @desc    Update a sureshot question
+// @access  Private (Admin only)
+router.put('/sureshot/:id', [auth, isAdmin], async (req, res) => {
+  const { question, answer, explanation } = req.body;
+  const qId = parseInt(req.params.id);
+  if (isNaN(qId)) {
+    return res.status(400).json({ message: 'Invalid question ID.' });
+  }
+  if (!question || !answer || !explanation) {
+    return res.status(400).json({ message: 'Question, answer, and explanation are required.' });
+  }
+  try {
+    const result = await db.query(
+      'UPDATE sureshot_questions SET question = $1, answer = $2, explanation = $3 WHERE id = $4 RETURNING *',
+      [question, answer, explanation, qId]
+    );
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: 'Sureshot question not found.' });
+    }
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error('Update sureshot error:', err.message);
+    res.status(500).send('Server error');
+  }
+});
+
+// @route   DELETE api/practice/sureshot/:id
+// @desc    Delete a sureshot question
+// @access  Private (Admin only)
+router.delete('/sureshot/:id', [auth, isAdmin], async (req, res) => {
+  const qId = parseInt(req.params.id);
+  if (isNaN(qId)) {
+    return res.status(400).json({ message: 'Invalid question ID.' });
+  }
+  try {
+    await db.query('DELETE FROM sureshot_questions WHERE id = $1', [qId]);
+    res.json({ message: 'Sureshot question deleted successfully.' });
+  } catch (err) {
+    console.error('Delete sureshot error:', err.message);
+    res.status(500).send('Server error');
+  }
+});
+
+// @route   POST api/practice/sureshot/import
+// @desc    Bulk import sureshot questions via CSV
+// @access  Private (Admin only)
+router.post('/sureshot/import', [auth, isAdmin, upload.single('file')], async (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ message: 'No CSV file uploaded' });
+  }
+
+  const results = [];
+  const errors = [];
+  let rowNum = 1;
+
+  fs.createReadStream(req.file.path)
+    .pipe(csv())
+    .on('data', (data) => {
+      rowNum++;
+      const { question, answer, explanation } = data;
+
+      if (!question || !answer || !explanation) {
+        errors.push(`Row ${rowNum}: Question, Answer, and Explanation are required.`);
+        return;
+      }
+
+      results.push({
+        question: question.trim(),
+        answer: answer.trim(),
+        explanation: explanation.trim()
+      });
+    })
+    .on('end', async () => {
+      fs.unlinkSync(req.file.path);
+
+      if (results.length === 0) {
+        return res.status(400).json({ message: 'No valid questions parsed from CSV.', errors });
+      }
+
+      try {
+        await db.query('DELETE FROM sureshot_questions');
+
+        const importedQuestions = [];
+        for (const q of results) {
+          const insertResult = await db.query(
+            'INSERT INTO sureshot_questions (question, answer, explanation) VALUES ($1, $2, $3) RETURNING *',
+            [q.question, q.answer, q.explanation]
+          );
+          importedQuestions.push(insertResult.rows[0]);
+        }
+
+        res.json({
+          message: `Successfully imported ${importedQuestions.length} sure-shot questions.`,
+          totalParsed: results.length,
+          errors: errors.length > 0 ? errors : null
+        });
+      } catch (err) {
+        console.error('Sureshot CSV database import error:', err.message);
+        res.status(500).json({ message: 'Database insert failed during CSV import.', errors: [err.message] });
+      }
+    });
+});
+
 module.exports = router;

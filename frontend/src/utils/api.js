@@ -213,6 +213,42 @@ export const api = {
     return response.json();
   },
 
+  getSureshotQuestions: () => 
+    request('/practice/sureshot'),
+
+  createSureshotQuestion: (qData) => 
+    request('/practice/sureshot', { method: 'POST', body: qData }),
+
+  updateSureshotQuestion: (id, qData) => 
+    request(`/practice/sureshot/${id}`, { method: 'PUT', body: qData }),
+
+  deleteSureshotQuestion: (id) => 
+    request(`/practice/sureshot/${id}`, { method: 'DELETE' }),
+
+  importSureshotQuestionsCsv: async (file) => {
+    const token = localStorage.getItem('token');
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const headers = {};
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    const response = await fetch(`${BASE_URL}/practice/sureshot/import`, {
+      method: 'POST',
+      headers,
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.message || 'CSV Import failed');
+    }
+
+    return response.json();
+  },
+
   // Mocks
   getMockTests: () => 
     request('/mocks'),

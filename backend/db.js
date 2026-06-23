@@ -19,6 +19,7 @@ const mockTestsPath = path.join(__dirname, 'db_mock_tests.json');
 const batchesPath = path.join(__dirname, 'db_batches.json');
 const practiceSubjectsPath = path.join(__dirname, 'db_practice_subjects.json');
 const conceptsPath = path.join(__dirname, 'db_concepts.json');
+const sureshotPath = path.join(__dirname, 'db_sureshot.json');
 
 const questionFiles = {
   'Medical Surgical Nursing': path.join(__dirname, 'db_questions_medical_surgical.json'),
@@ -341,6 +342,14 @@ if (process.env.DATABASE_URL) {
         bullets JSONB NOT NULL,
         created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
     );
+
+    CREATE TABLE IF NOT EXISTS sureshot_questions (
+        id SERIAL PRIMARY KEY,
+        question TEXT NOT NULL,
+        answer TEXT NOT NULL,
+        explanation TEXT NOT NULL,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    );
   `).then(() => {
     console.log('Postgres migrations completed successfully.');
   }).catch(err => {
@@ -487,6 +496,9 @@ function loadLocalDb() {
     // Load concepts
     const concepts = readJsonOrInit(conceptsPath, []);
     
+    // Load sureshot questions
+    const sureshot = readJsonOrInit(sureshotPath, []);
+    
     // 6. Load questions from all split files
     let questions = [];
     Object.entries(questionFiles).forEach(([key, filepath]) => {
@@ -528,7 +540,8 @@ function loadLocalDb() {
       mock_test_attempts: mockTestData.mock_test_attempts,
       batches,
       practice_subjects,
-      concepts
+      concepts,
+      sureshot_questions: sureshot
     };
   } catch (err) {
     console.error('Error loading separated local DB files, using defaults:', err);
@@ -581,6 +594,10 @@ function saveLocalDb(data) {
     // Save concepts
     if (data.concepts) {
       fs.writeFileSync(conceptsPath, JSON.stringify(data.concepts || [], null, 2));
+    }
+    // Save sureshot questions
+    if (data.sureshot_questions) {
+      fs.writeFileSync(sureshotPath, JSON.stringify(data.sureshot_questions || [], null, 2));
     }
   } catch (err) {
     console.error('Error saving separated local DB files:', err);
@@ -1219,6 +1236,63 @@ function simulateQuery(text, params = []) {
   // TRUNCATE TABLE concepts / DELETE FROM concepts (clear all for bulk upload)
   if (normalizedSql.startsWith('truncate table concepts') || (normalizedSql.startsWith('delete from concepts') && !normalizedSql.includes('where'))) {
     dbData.concepts = [];
+    saveLocalDb(dbData);
+    return { rows: [] };
+  }
+
+  // SELECT * FROM sureshot_questions
+  if (normalizedSql.startsWith('select * from sureshot_questions')) {
+    if (!dbData.sureshot_questions) dbData.sureshot_questions = [];
+    const sorted = [...dbData.sureshot_questions].sort((a, b) => a.id - b.id);
+    return { rows: sorted };
+  }
+
+  // INSERT INTO sureshot_questions (question, answer, explanation) VALUES ($1, $2, $3) RETURNING *
+  if (normalizedSql.startsWith('insert into sureshot_questions')) {
+    if (!dbData.sureshot_questions) dbData.sureshot_questions = [];
+    const nextId = dbData.sureshot_questions.length > 0 ? Math.max(...dbData.sureshot_questions.map(q => q.id)) + 1 : 1;
+    const newQ = {
+      id: nextId,
+      question: params[0],
+      answer: params[1],
+      explanation: params[2],
+      created_at: new Date().toISOString()
+    };
+    dbData.sureshot_questions.push(newQ);
+    saveLocalDb(dbData);
+    return { rows: [newQ] };
+  }
+
+  // UPDATE sureshot_questions SET question = $1, answer = $2, explanation = $3 WHERE id = $4 RETURNING *
+  if (normalizedSql.startsWith('update sureshot_questions')) {
+    if (!dbData.sureshot_questions) dbData.sureshot_questions = [];
+    const id = parseInt(params[3]);
+    const idx = dbData.sureshot_questions.findIndex(q => q.id === id);
+    if (idx !== -1) {
+      dbData.sureshot_questions[idx] = {
+        ...dbData.sureshot_questions[idx],
+        question: params[0],
+        answer: params[1],
+        explanation: params[2]
+      };
+      saveLocalDb(dbData);
+      return { rows: [dbData.sureshot_questions[idx]] };
+    }
+    return { rows: [] };
+  }
+
+  // DELETE FROM sureshot_questions WHERE id = $1
+  if (normalizedSql.startsWith('delete from sureshot_questions where id =')) {
+    if (!dbData.sureshot_questions) dbData.sureshot_questions = [];
+    const id = parseInt(params[0]);
+    dbData.sureshot_questions = dbData.sureshot_questions.filter(q => q.id !== id);
+    saveLocalDb(dbData);
+    return { rows: [] };
+  }
+
+  // TRUNCATE TABLE sureshot_questions / DELETE FROM sureshot_questions (clear all for bulk upload)
+  if (normalizedSql.startsWith('truncate table sureshot_questions') || (normalizedSql.startsWith('delete from sureshot_questions') && !normalizedSql.includes('where'))) {
+    dbData.sureshot_questions = [];
     saveLocalDb(dbData);
     return { rows: [] };
   }

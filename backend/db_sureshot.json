@@ -1,0 +1,152 @@
+[
+  {
+    "id": 1,
+    "question": "A patient with a head injury has a regular respiratory pattern followed by periods of apnea. How is this documented?",
+    "answer": "Cheyne-Stokes Respiration.",
+    "explanation": "Characterized by a gradual crescendo-decrescendo pattern of breathing separated by apneic phases, indicating deep bilateral cerebral hemisphere or brainstem impairment."
+  },
+  {
+    "id": 2,
+    "question": "Which solution is used to clean a large blood spill on an ICU floor?",
+    "answer": "10% Sodium Hypochlorite (Bleach) solution.",
+    "explanation": "For substantial blood spills, a 1:10 dilution of sodium hypochlorite is required to effectively neutralize bloodborne pathogens like HIV, HBV, and HCV."
+  },
+  {
+    "id": 3,
+    "question": "During CPR, what is the maximum recommended time allowed for interrupting chest compressions to check for a pulse or deliver breaths?",
+    "answer": "Less than 10 seconds.",
+    "explanation": "Minimizing interruptions ensures a high chest compression fraction, maintaining coronary and cerebral perfusion pressures during resuscitation."
+  },
+  {
+    "id": 4,
+    "question": "A patient is scheduled for an intravenous pyelogram (IVP). Which pre-procedure assessment is the most critical priority?",
+    "answer": "Assessing for allergies to iodine, shellfish, or contrast dye, and reviewing serum creatinine levels.",
+    "explanation": "IVP uses iodine-based contrast media, which can trigger severe anaphylactoid reactions and cause contrast-induced nephropathy if baseline kidney function is impaired."
+  },
+  {
+    "id": 5,
+    "question": "What is the priority nursing action when a patient’s central venous catheter accidentally becomes disconnected, and the patient suddenly develops severe dyspnea and cyanosis?",
+    "answer": "Place the patient in the Left Lateral Trendelenburg position (Durant's Maneuver) and administer high-flow oxygen.",
+    "explanation": "This position helps trap an air embolism in the apex of the right ventricle, preventing it from traveling into the pulmonary artery and obstructing blood flow."
+  },
+  {
+    "id": 6,
+    "question": "A psychiatric patient has been taking Phenelzine (an MAOI). The nurse instructs the patient to strictly avoid which food item to prevent a hypertensive crisis?",
+    "answer": "Aged cheese, yogurt, red wine, or processed meats (foods rich in Tyramine).",
+    "explanation": "MAOIs inhibit the breakdown of tyramine. Elevated tyramine levels cause a massive release of norepinephrine, leading to severe vasoconstriction and dangerous spikes in blood pressure."
+  },
+  {
+    "id": 7,
+    "question": "What is the primary clinical purpose of adding Positive End-Expiratory Pressure (PEEP) to the ventilator settings of an ARDS patient?",
+    "answer": "To prevent alveolar collapse at the end of expiration and improve oxygenation.",
+    "explanation": "PEEP keeps the alveoli open, expanding the surface area available for gas exchange and allowing for lower, safer fractions of inspired oxygen (FiO2) to prevent oxygen toxicity."
+  },
+  {
+    "id": 8,
+    "question": "Which physical assessment finding confirms the presence of a patent arteriovenous (AV) fistula created for hemodialysis?",
+    "answer": "Palpating a thrill and auscultating a bruit over the fistula site.",
+    "explanation": "A thrill (vibration) and bruit (swishing sound) confirm high-velocity blood flow from the artery directly into the vein, verifying that the access site is patent."
+  },
+  {
+    "id": 9,
+    "question": "A postpartum mother is diagnosed with deep vein thrombosis (DVT). Which clinical assessment technique is contraindicated due to safety concerns?",
+    "answer": "Eliciting Homans' Sign (forcible dorsiflexion of the foot).",
+    "explanation": "Homans' sign is unreliable and carrying out this maneuver can dislodge a thrombus, potentially causing a life-threatening pulmonary embolism."
+  },
+  {
+    "id": 10,
+    "question": "A child with a history of asthma is brought to the emergency department in acute respiratory distress. On auscultation, the nurse notes a sudden disappearance of wheezing and diminished breath sounds. How should the nurse interpret this finding?",
+    "answer": "The patient is experiencing \"Silent Chest Syndrome,\" a sign of impending respiratory failure.",
+    "explanation": "The absence of wheezing during a severe asthma attack indicates that airflow is too limited to produce sound, signaling critical airway obstruction that requires immediate intubation."
+  },
+  {
+    "id": 11,
+    "question": "What is the priority nursing action for a patient experiencing Autonomic Dysreflexia?",
+    "answer": "Place the patient in a high-Fowler's position and check for bladder distension or bowel impaction.",
+    "explanation": "Autonomic dysreflexia is a medical emergency in spinal cord injuries (T6 or above). Elevating the head of the bed decreases blood pressure through orthostatic pooling, while identifying and removing the noxious stimulus (usually a full bladder or impacted bowel) resolves the autonomic storm."
+  },
+  {
+    "id": 12,
+    "question": "What is the drug of choice for treating status epilepticus?",
+    "answer": "Intravenous Lorazepam (Ativan) or Diazepam (Valium).",
+    "explanation": "Benzodiazepines act rapidly to enhance GABA inhibition in the central nervous system, stopping continuous seizure activity. This is followed by a long-acting anticonvulsant like Phenytoin."
+  },
+  {
+    "id": 13,
+    "question": "Which clinical sign is expected in a pediatric patient with pyloric stenosis?",
+    "answer": "Non-bilious projectile vomiting and an olive-shaped mass in the epigastrium.",
+    "explanation": "Hypertrophy of the pyloric sphincter obstructs gastric outlet flow, leading to forceful projectile vomiting (typically non-bilious since it occurs before the duodenum) and a palpable olive-like mass."
+  },
+  {
+    "id": 14,
+    "question": "What is the primary antidote for acetaminophen (paracetamol) poisoning?",
+    "answer": "N-acetylcysteine (NAC / Mucomyst).",
+    "explanation": "NAC restores hepatic glutathione levels, allowing the liver to safely metabolize and detoxify the hepatotoxic metabolite NAPQI."
+  },
+  {
+    "id": 15,
+    "question": "What is the therapeutic range for serum Phenytoin (Dilantin)?",
+    "answer": "10 to 20 mcg/mL.",
+    "explanation": "Phenytoin has a narrow therapeutic index. Levels below 10 mcg/mL are subtherapeutic and increase seizure risk, while levels above 20 mcg/mL cause nystagmus, ataxia, and slurred speech."
+  },
+  {
+    "id": 16,
+    "question": "A patient on mechanical ventilation has a low-pressure alarm. What should the nurse inspect first?",
+    "answer": "Check for circuit disconnection, tubing leaks, or a deflated airway cuff.",
+    "explanation": "Low-pressure alarms indicate a loss of pressure in the ventilator circuit, usually due to a disconnection between the ventilator tubing and the patient’s airway, or an underinflated endotracheal tube cuff."
+  },
+  {
+    "id": 17,
+    "question": "A patient has a high-pressure ventilator alarm. What is the most common immediate cause?",
+    "answer": "Secretions in the airway, biting on the tube, or tube kinking.",
+    "explanation": "High-pressure alarms trigger when the ventilator meets resistance exceeding the pressure limit. Suctioning the airway, inserting a bite block, or straightening the tubing usually resolves the issue."
+  },
+  {
+    "id": 18,
+    "question": "What is the classic clinical sign of Intussusception in infants?",
+    "answer": "Red currant jelly stools and a sausage-shaped abdominal mass.",
+    "explanation": "Intussusception involves telescoping of one bowel segment into another, causing lymphatic and venous obstruction. This leads to mucosal bleeding and mucus production, presenting as jelly-like stools."
+  },
+  {
+    "id": 19,
+    "question": "What is the drug of choice for treating magnesium sulfate toxicity?",
+    "answer": "Calcium Gluconate 10% IV.",
+    "explanation": "Calcium antagonizes the neuromuscular blockade effects of hypermagnesemia, reversing respiratory depression and cardiac dysfunction."
+  },
+  {
+    "id": 20,
+    "question": "Which landmark is used to measure the insertion length of a Nasogastric (NG) tube?",
+    "answer": "From the tip of the nose, to the earlobe, to the xiphoid process (NEX measurement).",
+    "explanation": "The NEX measurement approximates the anatomical distance required for the tube to pass through the esophagus and sit correctly in the stomach."
+  },
+  {
+    "id": 21,
+    "question": "What clinical signs characterize Graves' disease (Hyperthyroidism)?",
+    "answer": "Heat intolerance, weight loss despite increased appetite, tachycardia, and exophthalmos.",
+    "explanation": "Excess circulating thyroid hormones (T3/T4) accelerate the metabolic rate, causing heat intolerance, weight loss, sympathetic overactivity (tachingcardia), and retro-orbital tissue inflammation (exophthalmos)."
+  },
+  {
+    "id": 22,
+    "question": "What is the key priority assessment for a patient diagnosed with Guillain-Barré Syndrome (GBS)?",
+    "answer": "Respiratory rate, effort, and vital capacity.",
+    "explanation": "GBS causes ascending muscle weakness and paralysis. As paralysis ascends to the diaphragm and intercostal muscles, respiratory failure can occur rapidly, making airway and ventilation monitoring the top priority."
+  },
+  {
+    "id": 23,
+    "question": "Which medication is contraindicated in a patient with a history of asthma?",
+    "answer": "Non-selective beta-blockers (e.g., Propranolol).",
+    "explanation": "Non-selective beta-blockers block beta-2 receptors in the lungs, causing bronchial smooth muscle contraction and triggering life-threatening bronchoconstriction in asthmatics."
+  },
+  {
+    "id": 24,
+    "question": "How is a positive Mantoux test (Tuberculin Skin Test) evaluated?",
+    "answer": "Measuring the diameter of induration (palpable raised hardening) in millimeters, not the erythema (redness).",
+    "explanation": "Induration is a delayed-type housing reaction. An induration of 10 mm or more is considered positive in healthcare workers and high-risk populations, whereas 15 mm or more is positive in low-risk individuals."
+  },
+  {
+    "id": 25,
+    "question": "What is the priority nursing action if a patient's chest tube accidentally becomes pulled out of the chest?",
+    "answer": "Cover the insertion site immediately with a sterile occlusive dressing taped on three sides.",
+    "explanation": "Taping the dressing on three sides creates a flutter-valve effect, allowing air to escape during expiration but preventing atmospheric air from entering the pleural space during inspiration, which prevents a tension pneumothorax."
+  }
+]
