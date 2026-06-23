@@ -24,7 +24,12 @@ const isAdmin = (req, res, next) => {
 router.get('/', [auth, trial], async (req, res) => {
   try {
     const result = await db.query('SELECT * FROM mock_tests ORDER BY id DESC');
-    res.json(result.rows);
+    const mockTests = result.rows;
+    for (const test of mockTests) {
+      const countRes = await db.query('SELECT COUNT(*) as count FROM mock_test_questions WHERE mock_test_id = $1', [test.id]);
+      test.total_questions = parseInt(countRes.rows[0].count || 0);
+    }
+    res.json(mockTests);
   } catch (err) {
     console.error('Fetch mock tests error:', err.message);
     res.status(500).send('Server error');
@@ -288,6 +293,8 @@ router.get('/:id', [auth, trial], async (req, res) => {
       [parseInt(req.params.id)]
     );
 
+    test.total_questions = questionsResult.rows.length;
+
     res.json({
       test,
       questions: questionsResult.rows
@@ -486,6 +493,8 @@ router.get('/results/:id', [auth, trial], async (req, res) => {
         is_correct
       });
     }
+
+    attempt.total_questions = questionsResult.rows.length;
 
     res.json({
       attempt,

@@ -942,6 +942,13 @@ function simulateQuery(text, params = []) {
     return { rows: [{ mock_test_id, question_id }] };
   }
 
+  // SELECT COUNT(*) as count FROM mock_test_questions WHERE mock_test_id = $1
+  if (normalizedSql.startsWith('select count(*) as count from mock_test_questions')) {
+    const mockId = parseInt(params[0]);
+    const mappings = dbData.mock_test_questions.filter(mq => mq.mock_test_id === mockId);
+    return { rows: [{ count: mappings.length }] };
+  }
+
   // 23. GET questions for a mock test
   if (normalizedSql.includes('mock_test_questions') && (normalizedSql.includes('join') || normalizedSql.includes('questions'))) {
     const mockId = parseInt(params[0]);
