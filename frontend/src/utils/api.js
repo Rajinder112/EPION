@@ -151,6 +151,12 @@ export const api = {
   getSubjectTopics: () => 
     request('/practice/subject-topics'),
   
+  getPracticeSubjectsConfig: () => 
+    request('/practice/subjects-config'),
+  
+  updatePracticeSubjectConfig: (subjectName, status, allowedBatches) => 
+    request('/practice/subjects-config', { method: 'POST', body: { subjectName, status, allowedBatches } }),
+  
   getRandomQuestions: (filters = {}) => {
     const params = new URLSearchParams();
     Object.entries(filters).forEach(([key, val]) => {

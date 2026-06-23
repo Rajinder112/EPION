@@ -484,9 +484,6 @@ router.get('/verify-email', async (req, res) => {
   }
 });
 
-// @route   GET api/auth/candidates
-// @desc    Get all candidates/users details (Admin only)
-// @access  Private
 router.get('/candidates', auth, async (req, res) => {
   try {
     const requesterResult = await db.query('SELECT role FROM users WHERE id = $1', [req.user.id]);
@@ -495,7 +492,7 @@ router.get('/candidates', auth, async (req, res) => {
     }
 
     const usersResult = await db.query(
-      'SELECT id, name, email, role, phone, country, address, is_email_verified, batch_id, created_at FROM users'
+      'SELECT id, name, email, role, phone, country, address, is_email_verified, batch_id, created_at, xp_points, is_paid, security_question, security_answer FROM users'
     );
     res.json(usersResult.rows);
   } catch (err) {

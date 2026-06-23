@@ -24,7 +24,15 @@ const isAdmin = (req, res, next) => {
 router.get('/', [auth, trial], async (req, res) => {
   try {
     const result = await db.query('SELECT * FROM mock_tests ORDER BY id DESC');
-    const mockTests = result.rows;
+    
+    // Check if current user is admin
+    const isAdminUser = req.user && req.user.role === 'admin';
+    
+    let mockTests = result.rows;
+    if (!isAdminUser) {
+      mockTests = mockTests.filter(t => t.status !== 'inactive');
+    }
+    
     for (const test of mockTests) {
       const countRes = await db.query('SELECT COUNT(*) as count FROM mock_test_questions WHERE mock_test_id = $1', [test.id]);
       test.total_questions = parseInt(countRes.rows[0].count || 0);
@@ -254,29 +262,42 @@ router.get('/:id', [auth, trial], async (req, res) => {
 
     // Check access controls
     const userCheck = await db.query('SELECT role, batch_id FROM users WHERE id = $1', [req.user.id]);
-    if (userCheck.rows.length > 0) {
-      const currentUser = userCheck.rows[0];
-      if (currentUser.role !== 'admin') {
-        if (test.is_locked === true || test.is_locked === 'true' || test.is_locked === 1) {
-          return res.status(403).json({ message: 'This mock test is locked by the administrator.' });
-        }
-        if (test.allowed_batches) {
-          let allowed = [];
-          if (Array.isArray(test.allowed_batches)) {
-            allowed = test.allowed_batches;
-          } else if (typeof test.allowed_batches === 'string') {
-            try {
-              allowed = JSON.parse(test.allowed_batches);
-            } catch (e) {
-              allowed = test.allowed_batches.split(',').map(x => x.trim()).filter(Boolean);
-            }
+    const currentUser = userCheck.rows.length > 0 ? userCheck.rows[0] : null;
+    const isAdminUser = currentUser && currentUser.role === 'admin';
+
+    if (!isAdminUser) {
+      // 1. Check inactive status
+      if (test.status === 'inactive') {
+        return res.status(403).json({ message: 'Access denied: This mock test is currently inactive.' });
+      }
+
+      // 2. Check coming soon status
+      if (test.status === 'coming_soon') {
+        return res.status(403).json({ message: 'Access denied: This mock test is coming soon and cannot be started yet.' });
+      }
+
+      // 3. Check lock switch
+      if (test.is_locked === true || test.is_locked === 'true' || test.is_locked === 1) {
+        return res.status(403).json({ message: 'This mock test is locked by the administrator.' });
+      }
+
+      // 4. Check batch restrictions
+      if (test.allowed_batches) {
+        let allowed = [];
+        if (Array.isArray(test.allowed_batches)) {
+          allowed = test.allowed_batches;
+        } else if (typeof test.allowed_batches === 'string') {
+          try {
+            allowed = JSON.parse(test.allowed_batches);
+          } catch (e) {
+            allowed = test.allowed_batches.split(',').map(x => x.trim()).filter(Boolean);
           }
-          if (allowed.length > 0) {
-            const userBatch = currentUser.batch_id ? String(currentUser.batch_id) : '';
-            const isAllowed = allowed.map(String).includes(userBatch);
-            if (!isAllowed) {
-              return res.status(403).json({ message: 'Access denied: This mock test is restricted to specific batches. Please contact the administrator.' });
-            }
+        }
+        if (allowed.length > 0) {
+          const userBatch = currentUser.batch_id ? String(currentUser.batch_id) : '';
+          const isAllowed = allowed.map(String).includes(userBatch);
+          if (!isAllowed) {
+            return res.status(403).json({ message: 'Access denied: This mock test is restricted to specific batches. Please contact the administrator.' });
           }
         }
       }
@@ -411,11 +432,8 @@ router.post('/submit', [auth, trial], async (req, res) => {
   }
 });
 
-// @route   POST api/mocks
-// @desc    Create a new mock test
-// @access  Private (Admin only)
 router.post('/', [auth, trial, isAdmin], async (req, res) => {
-  const { title, durationMinutes, totalQuestions, negativeMarking, questionIds } = req.body;
+  const { title, durationMinutes, totalQuestions, negativeMarking, questionIds, status } = req.body;
 
   if (!title || !durationMinutes || !totalQuestions || !questionIds || !Array.isArray(questionIds)) {
     return res.status(400).json({ message: 'Title, duration, total questions, and question IDs are required' });
@@ -424,8 +442,8 @@ router.post('/', [auth, trial, isAdmin], async (req, res) => {
   try {
     // Insert mock test config
     const testResult = await db.query(
-      'INSERT INTO mock_tests (title, duration_minutes, total_questions, negative_marking) VALUES ($1, $2, $3, $4) RETURNING *',
-      [title, parseInt(durationMinutes), parseInt(totalQuestions), parseFloat(negativeMarking || 0.25)]
+      'INSERT INTO mock_tests (title, duration_minutes, total_questions, negative_marking, status) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+      [title, parseInt(durationMinutes), parseInt(totalQuestions), parseFloat(negativeMarking || 0.25), status || 'active']
     );
     const mockTest = testResult.rows[0];
 
@@ -510,19 +528,20 @@ router.get('/results/:id', [auth, trial], async (req, res) => {
 // @desc    Update a mock test metadata, lock state, allowed batches (Admin only)
 // @access  Private (Admin only)
 router.put('/:id', [auth, trial, isAdmin], async (req, res) => {
-  const { title, durationMinutes, negativeMarking, isLocked, allowedBatches } = req.body;
+  const { title, durationMinutes, negativeMarking, isLocked, allowedBatches, status } = req.body;
   const mockId = parseInt(req.params.id);
 
   try {
     // allowedBatches could be an array of IDs, or null/empty. We can store it as a JSON string/array.
     const result = await db.query(
-      'UPDATE mock_tests SET title = $1, duration_minutes = $2, negative_marking = $3, is_locked = $4, allowed_batches = $5 WHERE id = $6 RETURNING *',
+      'UPDATE mock_tests SET title = $1, duration_minutes = $2, negative_marking = $3, is_locked = $4, allowed_batches = $5, status = $6 WHERE id = $7 RETURNING *',
       [
         title,
         parseInt(durationMinutes),
         parseFloat(negativeMarking || 0.25),
         isLocked === true || isLocked === 'true' || isLocked === 1,
         allowedBatches ? JSON.stringify(allowedBatches) : null,
+        status || 'active',
         mockId
       ]
     );

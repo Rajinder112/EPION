@@ -17,6 +17,7 @@ const bookmarksPath = path.join(__dirname, 'db_bookmarks.json');
 const attemptsPath = path.join(__dirname, 'db_question_attempts.json');
 const mockTestsPath = path.join(__dirname, 'db_mock_tests.json');
 const batchesPath = path.join(__dirname, 'db_batches.json');
+const practiceSubjectsPath = path.join(__dirname, 'db_practice_subjects.json');
 
 const questionFiles = {
   'Medical Surgical Nursing': path.join(__dirname, 'db_questions_medical_surgical.json'),
@@ -41,11 +42,13 @@ const defaultLocalDb = {
       duration_minutes: 120,
       total_questions: 18,
       negative_marking: 0.25,
-      created_at: new Date().toISOString()
+      created_at: new Date().toISOString(),
+      status: "active"
     }
   ],
   mock_test_questions: [],
-  mock_test_attempts: []
+  mock_test_attempts: [],
+  practice_subjects: []
 };
 
 // Seed questions for local DB (corresponds to seed.sql)
@@ -313,11 +316,19 @@ if (process.env.DATABASE_URL) {
     
     ALTER TABLE mock_tests ADD COLUMN IF NOT EXISTS is_locked BOOLEAN DEFAULT FALSE;
     ALTER TABLE mock_tests ADD COLUMN IF NOT EXISTS allowed_batches TEXT;
+    ALTER TABLE mock_tests ADD COLUMN IF NOT EXISTS status VARCHAR(20) DEFAULT 'active';
     
     CREATE TABLE IF NOT EXISTS batches (
         id SERIAL PRIMARY KEY,
         name VARCHAR(255) NOT NULL,
         created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    );
+
+    CREATE TABLE IF NOT EXISTS practice_subjects (
+        id SERIAL PRIMARY KEY,
+        subject_name VARCHAR(100) UNIQUE NOT NULL,
+        status VARCHAR(20) DEFAULT 'active',
+        allowed_batches TEXT
     );
   `).then(() => {
     console.log('Postgres migrations completed successfully.');
@@ -439,12 +450,16 @@ function loadLocalDb() {
       mock_test_attempts: defaultLocalDb.mock_test_attempts
     });
 
-    // Ensure all mock tests have is_locked and allowed_batches fields
+    // Ensure all mock tests have is_locked, allowed_batches, and status fields
     let mockTestDataUpdated = false;
     mockTestData.mock_tests.forEach(mt => {
       if (mt.is_locked === undefined) {
         mt.is_locked = false;
         mt.allowed_batches = mt.allowed_batches || null;
+        mockTestDataUpdated = true;
+      }
+      if (mt.status === undefined) {
+        mt.status = 'active';
         mockTestDataUpdated = true;
       }
     });
@@ -454,6 +469,9 @@ function loadLocalDb() {
 
     // Load batches
     const batches = readJsonOrInit(batchesPath, []);
+    
+    // Load practice subjects
+    const practice_subjects = readJsonOrInit(practiceSubjectsPath, []);
     
     // 6. Load questions from all split files
     let questions = [];
@@ -494,7 +512,8 @@ function loadLocalDb() {
       mock_tests: mockTestData.mock_tests,
       mock_test_questions: mockTestData.mock_test_questions,
       mock_test_attempts: mockTestData.mock_test_attempts,
-      batches
+      batches,
+      practice_subjects
     };
   } catch (err) {
     console.error('Error loading separated local DB files, using defaults:', err);
@@ -539,6 +558,10 @@ function saveLocalDb(data) {
     // Save batches
     if (data.batches) {
       fs.writeFileSync(batchesPath, JSON.stringify(data.batches || [], null, 2));
+    }
+    // Save practice subjects
+    if (data.practice_subjects) {
+      fs.writeFileSync(practiceSubjectsPath, JSON.stringify(data.practice_subjects || [], null, 2));
     }
   } catch (err) {
     console.error('Error saving separated local DB files:', err);
@@ -918,6 +941,7 @@ function simulateQuery(text, params = []) {
     const duration = parseInt(params[1]);
     const total = parseInt(params[2]);
     const neg = parseFloat(params[3] || 0.25);
+    const status = params[4] || 'active';
     const newId = dbData.mock_tests.length + 1;
     const newMock = {
       id: newId,
@@ -925,7 +949,10 @@ function simulateQuery(text, params = []) {
       duration_minutes: duration,
       total_questions: total,
       negative_marking: neg,
-      created_at: new Date().toISOString()
+      created_at: new Date().toISOString(),
+      is_locked: false,
+      allowed_batches: null,
+      status
     };
     dbData.mock_tests.push(newMock);
     saveLocalDb(dbData);
@@ -1025,6 +1052,9 @@ function simulateQuery(text, params = []) {
       dbData.mock_tests[idx].negative_marking = parseFloat(params[2]);
       dbData.mock_tests[idx].is_locked = params[3] === true || params[3] === 'true' || params[3] === 1;
       dbData.mock_tests[idx].allowed_batches = params[4] || null;
+      if (params.length >= 7) {
+        dbData.mock_tests[idx].status = params[5] || 'active';
+      }
       saveLocalDb(dbData);
       return { rows: [dbData.mock_tests[idx]] };
     }
@@ -1054,6 +1084,57 @@ function simulateQuery(text, params = []) {
   // 31. SELECT * FROM users (All candidates table list)
   if (normalizedSql.startsWith('select * from users') && !normalizedSql.includes('where')) {
     return { rows: dbData.users };
+  }
+
+  // SELECT * FROM practice_subjects
+  if (normalizedSql.startsWith('select * from practice_subjects')) {
+    return { rows: dbData.practice_subjects || [] };
+  }
+
+  // INSERT INTO practice_subjects (subject_name, status, allowed_batches) VALUES ($1, $2, $3)
+  if (normalizedSql.startsWith('insert into practice_subjects')) {
+    const subject_name = params[0];
+    const status = params[1] || 'active';
+    const allowed_batches = params[2] || null;
+    
+    if (!dbData.practice_subjects) dbData.practice_subjects = [];
+    
+    const existingIdx = dbData.practice_subjects.findIndex(ps => ps.subject_name === subject_name);
+    if (existingIdx !== -1) {
+      dbData.practice_subjects[existingIdx].status = status;
+      dbData.practice_subjects[existingIdx].allowed_batches = allowed_batches;
+      saveLocalDb(dbData);
+      return { rows: [dbData.practice_subjects[existingIdx]] };
+    }
+    
+    const newId = dbData.practice_subjects.length + 1;
+    const newSubject = {
+      id: newId,
+      subject_name,
+      status,
+      allowed_batches
+    };
+    dbData.practice_subjects.push(newSubject);
+    saveLocalDb(dbData);
+    return { rows: [newSubject] };
+  }
+
+  // UPDATE practice_subjects SET status = $1, allowed_batches = $2 WHERE subject_name = $3
+  if (normalizedSql.startsWith('update practice_subjects set') || normalizedSql.includes('update practice_subjects')) {
+    const status = params[0];
+    const allowed_batches = params[1] || null;
+    const subject_name = params[2];
+    
+    if (!dbData.practice_subjects) dbData.practice_subjects = [];
+    
+    const idx = dbData.practice_subjects.findIndex(ps => ps.subject_name === subject_name);
+    if (idx !== -1) {
+      dbData.practice_subjects[idx].status = status;
+      dbData.practice_subjects[idx].allowed_batches = allowed_batches;
+      saveLocalDb(dbData);
+      return { rows: [dbData.practice_subjects[idx]] };
+    }
+    return { rows: [] };
   }
 
   // Default return empty array

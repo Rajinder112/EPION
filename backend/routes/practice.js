@@ -4,27 +4,137 @@ const db = require('../db');
 const auth = require('../middleware/auth');
 const trial = require('../middleware/trial');
 
+// Helper to check if admin
+const isAdmin = (req, res, next) => {
+  if (req.user && req.user.role === 'admin') {
+    next();
+  } else {
+    res.status(403).json({ message: 'Access denied: Admin role required' });
+  }
+};
+
 // @route   GET api/practice/subject-topics
-// @desc    Get subjects and topics hierarchy with question count
+// @desc    Get subjects and topics hierarchy with question count & metadata
 // @access  Public
 router.get('/subject-topics', [auth, trial], async (req, res) => {
   try {
     const result = await db.query('SELECT subject, topic, COUNT(*) as q_count FROM questions GROUP BY subject, topic');
     
-    // Structure as hierarchy: { [subject]: { [topic]: count } }
+    // Fetch subject status/batch configurations
+    const subjectsConfigResult = await db.query('SELECT * FROM practice_subjects');
+    const subjectsConfig = subjectsConfigResult.rows;
+    
+    const metadata = {};
+    subjectsConfig.forEach(cfg => {
+      let allowed = null;
+      if (cfg.allowed_batches) {
+        try {
+          allowed = typeof cfg.allowed_batches === 'string' ? JSON.parse(cfg.allowed_batches) : cfg.allowed_batches;
+        } catch (e) {
+          allowed = cfg.allowed_batches.split(',').map(x => parseInt(x.trim())).filter(Boolean);
+        }
+      }
+      metadata[cfg.subject_name] = {
+        status: cfg.status || 'active',
+        allowed_batches: allowed
+      };
+    });
+
+    // Check if current user is admin
+    const userCheck = await db.query('SELECT role, batch_id FROM users WHERE id = $1', [req.user.id]);
+    const currentUser = userCheck.rows.length > 0 ? userCheck.rows[0] : null;
+    const isAdminUser = currentUser && currentUser.role === 'admin';
+
+    // Structure as hierarchy: { [subject]: [ { topic, count } ] }
     const hierarchy = {};
     result.rows.forEach(row => {
       const { subject, topic, q_count } = row;
       const count = parseInt(q_count);
+
+      // Access checks for candidates (non-admins)
+      if (!isAdminUser) {
+        const meta = metadata[subject];
+        if (meta) {
+          // Hide inactive subjects
+          if (meta.status === 'inactive') {
+            return;
+          }
+          // Restrict to allowed batches
+          if (meta.allowed_batches && Array.isArray(meta.allowed_batches) && meta.allowed_batches.length > 0) {
+            const userBatch = currentUser.batch_id ? parseInt(currentUser.batch_id) : null;
+            const isAllowed = meta.allowed_batches.map(Number).includes(Number(userBatch));
+            if (!isAllowed) {
+              return;
+            }
+          }
+        }
+      }
+
       if (!hierarchy[subject]) {
         hierarchy[subject] = [];
       }
       hierarchy[subject].push({ topic, count });
     });
 
-    res.json(hierarchy);
+    // Populate metadata for all returned subjects
+    const finalMetadata = {};
+    Object.keys(hierarchy).forEach(subject => {
+      finalMetadata[subject] = metadata[subject] || { status: 'active', allowed_batches: null };
+    });
+
+    res.json({
+      hierarchy,
+      metadata: finalMetadata
+    });
   } catch (err) {
     console.error('Fetch subject topics hierarchy error:', err.message);
+    res.status(500).send('Server error');
+  }
+});
+
+// @route   GET api/practice/subjects-config
+// @desc    Get configuration (status, allowed batches) for all subjects (Admin only)
+// @access  Private (Admin only)
+router.get('/subjects-config', [auth, trial, isAdmin], async (req, res) => {
+  try {
+    const result = await db.query('SELECT * FROM practice_subjects');
+    res.json(result.rows);
+  } catch (err) {
+    console.error('Fetch practice subjects config error:', err.message);
+    res.status(500).send('Server error');
+  }
+});
+
+// @route   POST api/practice/subjects-config
+// @desc    Save configuration for a subject (Admin only)
+// @access  Private (Admin only)
+router.post('/subjects-config', [auth, trial, isAdmin], async (req, res) => {
+  const { subjectName, status, allowedBatches } = req.body;
+  if (!subjectName || !status) {
+    return res.status(400).json({ message: 'Subject name and status are required' });
+  }
+  try {
+    const isPg = !db.isUsingLocalDb();
+    let queryText;
+    let params;
+    
+    if (isPg) {
+      queryText = `
+        INSERT INTO practice_subjects (subject_name, status, allowed_batches) 
+        VALUES ($1, $2, $3) 
+        ON CONFLICT (subject_name) 
+        DO UPDATE SET status = $2, allowed_batches = $3 
+        RETURNING *`;
+      params = [subjectName, status, allowedBatches ? JSON.stringify(allowedBatches) : null];
+    } else {
+      queryText = 'INSERT INTO practice_subjects (subject_name, status, allowed_batches) VALUES ($1, $2, $3)';
+      params = [subjectName, status, allowedBatches ? JSON.stringify(allowedBatches) : null];
+    }
+    
+    const result = await db.query(queryText, params);
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error('Save practice subjects config error:', err.message);
     res.status(500).send('Server error');
   }
 });
@@ -36,6 +146,41 @@ router.get('/random', [auth, trial], async (req, res) => {
   const { subject, topic, difficulty, limit = 10 } = req.query;
 
   try {
+    // Access check for students (non-admins)
+    if (subject) {
+      const userCheck = await db.query('SELECT role, batch_id FROM users WHERE id = $1', [req.user.id]);
+      const currentUser = userCheck.rows.length > 0 ? userCheck.rows[0] : null;
+      const isAdminUser = currentUser && currentUser.role === 'admin';
+
+      if (!isAdminUser) {
+        const configRes = await db.query('SELECT * FROM practice_subjects WHERE subject_name = $1', [subject]);
+        if (configRes.rows.length > 0) {
+          const cfg = configRes.rows[0];
+          if (cfg.status === 'inactive') {
+            return res.status(403).json({ message: 'Access denied: This subject is currently inactive.' });
+          }
+          if (cfg.status === 'coming_soon') {
+            return res.status(403).json({ message: 'Access denied: This subject is coming soon.' });
+          }
+          if (cfg.allowed_batches) {
+            let allowed = [];
+            try {
+              allowed = typeof cfg.allowed_batches === 'string' ? JSON.parse(cfg.allowed_batches) : cfg.allowed_batches;
+            } catch (e) {
+              allowed = cfg.allowed_batches.split(',').map(x => parseInt(x.trim())).filter(Boolean);
+            }
+            if (allowed.length > 0) {
+              const userBatch = currentUser.batch_id ? parseInt(currentUser.batch_id) : null;
+              const isAllowed = allowed.map(Number).includes(Number(userBatch));
+              if (!isAllowed) {
+                return res.status(403).json({ message: 'Access denied: This subject is restricted to specific batches.' });
+              }
+            }
+          }
+        }
+      }
+    }
+
     // To ensure compatibility with both local JSON DB and real Postgres (which use different random syntax),
     // we fetch matching rows and randomize in JavaScript.
     let queryText = 'SELECT * FROM questions WHERE 1=1';

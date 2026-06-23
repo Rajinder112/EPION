@@ -9,11 +9,12 @@ import MockTestView from '../components/MockTestView';
 import RevisionView from '../components/RevisionView';
 import LeaderboardView from '../components/LeaderboardView';
 import AdminView from '../components/AdminView';
+import ReportsView from '../components/ReportsView';
 import SettingsView from '../components/SettingsView';
 
 import { 
   LayoutDashboard, BookOpen, Trophy, Bookmark, 
-  Award, Shield, LogOut, Sun, Moon, HeartPulse, Settings 
+  Award, Shield, LogOut, Sun, Moon, HeartPulse, Settings, BarChart3 
 } from 'lucide-react';
 
 export default function Home() {
@@ -275,9 +276,10 @@ export default function Home() {
     { id: 'settings', name: 'Settings', icon: Settings },
   ];
 
-  // Append Admin Panel if user is administrator
+  // Append Admin Panel & Reports Console if user is administrator
   if (user.role === 'admin') {
     menuItems.push({ id: 'admin', name: 'Admin Panel', icon: Shield });
+    menuItems.push({ id: 'reports', name: 'Reports Console', icon: BarChart3 });
   }
 
   return (
@@ -499,6 +501,10 @@ export default function Home() {
 
         {activeTab === 'admin' && user.role === 'admin' && (
           <AdminView />
+        )}
+
+        {activeTab === 'reports' && user.role === 'admin' && (
+          <ReportsView />
         )}
 
         {/* Global Footer */}

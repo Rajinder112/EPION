@@ -35,6 +35,7 @@ export default function MockTestView({ onNavigateHome, user }) {
   const [editNegMarking, setEditNegMarking] = useState(0.25);
   const [editIsLocked, setEditIsLocked] = useState(false);
   const [editAllowedBatches, setEditAllowedBatches] = useState([]);
+  const [editStatus, setEditStatus] = useState('active');
   const [batches, setBatches] = useState([]);
   const [csvUploading, setCsvUploading] = useState(false);
   const [csvError, setCsvError] = useState(null);
@@ -79,6 +80,7 @@ export default function MockTestView({ onNavigateHome, user }) {
     setEditDuration(test.duration_minutes);
     setEditNegMarking(test.negative_marking);
     setEditIsLocked(test.is_locked === true || test.is_locked === 'true' || test.is_locked === 1);
+    setEditStatus(test.status || 'active');
     
     let allowed = [];
     if (test.allowed_batches) {
@@ -104,7 +106,8 @@ export default function MockTestView({ onNavigateHome, user }) {
         durationMinutes: editDuration,
         negativeMarking: editNegMarking,
         isLocked: editIsLocked,
-        allowedBatches: editAllowedBatches.length > 0 ? editAllowedBatches : null
+        allowedBatches: editAllowedBatches.length > 0 ? editAllowedBatches : null,
+        status: editStatus
       });
       alert('Mock test updated successfully');
       setIsEditModalOpen(false);
@@ -303,6 +306,21 @@ export default function MockTestView({ onNavigateHome, user }) {
                           Restricted ({allowedBatchesList.length} Batches)
                         </span>
                       )}
+                      {test.status === 'active' && (
+                        <span className="text-[9px] font-extrabold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/10 uppercase tracking-wider">
+                          Active
+                        </span>
+                      )}
+                      {test.status === 'coming_soon' && (
+                        <span className="text-[9px] font-extrabold text-amber-600 dark:text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/10 uppercase tracking-wider">
+                          Coming Soon
+                        </span>
+                      )}
+                      {test.status === 'inactive' && (
+                        <span className="text-[9px] font-extrabold text-red-600 dark:text-red-400 bg-red-500/10 px-2 py-0.5 rounded-full border border-red-500/10 uppercase tracking-wider">
+                          Inactive (Admin Only)
+                        </span>
+                      )}
                     </div>
                     <h3 className="text-base md:text-lg font-bold text-foreground">{test.title}</h3>
                     <div className="flex items-center gap-4 text-xs font-semibold text-muted-text">
@@ -316,12 +334,21 @@ export default function MockTestView({ onNavigateHome, user }) {
                   </div>
                   
                   <div className="flex flex-col sm:flex-row gap-2 shrink-0 w-full md:w-auto">
-                    <button
-                      onClick={() => handleStartExam(test)}
-                      className="px-5 py-2.5 bg-primary hover:bg-primary-hover text-white text-sm font-semibold rounded-xl flex items-center justify-center gap-2 shadow-sm transition-colors"
-                    >
-                      Start Exam
-                    </button>
+                    {test.status === 'coming_soon' && user?.role !== 'admin' ? (
+                      <button
+                        disabled
+                        className="px-5 py-2.5 bg-muted-bg text-muted-text text-sm font-semibold rounded-xl flex items-center justify-center gap-2 border border-border cursor-not-allowed"
+                      >
+                        Coming Soon
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => handleStartExam(test)}
+                        className="px-5 py-2.5 bg-primary hover:bg-primary-hover text-white text-sm font-semibold rounded-xl flex items-center justify-center gap-2 shadow-sm transition-colors"
+                      >
+                        Start Exam
+                      </button>
+                    )}
                     {user?.role === 'admin' && (
                       <div className="flex gap-2">
                         <button
@@ -729,6 +756,20 @@ export default function MockTestView({ onNavigateHome, user }) {
                     className="w-full py-2 px-3 bg-muted-bg border border-border rounded-lg text-sm text-foreground focus:outline-none"
                   />
                 </div>
+              </div>
+
+              {/* Status Selector */}
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-muted-text uppercase tracking-wider block">Mock Test Status</label>
+                <select
+                  value={editStatus}
+                  onChange={(e) => setEditStatus(e.target.value)}
+                  className="w-full py-2 px-3 bg-muted-bg border border-border rounded-lg text-sm text-foreground focus:outline-none focus:border-primary"
+                >
+                  <option value="active">Active (Visible & Playable)</option>
+                  <option value="coming_soon">Coming Soon (Visible but Disabled)</option>
+                  <option value="inactive">Inactive (Hidden from Candidates)</option>
+                </select>
               </div>
 
               {/* Lock Switch */}

@@ -19,6 +19,11 @@ export default function AdminView() {
   const [batches, setBatches] = useState([]);
   const [newBatchName, setNewBatchName] = useState('');
   const [candidateSearch, setCandidateSearch] = useState('');
+  
+  // Practice Subjects state
+  const [practiceSubjects, setPracticeSubjects] = useState([]);
+  const [practiceConfigs, setPracticeConfigs] = useState({});
+  const [savingSubject, setSavingSubject] = useState(null);
 
   // Form inputs
   const [subject, setSubject] = useState('');
@@ -74,6 +79,88 @@ export default function AdminView() {
       fetchCandidatesAndBatches();
     }
   }, [activeSubTab]);
+
+  const fetchPracticeSubjectsAndConfigs = async () => {
+    try {
+      const [hierarchyRes, configRes, batchesRes] = await Promise.all([
+        api.getSubjectTopics(),
+        api.getPracticeSubjectsConfig(),
+        api.getBatches()
+      ]);
+      
+      const subjectNames = Object.keys(hierarchyRes.hierarchy || hierarchyRes || {});
+      setPracticeSubjects(subjectNames);
+      setBatches(batchesRes);
+
+      const configMap = {};
+      (configRes || []).forEach(cfg => {
+        let allowed = [];
+        if (cfg.allowed_batches) {
+          try {
+            allowed = typeof cfg.allowed_batches === 'string' ? JSON.parse(cfg.allowed_batches) : cfg.allowed_batches;
+          } catch(e) {
+            allowed = cfg.allowed_batches.split(',').map(x => parseInt(x.trim())).filter(Boolean);
+          }
+        }
+        configMap[cfg.subject_name] = {
+          status: cfg.status || 'active',
+          allowed_batches: Array.isArray(allowed) ? allowed.map(Number) : []
+        };
+      });
+      setPracticeConfigs(configMap);
+    } catch(err) {
+      console.error('Error fetching practice configurations:', err);
+    }
+  };
+
+  useEffect(() => {
+    if (activeSubTab === 'practice_subjects') {
+      fetchPracticeSubjectsAndConfigs();
+    }
+  }, [activeSubTab]);
+
+  const handleStatusChange = (subjectName, newStatus) => {
+    setPracticeConfigs(prev => ({
+      ...prev,
+      [subjectName]: {
+        ...(prev[subjectName] || { allowed_batches: [] }),
+        status: newStatus
+      }
+    }));
+  };
+
+  const handleBatchToggle = (subjectName, batchId) => {
+    setPracticeConfigs(prev => {
+      const current = prev[subjectName] || { status: 'active', allowed_batches: [] };
+      let updatedBatches;
+      if (current.allowed_batches.includes(batchId)) {
+        updatedBatches = current.allowed_batches.filter(id => id !== batchId);
+      } else {
+        updatedBatches = [...current.allowed_batches, batchId];
+      }
+      return {
+        ...prev,
+        [subjectName]: {
+          ...current,
+          allowed_batches: updatedBatches
+        }
+      };
+    });
+  };
+
+  const handleSaveSubjectConfig = async (subjectName) => {
+    setSavingSubject(subjectName);
+    try {
+      const config = practiceConfigs[subjectName] || { status: 'active', allowed_batches: [] };
+      await api.updatePracticeSubjectConfig(subjectName, config.status, config.allowed_batches);
+      alert(`Configuration for "${subjectName}" saved successfully.`);
+      fetchPracticeSubjectsAndConfigs();
+    } catch (err) {
+      alert(err.message || `Failed to save configuration for "${subjectName}"`);
+    } finally {
+      setSavingSubject(null);
+    }
+  };
 
   useEffect(() => {
     fetchQuestions();
@@ -409,9 +496,19 @@ export default function AdminView() {
         >
           Batches & Candidates
         </button>
+        <button
+          onClick={() => setActiveSubTab('practice_subjects')}
+          className={`px-4 py-2 text-xs font-bold rounded-lg transition-all ${
+            activeSubTab === 'practice_subjects' 
+              ? 'bg-card text-primary shadow-sm border border-border' 
+              : 'text-muted-text hover:text-foreground'
+          }`}
+        >
+          Practice Subjects
+        </button>
       </div>
 
-      {activeSubTab === 'questions' ? (
+      {activeSubTab === 'questions' && (
         <>
           {/* CSV Batch Importer widget */}
           <div className="bg-card border border-border p-5 rounded-2xl shadow-sm">
@@ -585,7 +682,9 @@ export default function AdminView() {
             </div>
           </div>
         </>
-      ) : (
+      )}
+
+      {activeSubTab === 'candidates' && (
         <>
           {/* Create Student Batch widget */}
           <div className="bg-card border border-border p-5 rounded-2xl shadow-sm animate-fade-in">
@@ -714,6 +813,125 @@ export default function AdminView() {
             </div>
           </div>
         </>
+      )}
+
+      {activeSubTab === 'practice_subjects' && (
+        <div className="space-y-6 animate-fade-in">
+          <div className="bg-card border border-border p-5 rounded-2xl shadow-sm">
+            <h3 className="font-bold text-foreground text-sm flex items-center gap-2 mb-2">
+              <Database className="w-4.5 h-4.5 text-primary" />
+              <span>Practice Subjects Access Control</span>
+            </h3>
+            <p className="text-xs text-muted-text">
+              Configure visibility statuses and assign batch restrictions for each practice subject area. 
+              Checking no batches makes the subject public to all registered candidates.
+            </p>
+          </div>
+
+          <div className="bg-card border border-border rounded-2xl shadow-sm overflow-hidden">
+            <div className="overflow-x-auto w-full">
+              <table className="w-full text-left text-xs border-collapse">
+                <thead>
+                  <tr className="bg-muted-bg text-muted-text uppercase font-bold border-b border-border text-[10px] tracking-wider">
+                    <th className="p-4 w-1/3">Subject Name</th>
+                    <th className="p-4 w-1/4">Access Status</th>
+                    <th className="p-4">Allowed Batches (Access Restriction)</th>
+                    <th className="p-4 text-center w-32">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-border text-foreground font-medium">
+                  {practiceSubjects.map((subName) => {
+                    const cfg = practiceConfigs[subName] || { status: 'active', allowed_batches: [] };
+                    const isSaving = savingSubject === subName;
+                    
+                    return (
+                      <tr key={subName} className="hover:bg-muted-bg/5 transition-colors">
+                        <td className="p-4 font-bold text-sm text-foreground">
+                          {subName}
+                        </td>
+                        <td className="p-4">
+                          <select
+                            value={cfg.status}
+                            onChange={(e) => handleStatusChange(subName, e.target.value)}
+                            className={`w-full py-1.5 px-2.5 bg-muted-bg border rounded-xl text-xs font-semibold focus:outline-none ${
+                              cfg.status === 'active' ? 'text-success border-success/30' :
+                              cfg.status === 'coming_soon' ? 'text-amber-500 border-amber-500/30' :
+                              'text-danger border-danger/30'
+                            }`}
+                          >
+                            <option value="active" className="text-success font-semibold">Active</option>
+                            <option value="coming_soon" className="text-amber-500 font-semibold">Coming Soon</option>
+                            <option value="inactive" className="text-danger font-semibold">Inactive</option>
+                          </select>
+                        </td>
+                        <td className="p-4">
+                          {batches.length > 0 ? (
+                            <div className="flex flex-wrap gap-3 items-center">
+                              {batches.map((batch) => {
+                                const isChecked = cfg.allowed_batches.includes(batch.id);
+                                return (
+                                  <label 
+                                    key={batch.id} 
+                                    className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border text-[11px] font-semibold cursor-pointer select-none transition-all ${
+                                      isChecked 
+                                        ? 'bg-primary-light border-primary/20 text-primary' 
+                                        : 'bg-muted-bg/30 border-border text-muted-text hover:text-foreground hover:bg-muted-bg/50'
+                                    }`}
+                                  >
+                                    <input
+                                      type="checkbox"
+                                      checked={isChecked}
+                                      onChange={() => handleBatchToggle(subName, batch.id)}
+                                      className="rounded text-primary focus:ring-primary w-3.5 h-3.5"
+                                    />
+                                    <span>{batch.name}</span>
+                                  </label>
+                                );
+                              })}
+                            </div>
+                          ) : (
+                            <span className="text-muted-text text-[11px] italic">
+                              Create batches in "Batches & Candidates" tab to restrict access
+                            </span>
+                          )}
+                          <div className="text-[10px] text-muted-text/75 mt-1.5 font-semibold">
+                            {cfg.allowed_batches.length === 0 ? '🔓 Public Access (Open to all batches)' : `🔒 Restricted to ${cfg.allowed_batches.length} batch(es)`}
+                          </div>
+                        </td>
+                        <td className="p-4 text-center">
+                          <button
+                            onClick={() => handleSaveSubjectConfig(subName)}
+                            disabled={isSaving}
+                            className="px-4 py-2 bg-primary hover:bg-primary-hover disabled:bg-primary/50 text-white text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 shadow-sm transition-colors cursor-pointer w-full"
+                          >
+                            {isSaving ? (
+                              <>
+                                <span className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                                <span>Saving...</span>
+                              </>
+                            ) : (
+                              <>
+                                <Check className="w-3.5 h-3.5" />
+                                <span>Save</span>
+                              </>
+                            )}
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                  {practiceSubjects.length === 0 && (
+                    <tr>
+                      <td colSpan="4" className="text-center py-12 text-muted-text font-bold text-sm">
+                        No subjects found in the practice questions bank.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
       )}
 
       {/* 1. MOCK TEST GENERATOR MODAL */}

@@ -10,6 +10,7 @@ import {
 
 export default function PracticeView({ initialFilters = null, directLaunchQuestion = null, onNavigateHome, user }) {
   const [subjectsHierarchy, setSubjectsHierarchy] = useState({});
+  const [subjectsMetadata, setSubjectsMetadata] = useState({});
   const [loading, setLoading] = useState(true);
   const [sessionQuestions, setSessionQuestions] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -33,14 +34,27 @@ export default function PracticeView({ initialFilters = null, directLaunchQuesti
   const [showChallengeCompletionModal, setShowChallengeCompletionModal] = useState(false);
   const [challengeStreak, setChallengeStreak] = useState(0);
 
+  const checkBookmarkStatus = async (questionId) => {
+    try {
+      const bookmarks = await api.getBookmarks();
+      const bookmarked = bookmarks.some(b => b.id === questionId);
+      setIsBookmarked(bookmarked);
+    } catch (err) {
+      console.error('Error checking bookmark status:', err);
+    }
+  };
+
   useEffect(() => {
     fetchMetadata();
   }, []);
 
   useEffect(() => {
     if (initialFilters) {
+      setSelectedSubject(initialFilters.subject || '');
+      setSelectedTopic(initialFilters.topic || '');
+      setSelectedDifficulty(initialFilters.difficulty || '');
+      
       if (initialFilters.subject) {
-        setSelectedSubject(initialFilters.subject);
         if (initialFilters.isDailyChallenge) {
           setIsDailyChallenge(true);
           setSessionSize(10);
@@ -48,7 +62,7 @@ export default function PracticeView({ initialFilters = null, directLaunchQuesti
           setIsDailyChallenge(false);
         }
         // Automatically fetch questions
-        startPracticeSession(initialFilters.subject, '', '', initialFilters.isDailyChallenge ? 10 : sessionSize);
+        startPracticeSession(initialFilters.subject, initialFilters.topic || '', initialFilters.difficulty || '', initialFilters.isDailyChallenge ? 10 : sessionSize);
       }
     }
   }, [initialFilters]);
@@ -70,7 +84,13 @@ export default function PracticeView({ initialFilters = null, directLaunchQuesti
     setLoading(true);
     try {
       const data = await api.getSubjectTopics();
-      setSubjectsHierarchy(data);
+      if (data && data.hierarchy) {
+        setSubjectsHierarchy(data.hierarchy);
+        setSubjectsMetadata(data.metadata || {});
+      } else {
+        setSubjectsHierarchy(data || {});
+        setSubjectsMetadata({});
+      }
     } catch (err) {
       console.error('Error fetching subject metadata:', err);
     } finally {
@@ -79,6 +99,13 @@ export default function PracticeView({ initialFilters = null, directLaunchQuesti
   };
 
   const startPracticeSession = async (subject = selectedSubject, topic = selectedTopic, difficulty = selectedDifficulty, customLimit = null) => {
+    if (subject) {
+      const meta = subjectsMetadata[subject];
+      if (meta && meta.status === 'coming_soon' && user?.role !== 'admin') {
+        alert('This subject is coming soon and cannot be practiced yet.');
+        return;
+      }
+    }
     setLoading(true);
     try {
       const filters = {
@@ -113,15 +140,7 @@ export default function PracticeView({ initialFilters = null, directLaunchQuesti
     }
   };
 
-  const checkBookmarkStatus = async (qId) => {
-    try {
-      const bookmarks = await api.getBookmarks();
-      const isMarked = bookmarks.some(b => b.id === qId);
-      setIsBookmarked(isMarked);
-    } catch (err) {
-      console.error('Error checking bookmark status:', err);
-    }
-  };
+
 
   const handleSelectOption = (index) => {
     if (hasSubmitted) return;
@@ -354,14 +373,29 @@ export default function PracticeView({ initialFilters = null, directLaunchQuesti
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {Object.entries(subjectsHierarchy).map(([subject, topics], idx) => {
                 const totalQuestions = topics.reduce((sum, item) => sum + item.count, 0);
+                const meta = subjectsMetadata[subject] || {};
+                const isComingSoon = meta.status === 'coming_soon';
+                const isInactive = meta.status === 'inactive';
                 return (
                   <div
                     key={idx}
-                    className="bg-card border border-border p-4 rounded-xl shadow-sm flex items-center justify-between hover:border-primary/50 transition-all group"
+                    className={`bg-card border p-4 rounded-xl shadow-sm flex items-center justify-between transition-all group ${
+                      isComingSoon ? 'opacity-75 border-border' : 'border-border hover:border-primary/50'
+                    }`}
                   >
                     <div className="space-y-1.5 pr-4">
-                      <h4 className="font-bold text-foreground group-hover:text-primary transition-colors text-sm md:text-base">
-                        {subject}
+                      <h4 className="font-bold text-foreground group-hover:text-primary transition-colors text-sm md:text-base flex items-center flex-wrap gap-1.5">
+                        <span>{subject}</span>
+                        {isComingSoon && (
+                          <span className="px-1.5 py-0.5 text-[8px] bg-amber-500/10 text-amber-600 dark:text-amber-400 font-black rounded uppercase tracking-wider border border-amber-500/10 shrink-0">
+                            Coming Soon
+                          </span>
+                        )}
+                        {isInactive && (
+                          <span className="px-1.5 py-0.5 text-[8px] bg-danger-light text-danger font-black rounded uppercase tracking-wider border border-danger/10 shrink-0">
+                            Inactive
+                          </span>
+                        )}
                       </h4>
                       <p className="text-xs text-muted-text">
                         {topics.length} topics • {totalQuestions} questions
@@ -369,11 +403,18 @@ export default function PracticeView({ initialFilters = null, directLaunchQuesti
                     </div>
                     <button
                       onClick={() => {
+                        if (isComingSoon && user?.role !== 'admin') return;
                         setSelectedSubject(subject);
                         setSelectedTopic('');
                         startPracticeSession(subject, '', '');
                       }}
-                      className="p-2.5 rounded-lg bg-primary-light text-primary hover:bg-primary hover:text-white transition-colors"
+                      disabled={isComingSoon && user?.role !== 'admin'}
+                      className={`p-2.5 rounded-lg transition-colors ${
+                        isComingSoon && user?.role !== 'admin'
+                          ? 'bg-muted-bg text-muted-text/30 border border-border cursor-not-allowed'
+                          : 'bg-primary-light text-primary hover:bg-primary hover:text-white'
+                      }`}
+                      title={isComingSoon ? 'Coming Soon' : 'Play'}
                     >
                       <Play className="w-4 h-4 fill-current" />
                     </button>
