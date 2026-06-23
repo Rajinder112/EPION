@@ -5,7 +5,7 @@ import { api } from '../utils/api';
 import { 
   Bookmark, AlertCircle, Play, Sparkles, BookOpen, Trash2, ArrowRight,
   ChevronDown, ChevronUp, Calculator, HeartPulse, Activity, HelpCircle, 
-  RotateCcw, Sparkle, Stethoscope, GraduationCap, ArrowUpRight, Check
+  RotateCcw, Sparkle, Stethoscope, GraduationCap, ArrowUpRight, Check, Brain
 } from 'lucide-react';
 
 export default function RevisionView({ onStartQuestionPractice }) {
@@ -49,6 +49,22 @@ export default function RevisionView({ onStartQuestionPractice }) {
   const [ivTime, setIvTime] = useState(8);
   const [ivDropFactor, setIvDropFactor] = useState(15);
   const [ivResult, setIvResult] = useState(null);
+
+  // States for Glasgow Coma Scale (GCS)
+  const [gcsEye, setGcsEye] = useState(4);
+  const [gcsVerbal, setGcsVerbal] = useState(5);
+  const [gcsMotor, setGcsMotor] = useState(6);
+  const [gcsResult, setGcsResult] = useState(null);
+
+  // States for SpO2/FiO2 Ratio
+  const [sfSpo2, setSfSpo2] = useState(98);
+  const [sfFio2, setSfFio2] = useState(21);
+  const [sfResult, setSfResult] = useState(null);
+
+  // States for Mean Arterial Pressure (MAP)
+  const [mapSbp, setMapSbp] = useState(120);
+  const [mapDbp, setMapDbp] = useState(80);
+  const [mapResult, setMapResult] = useState(null);
 
   useEffect(() => {
     fetchRevisionData();
@@ -99,7 +115,16 @@ export default function RevisionView({ onStartQuestionPractice }) {
     e.preventDefault();
     const w = parseFloat(parklandWeight);
     const t = parseFloat(parklandTbsa);
-    if (isNaN(w) || isNaN(t) || w <= 0 || t <= 0) return;
+    if (isNaN(w) || isNaN(t)) return;
+
+    if (w <= 0 || t <= 0 || t > 100) {
+      setParklandResult({
+        totalFluid: null,
+        errorMsg: 'Error: Weight must be positive, and TBSA must be between 0% and 100%.',
+        alertClass: 'bg-danger-light text-danger border-danger/20'
+      });
+      return;
+    }
 
     const totalFluid = 4 * w * t; // in mL
     const first8Hrs = totalFluid / 2;
@@ -125,6 +150,16 @@ export default function RevisionView({ onStartQuestionPractice }) {
 
     if (isNaN(ph) || isNaN(paco2) || isNaN(hco3)) return;
 
+    // Validate physiological bounds to prevent clinically impossible calculations
+    if (ph < 6.0 || ph > 8.0 || paco2 < 5 || paco2 > 150 || hco3 < 2 || hco3 > 60) {
+      setAbgResult({
+        diagnosis: 'Inconsistent/Invalid ABG Values',
+        compensation: 'Error: Input values are outside plausible physiological ranges (pH 6.0-8.0, PaCO₂ 5-150 mmHg, HCO₃⁻ 2-60 mEq/L).',
+        isError: true
+      });
+      return;
+    }
+
     let pHState = 'normal'; // 'normal' | 'acidosis' | 'alkalosis'
     if (ph < 7.35) pHState = 'acidosis';
     else if (ph > 7.45) pHState = 'alkalosis';
@@ -139,6 +174,7 @@ export default function RevisionView({ onStartQuestionPractice }) {
 
     let diagnosis = 'Normal Acid-Base Balance';
     let compensation = 'N/A';
+    let isError = false;
 
     if (pHState === 'acidosis') {
       if (respiratoryState === 'acidosis' && metabolicState !== 'acidosis') {
@@ -150,6 +186,10 @@ export default function RevisionView({ onStartQuestionPractice }) {
       } else if (respiratoryState === 'acidosis' && metabolicState === 'acidosis') {
         diagnosis = 'Combined Respiratory & Metabolic Acidosis';
         compensation = 'None';
+      } else {
+        diagnosis = 'Inconsistent/Invalid ABG Values';
+        compensation = 'Error: Acidosis pH cannot coexist with these respiratory/metabolic values.';
+        isError = true;
       }
     } else if (pHState === 'alkalosis') {
       if (respiratoryState === 'alkalosis' && metabolicState !== 'alkalosis') {
@@ -161,19 +201,29 @@ export default function RevisionView({ onStartQuestionPractice }) {
       } else if (respiratoryState === 'alkalosis' && metabolicState === 'alkalosis') {
         diagnosis = 'Combined Respiratory & Metabolic Alkalosis';
         compensation = 'None';
+      } else {
+        diagnosis = 'Inconsistent/Invalid ABG Values';
+        compensation = 'Error: Alkalosis pH cannot coexist with these respiratory/metabolic values.';
+        isError = true;
       }
     } else {
-      // pH is normal, but check for fully compensated states
-      if (respiratoryState === 'acidosis' && metabolicState === 'alkalosis') {
+      if (respiratoryState === 'normal' && metabolicState === 'normal') {
+        diagnosis = 'Normal Acid-Base Balance';
+        compensation = 'None';
+      } else if (respiratoryState === 'acidosis' && metabolicState === 'alkalosis') {
         diagnosis = ph < 7.40 ? 'Fully Compensated Respiratory Acidosis' : 'Fully Compensated Metabolic Alkalosis';
         compensation = 'Fully Compensated';
       } else if (respiratoryState === 'alkalosis' && metabolicState === 'acidosis') {
         diagnosis = ph < 7.40 ? 'Fully Compensated Metabolic Acidosis' : 'Fully Compensated Respiratory Alkalosis';
         compensation = 'Fully Compensated';
+      } else {
+        diagnosis = 'Inconsistent/Invalid ABG Values';
+        compensation = 'Error: Normal pH requires both values to be normal or fully compensating.';
+        isError = true;
       }
     }
 
-    setAbgResult({ diagnosis, compensation });
+    setAbgResult({ diagnosis, compensation, isError });
   };
 
   // 3. APGAR calculation logic
@@ -201,7 +251,16 @@ export default function RevisionView({ onStartQuestionPractice }) {
     const t = parseFloat(ivTime);
     const f = parseFloat(ivDropFactor);
 
-    if (isNaN(v) || isNaN(t) || isNaN(f) || v <= 0 || t <= 0) return;
+    if (isNaN(v) || isNaN(t) || isNaN(f)) return;
+
+    if (v <= 0 || t <= 0) {
+      setIvResult({
+        rateMlHr: null,
+        errorMsg: 'Error: Volume and time must be positive values.',
+        alertClass: 'bg-danger-light text-danger border-danger/20'
+      });
+      return;
+    }
 
     const rateMlHr = v / t;
     const rateDropsMin = (v * f) / (t * 60);
@@ -210,6 +269,102 @@ export default function RevisionView({ onStartQuestionPractice }) {
       rateMlHr: rateMlHr.toFixed(1),
       rateDropsMin: Math.round(rateDropsMin)
     });
+  };
+
+  // 5. GCS calculation logic
+  const calculateGcs = (e) => {
+    e.preventDefault();
+    const eye = parseInt(gcsEye);
+    const verbal = parseInt(gcsVerbal);
+    const motor = parseInt(gcsMotor);
+    const score = eye + verbal + motor;
+
+    let interpretation = 'Mild Brain Injury (13-15)';
+    let alertClass = 'bg-success-light text-success border-success/20';
+
+    if (score <= 8) {
+      interpretation = 'Severe Brain Injury / Coma (3-8). Less than 8, intubate!';
+      alertClass = 'bg-danger-light text-danger border-danger/20';
+    } else if (score <= 12) {
+      interpretation = 'Moderate Brain Injury (9-12)';
+      alertClass = 'bg-amber-500/10 text-amber-600 border-amber-500/15';
+    }
+
+    setGcsResult({ score, interpretation, alertClass });
+  };
+
+  // 6. SpO2/FiO2 Ratio calculation logic
+  const calculateSfRatio = (e) => {
+    e.preventDefault();
+    const spo2 = parseFloat(sfSpo2);
+    const fio2 = parseFloat(sfFio2);
+
+    if (isNaN(spo2) || isNaN(fio2)) return;
+
+    let adjustedFio2 = fio2;
+    if (fio2 <= 1.0) {
+      adjustedFio2 = fio2 * 100;
+    }
+
+    if (spo2 < 0 || spo2 > 100 || adjustedFio2 < 21 || adjustedFio2 > 100) {
+      setSfResult({
+        ratio: null,
+        interpretation: 'Error: SpO₂ must be between 0-100%, and FiO₂ must be between 21-100% (or 0.21-1.0).',
+        alertClass: 'bg-danger-light text-danger border-danger/20'
+      });
+      return;
+    }
+
+    const ratio = Math.round((spo2 / adjustedFio2) * 100);
+
+    let interpretation = 'Normal / No ARDS (> 315)';
+    let alertClass = 'bg-success-light text-success border-success/20';
+
+    if (ratio <= 235) {
+      interpretation = 'Moderate to Severe ARDS (≤ 235) [Equivalent to PaO₂/FiO₂ ≤ 200]';
+      alertClass = 'bg-danger-light text-danger border-danger/20';
+    } else if (ratio <= 315) {
+      interpretation = 'Mild ARDS (236 - 315) [Equivalent to PaO₂/FiO₂ ≤ 300]';
+      alertClass = 'bg-amber-500/10 text-amber-600 border-amber-500/15';
+    }
+
+    setSfResult({ ratio, interpretation, alertClass });
+  };
+
+  // 7. MAP calculation logic
+  const calculateMap = (e) => {
+    e.preventDefault();
+    const sbp = parseFloat(mapSbp);
+    const dbp = parseFloat(mapDbp);
+
+    if (isNaN(sbp) || isNaN(dbp)) return;
+
+    if (sbp <= dbp || sbp <= 0 || dbp <= 0) {
+      setMapResult({
+        map: null,
+        interpretation: 'Error: Systolic pressure must be greater than diastolic pressure, and both must be positive.',
+        alertClass: 'bg-danger-light text-danger border-danger/20'
+      });
+      return;
+    }
+
+    const mapVal = Math.round((sbp + 2 * dbp) / 3);
+
+    let interpretation = 'Normal Perfusion (70-100 mmHg)';
+    let alertClass = 'bg-success-light text-success border-success/20';
+
+    if (mapVal < 60) {
+      interpretation = 'Inadequate Organ Perfusion (< 60 mmHg) - Danger of Shock!';
+      alertClass = 'bg-danger-light text-danger border-danger/20';
+    } else if (mapVal < 70) {
+      interpretation = 'Low MAP (60-69 mmHg) - Monitor Closely';
+      alertClass = 'bg-amber-500/10 text-amber-600 border-amber-500/15';
+    } else if (mapVal > 100) {
+      interpretation = 'Elevated MAP (> 100 mmHg)';
+      alertClass = 'bg-amber-500/10 text-amber-600 border-amber-500/15';
+    }
+
+    setMapResult({ map: mapVal, interpretation, alertClass });
   };
 
   // High-Yield One Page Notes dataset
@@ -1324,26 +1479,32 @@ export default function RevisionView({ onStartQuestionPractice }) {
             </form>
 
             {parklandResult && (
-              <div className="bg-primary-light/40 border border-primary/20 p-4 rounded-xl text-xs space-y-2 animate-slide-up">
-                <div className="flex justify-between items-center border-b border-primary/10 pb-1.5">
-                  <span className="font-semibold text-muted-text">Total Fluid (24 hrs)</span>
-                  <span className="font-black text-primary text-base">{parklandResult.totalFluid} mL</span>
-                </div>
-                <div className="grid grid-cols-2 gap-2 text-[10px] text-muted-text leading-tight pt-1">
-                  <div>
-                    <div className="font-semibold text-foreground">First 8 Hours:</div>
-                    <div className="text-xs font-bold text-foreground mt-0.5">{parklandResult.first8Hrs} mL</div>
-                    <div>Rate: {parklandResult.rateFirst8} mL/hr</div>
-                  </div>
-                  <div>
-                    <div className="font-semibold text-foreground">Next 16 Hours:</div>
-                    <div className="text-xs font-bold text-foreground mt-0.5">{parklandResult.next16Hrs} mL</div>
-                    <div>Rate: {parklandResult.rateNext16} mL/hr</div>
-                  </div>
-                </div>
-                <div className="text-[9px] text-accent font-bold mt-1 uppercase tracking-wider">
-                  * First 8 hours volume count starts from the TIME OF INJURY!
-                </div>
+              <div className={`p-4 rounded-xl text-xs space-y-2 border animate-slide-up ${parklandResult.totalFluid === null ? parklandResult.alertClass : 'bg-primary-light/40 border-primary/20 text-foreground'}`}>
+                {parklandResult.totalFluid !== null ? (
+                  <>
+                    <div className="flex justify-between items-center border-b border-primary/10 pb-1.5">
+                      <span className="font-semibold text-muted-text">Total Fluid (24 hrs)</span>
+                      <span className="font-black text-primary text-base">{parklandResult.totalFluid} mL</span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2 text-[10px] text-muted-text leading-tight pt-1">
+                      <div>
+                        <div className="font-semibold text-foreground">First 8 Hours:</div>
+                        <div className="text-xs font-bold text-foreground mt-0.5">{parklandResult.first8Hrs} mL</div>
+                        <div>Rate: {parklandResult.rateFirst8} mL/hr</div>
+                      </div>
+                      <div>
+                        <div className="font-semibold text-foreground">Next 16 Hours:</div>
+                        <div className="text-xs font-bold text-foreground mt-0.5">{parklandResult.next16Hrs} mL</div>
+                        <div>Rate: {parklandResult.rateNext16} mL/hr</div>
+                      </div>
+                    </div>
+                    <div className="text-[9px] text-accent font-bold mt-1 uppercase tracking-wider">
+                      * First 8 hours volume count starts from the TIME OF INJURY!
+                    </div>
+                  </>
+                ) : (
+                  <p className="text-xs leading-tight font-semibold">{parklandResult.errorMsg}</p>
+                )}
               </div>
             )}
           </div>
@@ -1397,10 +1558,90 @@ export default function RevisionView({ onStartQuestionPractice }) {
             </form>
 
             {abgResult && (
-              <div className="bg-secondary-light border border-secondary/20 p-4 rounded-xl text-xs space-y-1.5 animate-slide-up">
-                <div className="font-semibold text-muted-text">Diagnostic Interpretation:</div>
-                <div className="text-sm font-black text-secondary">{abgResult.diagnosis}</div>
-                <div className="text-[10px] text-muted-text">Compensation Status: {abgResult.compensation}</div>
+              <div className={`p-4 rounded-xl text-xs space-y-1.5 border animate-slide-up ${
+                abgResult.isError 
+                  ? 'bg-danger-light border-danger/20 text-danger' 
+                  : 'bg-secondary-light border-secondary/20 text-secondary'
+              }`}>
+                <div className={`font-semibold ${abgResult.isError ? 'text-danger/80' : 'text-muted-text'}`}>
+                  Diagnostic Interpretation:
+                </div>
+                <div className={`text-sm font-black ${abgResult.isError ? 'text-danger' : 'text-secondary'}`}>
+                  {abgResult.diagnosis}
+                </div>
+                <div className={`text-[10px] ${abgResult.isError ? 'text-danger/90 font-semibold' : 'text-muted-text'}`}>
+                  {abgResult.isError ? abgResult.compensation : `Compensation Status: ${abgResult.compensation}`}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Glasgow Coma Scale (GCS) Calculator */}
+          <div className="bg-card border border-border p-5 rounded-2xl shadow-sm space-y-4">
+            <h3 className="font-extrabold text-foreground text-sm flex items-center gap-2 border-b border-border/80 pb-2">
+              <Brain className="w-4.5 h-4.5 text-primary" />
+              <span>Glasgow Coma Scale (GCS)</span>
+            </h3>
+            <form onSubmit={calculateGcs} className="space-y-3 text-xs">
+              <div className="space-y-2">
+                <div className="flex justify-between items-center gap-2 border-b border-border/50 pb-1.5">
+                  <span className="font-semibold text-muted-text">Eye Opening (E):</span>
+                  <select 
+                    value={gcsEye} 
+                    onChange={(e) => setGcsEye(parseInt(e.target.value))}
+                    className="py-1 px-2 bg-muted-bg border border-border rounded-lg focus:outline-none text-[11px] text-foreground w-40"
+                  >
+                    <option value="4">4 - Spontaneous</option>
+                    <option value="3">3 - To sound / command</option>
+                    <option value="2">2 - To pressure / pain</option>
+                    <option value="1">1 - None</option>
+                  </select>
+                </div>
+                <div className="flex justify-between items-center gap-2 border-b border-border/50 pb-1.5">
+                  <span className="font-semibold text-muted-text">Verbal Response (V):</span>
+                  <select 
+                    value={gcsVerbal} 
+                    onChange={(e) => setGcsVerbal(parseInt(e.target.value))}
+                    className="py-1 px-2 bg-muted-bg border border-border rounded-lg focus:outline-none text-[11px] text-foreground w-40"
+                  >
+                    <option value="5">5 - Oriented conversation</option>
+                    <option value="4">4 - Confused conversation</option>
+                    <option value="3">3 - Inappropriate words</option>
+                    <option value="2">2 - Incomprehensible sounds</option>
+                    <option value="1">1 - None</option>
+                  </select>
+                </div>
+                <div className="flex justify-between items-center gap-2">
+                  <span className="font-semibold text-muted-text">Motor Response (M):</span>
+                  <select 
+                    value={gcsMotor} 
+                    onChange={(e) => setGcsMotor(parseInt(e.target.value))}
+                    className="py-1 px-2 bg-muted-bg border border-border rounded-lg focus:outline-none text-[11px] text-foreground w-40"
+                  >
+                    <option value="6">6 - Obeys commands</option>
+                    <option value="5">5 - Localizes to pain</option>
+                    <option value="4">4 - Normal flexion (withdrawal)</option>
+                    <option value="3">3 - Abnormal flexion (decorticate)</option>
+                    <option value="2">2 - Extension response (decerebrate)</option>
+                    <option value="1">1 - None</option>
+                  </select>
+                </div>
+              </div>
+              <button
+                type="submit"
+                className="w-full py-2 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-lg transition-colors shadow-sm"
+              >
+                Calculate GCS Score
+              </button>
+            </form>
+
+            {gcsResult && (
+              <div className={`p-4 rounded-xl text-xs space-y-1.5 border animate-slide-up ${gcsResult.alertClass}`}>
+                <div className="flex justify-between items-center">
+                  <span className="font-semibold">Calculated GCS Score</span>
+                  <span className="text-lg font-black">{gcsResult.score} / 15</span>
+                </div>
+                <p className="text-[10px] leading-tight font-semibold">{gcsResult.interpretation}</p>
               </div>
             )}
           </div>
@@ -1493,6 +1734,62 @@ export default function RevisionView({ onStartQuestionPractice }) {
             )}
           </div>
 
+          {/* Mean Arterial Pressure (MAP) Calculator */}
+          <div className="bg-card border border-border p-5 rounded-2xl shadow-sm space-y-4">
+            <h3 className="font-extrabold text-foreground text-sm flex items-center gap-2 border-b border-border/80 pb-2">
+              <HeartPulse className="w-4.5 h-4.5 text-secondary" />
+              <span>Mean Arterial Pressure (MAP)</span>
+            </h3>
+            <form onSubmit={calculateMap} className="space-y-3 text-xs">
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-1">
+                  <label className="font-semibold text-muted-text">Systolic BP (mmHg)</label>
+                  <input
+                    type="number"
+                    required
+                    value={mapSbp}
+                    onChange={(e) => setMapSbp(e.target.value)}
+                    className="w-full py-2 px-3 bg-muted-bg border border-border rounded-lg text-foreground focus:outline-none"
+                    placeholder="e.g. 120"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="font-semibold text-muted-text">Diastolic BP (mmHg)</label>
+                  <input
+                    type="number"
+                    required
+                    value={mapDbp}
+                    onChange={(e) => setMapDbp(e.target.value)}
+                    className="w-full py-2 px-3 bg-muted-bg border border-border rounded-lg text-foreground focus:outline-none"
+                    placeholder="e.g. 80"
+                  />
+                </div>
+              </div>
+              <button
+                type="submit"
+                className="w-full py-2 bg-secondary hover:bg-secondary-hover text-white text-xs font-bold rounded-lg transition-colors shadow-sm"
+              >
+                Calculate MAP
+              </button>
+            </form>
+
+            {mapResult && (
+              <div className={`p-4 rounded-xl text-xs space-y-1.5 border animate-slide-up ${mapResult.alertClass}`}>
+                {mapResult.map !== null ? (
+                  <>
+                    <div className="flex justify-between items-center">
+                      <span className="font-semibold">Calculated MAP</span>
+                      <span className="text-lg font-black">{mapResult.map} mmHg</span>
+                    </div>
+                    <p className="text-[10px] leading-tight font-semibold">{mapResult.interpretation}</p>
+                  </>
+                ) : (
+                  <p className="text-xs leading-tight font-semibold">{mapResult.interpretation}</p>
+                )}
+              </div>
+            )}
+          </div>
+
           {/* IV Drop Rate Flow Calculator */}
           <div className="bg-card border border-border p-5 rounded-2xl shadow-sm space-y-4">
             <h3 className="font-extrabold text-foreground text-sm flex items-center gap-2 border-b border-border/80 pb-2">
@@ -1544,15 +1841,82 @@ export default function RevisionView({ onStartQuestionPractice }) {
             </form>
 
             {ivResult && (
-              <div className="bg-secondary-light border border-secondary/20 p-4 rounded-xl text-xs space-y-1.5 animate-slide-up">
-                <div className="flex justify-between items-center">
-                  <span className="font-semibold text-muted-text">Infusion Rate</span>
-                  <span className="font-bold text-foreground">{ivResult.rateMlHr} mL/hour</span>
+              <div className={`p-4 rounded-xl text-xs space-y-1.5 border animate-slide-up ${ivResult.rateMlHr === null ? ivResult.alertClass : 'bg-secondary-light border-secondary/20 text-secondary'}`}>
+                {ivResult.rateMlHr !== null ? (
+                  <>
+                    <div className="flex justify-between items-center">
+                      <span className="font-semibold text-muted-text">Infusion Rate</span>
+                      <span className="font-bold text-foreground">{ivResult.rateMlHr} mL/hour</span>
+                    </div>
+                    <div className="flex justify-between items-center border-t border-secondary/10 pt-1.5">
+                      <span className="font-semibold text-muted-text">Gravity Drop Rate</span>
+                      <span className="font-black text-secondary text-base">{ivResult.rateDropsMin} drops/minute</span>
+                    </div>
+                  </>
+                ) : (
+                  <p className="text-xs leading-tight font-semibold">{ivResult.errorMsg}</p>
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* SpO₂/FiO₂ Ratio Calculator */}
+          <div className="bg-card border border-border p-5 rounded-2xl shadow-sm space-y-4">
+            <h3 className="font-extrabold text-foreground text-sm flex items-center gap-2 border-b border-border/80 pb-2">
+              <Activity className="w-4.5 h-4.5 text-primary" />
+              <span>SpO₂/FiO₂ Ratio Calculator</span>
+            </h3>
+            <form onSubmit={calculateSfRatio} className="space-y-3 text-xs">
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-1">
+                  <label className="font-semibold text-muted-text">SpO₂ (%)</label>
+                  <input
+                    type="number"
+                    required
+                    min={50}
+                    max={100}
+                    value={sfSpo2}
+                    onChange={(e) => setSfSpo2(e.target.value)}
+                    className="w-full py-2 px-3 bg-muted-bg border border-border rounded-lg text-foreground focus:outline-none"
+                    placeholder="e.g. 95"
+                  />
                 </div>
-                <div className="flex justify-between items-center border-t border-secondary/10 pt-1.5">
-                  <span className="font-semibold text-muted-text">Gravity Drop Rate</span>
-                  <span className="font-black text-secondary text-base">{ivResult.rateDropsMin} drops/minute</span>
+                <div className="space-y-1">
+                  <label className="font-semibold text-muted-text">FiO₂ (%) or Decimal</label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    required
+                    min={0.21}
+                    max={100}
+                    value={sfFio2}
+                    onChange={(e) => setSfFio2(e.target.value)}
+                    className="w-full py-2 px-3 bg-muted-bg border border-border rounded-lg text-foreground focus:outline-none"
+                    placeholder="e.g. 50 or 0.50"
+                  />
                 </div>
+              </div>
+              <button
+                type="submit"
+                className="w-full py-2 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-lg transition-colors shadow-sm"
+              >
+                Calculate SF Ratio
+              </button>
+            </form>
+
+            {sfResult && (
+              <div className={`p-4 rounded-xl text-xs space-y-1.5 border animate-slide-up ${sfResult.alertClass}`}>
+                {sfResult.ratio !== null ? (
+                  <>
+                    <div className="flex justify-between items-center">
+                      <span className="font-semibold">Calculated SF Ratio</span>
+                      <span className="text-lg font-black">{sfResult.ratio}</span>
+                    </div>
+                    <p className="text-[10px] leading-tight font-semibold">{sfResult.interpretation}</p>
+                  </>
+                ) : (
+                  <p className="text-xs leading-tight font-semibold">{sfResult.interpretation}</p>
+                )}
               </div>
             )}
           </div>
