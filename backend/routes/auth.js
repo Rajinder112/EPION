@@ -10,9 +10,9 @@ const JWT_SECRET = process.env.JWT_SECRET || 'sgpgi_nursing_prep_secret_key';
 // @desc    Register a user with detailed fields
 // @access  Public
 router.post('/register', async (req, res) => {
-  const { name, email, password, phone, country, address, securityQuestion, securityAnswer } = req.body;
+  const { name, email, password, phone, country, state, address, securityQuestion, securityAnswer } = req.body;
 
-  if (!name || !email || !password || !phone || !country || !address || !securityQuestion || !securityAnswer) {
+  if (!name || !email || !password || !phone || !country || !state || !address || !securityQuestion || !securityAnswer) {
     return res.status(400).json({ message: 'Please enter all fields' });
   }
 
@@ -34,12 +34,12 @@ router.post('/register', async (req, res) => {
     await db.query(
       `INSERT INTO users (
         name, email, password_hash, google_id, role,
-        phone, country, address, security_question, security_answer,
+        phone, country, state, address, security_question, security_answer,
         is_email_verified, email_verification_token, batch_id
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)`,
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)`,
       [
         name, email, password_hash, null, 'user',
-        phone, country, address, securityQuestion, securityAnswer,
+        phone, country, state, address, securityQuestion, securityAnswer,
         false, verificationToken, null
       ]
     );
@@ -492,7 +492,7 @@ router.get('/candidates', auth, async (req, res) => {
     }
 
     const usersResult = await db.query(
-      'SELECT id, name, email, role, phone, country, address, is_email_verified, batch_id, created_at, xp_points, is_paid, security_question, security_answer FROM users'
+      'SELECT id, name, email, role, phone, country, state, address, is_email_verified, batch_id, created_at, xp_points, is_paid, security_question, security_answer FROM users'
     );
     res.json(usersResult.rows);
   } catch (err) {

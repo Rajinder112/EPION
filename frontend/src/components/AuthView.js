@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { api } from '../utils/api';
-import { Shield, Mail, Lock, User, AlertCircle, Sparkles, Phone, Globe, MapPin, HelpCircle } from 'lucide-react';
+import { Shield, Mail, Lock, User, AlertCircle, Sparkles, Phone, Globe, MapPin, HelpCircle, Map } from 'lucide-react';
 
 const countryOptions = [
   { code: '+91', country: 'India', label: '+91 (IN)' },
@@ -33,6 +33,45 @@ const countryOptions = [
   { code: '+34', country: 'Spain', label: '+34 (ES)' }
 ];
 
+const indianStates = [
+  "Andaman and Nicobar Islands",
+  "Andhra Pradesh",
+  "Arunachal Pradesh",
+  "Assam",
+  "Bihar",
+  "Chandigarh",
+  "Chhattisgarh",
+  "Dadra and Nagar Haveli and Daman and Diu",
+  "Delhi",
+  "Goa",
+  "Gujarat",
+  "Haryana",
+  "Himachal Pradesh",
+  "Jammu and Kashmir",
+  "Jharkhand",
+  "Karnataka",
+  "Kerala",
+  "Ladakh",
+  "Lakshadweep",
+  "Madhya Pradesh",
+  "Maharashtra",
+  "Manipur",
+  "Meghalaya",
+  "Mizoram",
+  "Nagaland",
+  "Odisha",
+  "Puducherry",
+  "Punjab",
+  "Rajasthan",
+  "Sikkim",
+  "Tamil Nadu",
+  "Telangana",
+  "Tripura",
+  "Uttar Pradesh",
+  "Uttarakhand",
+  "West Bengal"
+];
+
 export default function AuthView({ onAuthSuccess }) {
   const [isLogin, setIsLogin] = useState(true);
   const [name, setName] = useState('');
@@ -41,6 +80,7 @@ export default function AuthView({ onAuthSuccess }) {
   const [phone, setPhone] = useState('');
   const [countryCode, setCountryCode] = useState('+91');
   const [country, setCountry] = useState('India');
+  const [state, setState] = useState('');
   const [address, setAddress] = useState('');
   const [securityQuestion, setSecurityQuestion] = useState('What was the name of your first pet?');
   const [securityAnswer, setSecurityAnswer] = useState('');
@@ -95,6 +135,7 @@ export default function AuthView({ onAuthSuccess }) {
           password, 
           fullPhone, 
           country, 
+          state, 
           address, 
           securityQuestion, 
           securityAnswer
@@ -346,6 +387,42 @@ export default function AuthView({ onAuthSuccess }) {
                     className="w-full bg-muted-bg border border-border focus:border-primary focus:outline-none rounded-xl text-foreground text-sm transition-all focus:ring-2 focus:ring-primary/10"
                     style={{ paddingLeft: '2.5rem', paddingRight: '0.75rem', paddingTop: '0.65rem', paddingBottom: '0.65rem' }}
                   />
+                </div>
+              </div>
+
+              {/* State */}
+              <div className="flex flex-col gap-1 animate-slide-up" style={{ marginBottom: '1.25rem' }}>
+                <label className="text-xs font-bold text-muted-text uppercase tracking-wider block" style={{ paddingLeft: '0.25rem' }}>
+                  State / Union Territory
+                </label>
+                <div className="relative">
+                  <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-muted-text pointer-events-none" style={{ paddingLeft: '0.75rem' }}>
+                    <Map className="w-4 h-4" />
+                  </span>
+                  {(country || '').toLowerCase() === 'india' ? (
+                    <select
+                      required
+                      value={state}
+                      onChange={(e) => setState(e.target.value)}
+                      className="w-full bg-muted-bg border border-border focus:border-primary focus:outline-none rounded-xl text-foreground text-sm transition-all focus:ring-2 focus:ring-primary/10"
+                      style={{ paddingLeft: '2.5rem', paddingRight: '0.75rem', paddingTop: '0.65rem', paddingBottom: '0.65rem' }}
+                    >
+                      <option value="" disabled>Select State / Union Territory</option>
+                      {indianStates.map((st) => (
+                        <option key={st} value={st}>{st}</option>
+                      ))}
+                    </select>
+                  ) : (
+                    <input
+                      type="text"
+                      required
+                      placeholder="Enter State / Province / Region"
+                      value={state}
+                      onChange={(e) => setState(e.target.value)}
+                      className="w-full bg-muted-bg border border-border focus:border-primary focus:outline-none rounded-xl text-foreground text-sm transition-all focus:ring-2 focus:ring-primary/10"
+                      style={{ paddingLeft: '2.5rem', paddingRight: '0.75rem', paddingTop: '0.65rem', paddingBottom: '0.65rem' }}
+                    />
+                  )}
                 </div>
               </div>
 

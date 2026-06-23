@@ -96,8 +96,9 @@ export default function ReportsView() {
     // 4. Search by State / Address
     if (searchState) {
       const stateTerm = searchState.toLowerCase();
+      const candidateState = (candidate.state || '').toLowerCase();
       const candidateAddress = (candidate.address || '').toLowerCase();
-      if (!candidateAddress.includes(stateTerm)) return false;
+      if (!candidateState.includes(stateTerm) && !candidateAddress.includes(stateTerm)) return false;
     }
 
     // 5. Filter by Batch
@@ -138,7 +139,7 @@ export default function ReportsView() {
   // CSV Report Generator
   const handleExportCSV = () => {
     const headers = [
-      'Rank', 'Name', 'Email', 'Phone', 'Country', 'State / Address', 
+      'Rank', 'Name', 'Email', 'Phone', 'Country', 'State', 'Address', 
       'Enrolled At', 'Enrolment Year', 'XP Points', 'Paid Member', 
       'Email Verified', 'Batch Name', 'Security Question', 'Security Answer'
     ];
@@ -167,6 +168,7 @@ export default function ReportsView() {
         escapeCsv(c.email),
         escapeCsv(c.phone),
         escapeCsv(c.country),
+        escapeCsv(c.state),
         escapeCsv(c.address),
         escapeCsv(c.created_at ? new Date(c.created_at).toLocaleDateString() : ''),
         year,
@@ -455,8 +457,13 @@ export default function ReportsView() {
                     </td>
 
                     {/* State & Address */}
-                    <td className="py-3 px-4 max-w-[200px] truncate" title={c.address || 'No address provided'}>
-                      <span className="text-muted-text text-[10px] leading-relaxed block whitespace-pre-line truncate">
+                    <td className="py-3 px-4 max-w-[200px]" title={`State: ${c.state || 'N/A'}\nAddress: ${c.address || 'No address provided'}`}>
+                      {c.state && (
+                        <span className="inline-block px-1.5 py-0.5 rounded text-[9px] font-bold bg-primary-light text-primary border border-primary/10 mb-1">
+                          {c.state}
+                        </span>
+                      )}
+                      <span className="text-muted-text text-[10px] leading-relaxed block truncate">
                         {c.address || 'N/A'}
                       </span>
                     </td>

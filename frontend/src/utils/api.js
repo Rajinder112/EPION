@@ -69,8 +69,8 @@ async function request(endpoint, options = {}) {
 
 export const api = {
   // Auth
-  register: (name, email, password, phone, country, address, securityQuestion, securityAnswer) => 
-    request('/auth/register', { method: 'POST', body: { name, email, password, phone, country, address, securityQuestion, securityAnswer } }),
+  register: (name, email, password, phone, country, state, address, securityQuestion, securityAnswer) => 
+    request('/auth/register', { method: 'POST', body: { name, email, password, phone, country, state, address, securityQuestion, securityAnswer } }),
   
   login: (email, password) => 
     request('/auth/login', { method: 'POST', body: { email, password } }),

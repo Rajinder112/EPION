@@ -6,7 +6,7 @@ import {
   Bookmark, AlertCircle, Play, Sparkles, BookOpen, Trash2, ArrowRight,
   ChevronDown, ChevronUp, Calculator, HeartPulse, Activity, HelpCircle, 
   RotateCcw, Sparkle, Stethoscope, GraduationCap, ArrowUpRight, Check, Brain,
-  Calendar
+  Calendar, Droplet
 } from 'lucide-react';
 
 export default function RevisionView({ onStartQuestionPractice, user }) {
@@ -71,6 +71,10 @@ export default function RevisionView({ onStartQuestionPractice, user }) {
   const [pregnancyLmp, setPregnancyLmp] = useState('');
   const [pregnancyCycle, setPregnancyCycle] = useState(28);
   const [pregnancyResult, setPregnancyResult] = useState(null);
+
+  // States for Holliday-Segar Formula Calculator
+  const [hollidayWeight, setHollidayWeight] = useState(15);
+  const [hollidayResult, setHollidayResult] = useState(null);
 
   // States for Dynamic Concepts Database
   const [conceptsList, setConceptsList] = useState([]);
@@ -495,6 +499,57 @@ export default function RevisionView({ onStartQuestionPractice, user }) {
       trimester,
       progressPercent,
       errorMsg: null
+    });
+  };
+
+  // Holliday-Segar Formula calculation logic
+  const calculateHolliday = (e) => {
+    if (e) e.preventDefault();
+    const w = parseFloat(hollidayWeight);
+    if (isNaN(w) || w <= 0) {
+      setHollidayResult({
+        daily: null,
+        hourly: null,
+        errorMsg: 'Weight must be a positive number.',
+        alertClass: 'bg-danger-light text-danger border-danger/20'
+      });
+      return;
+    }
+
+    // Daily fluid calculation (100/50/20 rule)
+    let dailyFluid = 0;
+    let dailyBreakdown = '';
+    if (w <= 10) {
+      dailyFluid = w * 100;
+      dailyBreakdown = `${w.toFixed(1)} kg × 100 mL/kg = ${dailyFluid.toFixed(0)} mL/day`;
+    } else if (w <= 20) {
+      dailyFluid = 1000 + (w - 10) * 50;
+      dailyBreakdown = `First 10 kg: 1000 mL/day\nRemaining ${(w - 10).toFixed(1)} kg × 50 mL/kg = ${((w - 10) * 50).toFixed(0)} mL/day\nTotal = ${dailyFluid.toFixed(0)} mL/day`;
+    } else {
+      dailyFluid = 1500 + (w - 20) * 20;
+      dailyBreakdown = `First 10 kg: 1000 mL/day\nNext 10 kg: 500 mL/day\nRemaining ${(w - 20).toFixed(1)} kg × 20 mL/kg = ${((w - 20) * 20).toFixed(0)} mL/day\nTotal = ${dailyFluid.toFixed(0)} mL/day`;
+    }
+
+    // Hourly fluid calculation (4/2/1 rule)
+    let hourlyFluid = 0;
+    let hourlyBreakdown = '';
+    if (w <= 10) {
+      hourlyFluid = w * 4;
+      hourlyBreakdown = `${w.toFixed(1)} kg × 4 mL/kg/hr = ${hourlyFluid.toFixed(0)} mL/hr`;
+    } else if (w <= 20) {
+      hourlyFluid = 40 + (w - 10) * 2;
+      hourlyBreakdown = `First 10 kg: 40 mL/hr\nRemaining ${(w - 10).toFixed(1)} kg × 2 mL/kg/hr = ${((w - 10) * 2).toFixed(0)} mL/hr\nTotal = ${hourlyFluid.toFixed(0)} mL/hr`;
+    } else {
+      hourlyFluid = 60 + (w - 20) * 1;
+      hourlyBreakdown = `First 10 kg: 40 mL/hr\nNext 10 kg: 20 mL/hr\nRemaining ${(w - 20).toFixed(1)} kg × 1 mL/kg/hr = ${((w - 20) * 1).toFixed(0)} mL/hr\nTotal = ${hourlyFluid.toFixed(0)} mL/hr`;
+    }
+
+    setHollidayResult({
+      daily: Math.round(dailyFluid),
+      hourly: Math.round(hourlyFluid),
+      dailyBreakdown,
+      hourlyBreakdown,
+      alertClass: 'bg-secondary-light border-secondary/20 text-foreground'
     });
   };
 
@@ -2441,6 +2496,61 @@ export default function RevisionView({ onStartQuestionPractice, user }) {
                   </>
                 ) : (
                   <p className="text-xs leading-tight font-semibold">{pregnancyResult.errorMsg}</p>
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* Holliday-Segar Pediatric Fluid Calculator */}
+          <div className="bg-card border border-border p-5 rounded-2xl shadow-sm space-y-4">
+            <h3 className="font-extrabold text-foreground text-sm flex items-center gap-2 border-b border-border/80 pb-2">
+              <Droplet className="w-4.5 h-4.5 text-primary" />
+              <span>Pediatric Fluid Maintenance (Holliday-Segar)</span>
+            </h3>
+            <form onSubmit={calculateHolliday} className="space-y-3 text-xs">
+              <div className="space-y-1">
+                <label className="font-semibold text-muted-text uppercase tracking-wider block">Body Weight (kg)</label>
+                <input
+                  type="number"
+                  required
+                  min={1}
+                  max={150}
+                  step="0.1"
+                  value={hollidayWeight}
+                  onChange={(e) => setHollidayWeight(e.target.value)}
+                  className="w-full py-2 px-3 bg-muted-bg border border-border rounded-lg text-foreground focus:outline-none"
+                  placeholder="e.g. 15"
+                />
+              </div>
+              <button
+                type="submit"
+                className="w-full py-2 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-lg transition-colors shadow-sm"
+              >
+                Calculate Maintenance Fluid
+              </button>
+            </form>
+
+            {hollidayResult && (
+              <div className={`p-4 rounded-xl text-xs space-y-2 border animate-slide-up ${hollidayResult.daily === null ? hollidayResult.alertClass : 'bg-secondary-light border-secondary/20 text-foreground'}`}>
+                {hollidayResult.daily !== null ? (
+                  <>
+                    <div className="flex justify-between items-center border-b border-secondary/10 pb-1.5 gap-2">
+                      <span className="font-semibold text-muted-text">Hourly Rate (4/2/1):</span>
+                      <span className="font-black text-secondary text-base">{hollidayResult.hourly} mL/hour</span>
+                    </div>
+                    <div className="text-[10px] text-muted-text leading-relaxed whitespace-pre-line border-b border-secondary/10 pb-1.5">
+                      {hollidayResult.hourlyBreakdown}
+                    </div>
+                    <div className="flex justify-between items-center py-0.5 gap-2">
+                      <span className="font-semibold text-muted-text">Daily Volume (100/50/20):</span>
+                      <span className="font-bold text-foreground text-sm">{hollidayResult.daily} mL/day</span>
+                    </div>
+                    <div className="text-[10px] text-muted-text leading-relaxed whitespace-pre-line">
+                      {hollidayResult.dailyBreakdown}
+                    </div>
+                  </>
+                ) : (
+                  <p className="text-xs leading-tight font-semibold">{hollidayResult.errorMsg}</p>
                 )}
               </div>
             )}

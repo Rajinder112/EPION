@@ -309,6 +309,7 @@ if (process.env.DATABASE_URL) {
   pool.query(`
     ALTER TABLE users ADD COLUMN IF NOT EXISTS phone VARCHAR(50);
     ALTER TABLE users ADD COLUMN IF NOT EXISTS country VARCHAR(100);
+    ALTER TABLE users ADD COLUMN IF NOT EXISTS state VARCHAR(100);
     ALTER TABLE users ADD COLUMN IF NOT EXISTS address TEXT;
     ALTER TABLE users ADD COLUMN IF NOT EXISTS security_question TEXT;
     ALTER TABLE users ADD COLUMN IF NOT EXISTS security_answer TEXT;
@@ -443,15 +444,16 @@ function loadLocalDb() {
     users.forEach(u => {
       if (u.is_email_verified === undefined) {
         u.is_email_verified = true; // default verified for legacy users
-        u.phone = u.phone || null;
-        u.country = u.country || null;
-        u.address = u.address || null;
-        u.security_question = u.security_question || null;
-        u.security_answer = u.security_answer || null;
-        u.email_verification_token = u.email_verification_token || null;
-        u.batch_id = u.batch_id || null;
         usersUpdated = true;
       }
+      if (u.phone === undefined) { u.phone = null; usersUpdated = true; }
+      if (u.country === undefined) { u.country = null; usersUpdated = true; }
+      if (u.state === undefined) { u.state = null; usersUpdated = true; }
+      if (u.address === undefined) { u.address = null; usersUpdated = true; }
+      if (u.security_question === undefined) { u.security_question = null; usersUpdated = true; }
+      if (u.security_answer === undefined) { u.security_answer = null; usersUpdated = true; }
+      if (u.email_verification_token === undefined) { u.email_verification_token = null; usersUpdated = true; }
+      if (u.batch_id === undefined) { u.batch_id = null; usersUpdated = true; }
     });
     if (usersUpdated) {
       fs.writeFileSync(usersPath, JSON.stringify(users, null, 2));
@@ -709,8 +711,8 @@ function simulateQuery(text, params = []) {
     const id = require('crypto').randomUUID();
     let newUser = {};
 
-    // Check if detailed register with 12 parameters is executed
-    if (params.length >= 12) {
+    // Check if detailed register with 14 parameters (including state) or legacy parameters is executed
+    if (params.length >= 14) {
       newUser = {
         id,
         name: params[0],
@@ -720,6 +722,30 @@ function simulateQuery(text, params = []) {
         role: params[4] || 'user',
         phone: params[5],
         country: params[6],
+        state: params[7],
+        address: params[8],
+        security_question: params[9],
+        security_answer: params[10],
+        is_email_verified: params[11] === true || params[11] === 'true' || params[11] === 1,
+        email_verification_token: params[12],
+        batch_id: params[13] ? parseInt(params[13]) : null,
+        xp_points: 0,
+        streak: 0,
+        is_paid: false,
+        last_active_date: null,
+        created_at: new Date().toISOString()
+      };
+    } else if (params.length >= 12) {
+      newUser = {
+        id,
+        name: params[0],
+        email: params[1],
+        password_hash: params[2],
+        google_id: params[3],
+        role: params[4] || 'user',
+        phone: params[5],
+        country: params[6],
+        state: null,
         address: params[7],
         security_question: params[8],
         security_answer: params[9],

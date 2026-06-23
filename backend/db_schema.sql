@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS users (
     is_paid BOOLEAN DEFAULT FALSE,
     phone VARCHAR(50),
     country VARCHAR(100),
+    state VARCHAR(100),
     address TEXT,
     security_question TEXT,
     security_answer TEXT,
