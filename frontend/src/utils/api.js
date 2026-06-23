@@ -177,6 +177,42 @@ export const api = {
   getRevisionList: () => 
     request('/practice/revision'),
 
+  getConcepts: () => 
+    request('/practice/concepts'),
+
+  createConcept: (conceptData) => 
+    request('/practice/concepts', { method: 'POST', body: conceptData }),
+
+  updateConcept: (id, conceptData) => 
+    request(`/practice/concepts/${id}`, { method: 'PUT', body: conceptData }),
+
+  deleteConcept: (id) => 
+    request(`/practice/concepts/${id}`, { method: 'DELETE' }),
+
+  importConceptsCsv: async (file) => {
+    const token = localStorage.getItem('token');
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const headers = {};
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    const response = await fetch(`${BASE_URL}/practice/concepts/import`, {
+      method: 'POST',
+      headers,
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.message || 'CSV Import failed');
+    }
+
+    return response.json();
+  },
+
   // Mocks
   getMockTests: () => 
     request('/mocks'),

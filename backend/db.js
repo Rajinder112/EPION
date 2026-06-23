@@ -18,6 +18,7 @@ const attemptsPath = path.join(__dirname, 'db_question_attempts.json');
 const mockTestsPath = path.join(__dirname, 'db_mock_tests.json');
 const batchesPath = path.join(__dirname, 'db_batches.json');
 const practiceSubjectsPath = path.join(__dirname, 'db_practice_subjects.json');
+const conceptsPath = path.join(__dirname, 'db_concepts.json');
 
 const questionFiles = {
   'Medical Surgical Nursing': path.join(__dirname, 'db_questions_medical_surgical.json'),
@@ -331,6 +332,15 @@ if (process.env.DATABASE_URL) {
         status VARCHAR(20) DEFAULT 'active',
         allowed_batches TEXT
     );
+
+    CREATE TABLE IF NOT EXISTS concepts (
+        id SERIAL PRIMARY KEY,
+        title VARCHAR(255) NOT NULL,
+        category VARCHAR(255) NOT NULL,
+        highlight TEXT,
+        bullets JSONB NOT NULL,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    );
   `).then(() => {
     console.log('Postgres migrations completed successfully.');
   }).catch(err => {
@@ -474,6 +484,9 @@ function loadLocalDb() {
     // Load practice subjects
     const practice_subjects = readJsonOrInit(practiceSubjectsPath, []);
     
+    // Load concepts
+    const concepts = readJsonOrInit(conceptsPath, []);
+    
     // 6. Load questions from all split files
     let questions = [];
     Object.entries(questionFiles).forEach(([key, filepath]) => {
@@ -514,7 +527,8 @@ function loadLocalDb() {
       mock_test_questions: mockTestData.mock_test_questions,
       mock_test_attempts: mockTestData.mock_test_attempts,
       batches,
-      practice_subjects
+      practice_subjects,
+      concepts
     };
   } catch (err) {
     console.error('Error loading separated local DB files, using defaults:', err);
@@ -563,6 +577,10 @@ function saveLocalDb(data) {
     // Save practice subjects
     if (data.practice_subjects) {
       fs.writeFileSync(practiceSubjectsPath, JSON.stringify(data.practice_subjects || [], null, 2));
+    }
+    // Save concepts
+    if (data.concepts) {
+      fs.writeFileSync(conceptsPath, JSON.stringify(data.concepts || [], null, 2));
     }
   } catch (err) {
     console.error('Error saving separated local DB files:', err);
@@ -1135,6 +1153,73 @@ function simulateQuery(text, params = []) {
       saveLocalDb(dbData);
       return { rows: [dbData.practice_subjects[idx]] };
     }
+    return { rows: [] };
+  }
+
+  // SELECT * FROM concepts
+  if (normalizedSql.startsWith('select * from concepts')) {
+    if (!dbData.concepts) dbData.concepts = [];
+    const sorted = [...dbData.concepts].sort((a, b) => a.id - b.id);
+    return { rows: sorted };
+  }
+
+  // INSERT INTO concepts (title, category, highlight, bullets) VALUES ($1, $2, $3, $4) RETURNING *
+  if (normalizedSql.startsWith('insert into concepts')) {
+    if (!dbData.concepts) dbData.concepts = [];
+    const nextId = dbData.concepts.length > 0 ? Math.max(...dbData.concepts.map(c => c.id)) + 1 : 1;
+    let bulletsVal = params[3];
+    if (typeof bulletsVal === 'string') {
+      try { bulletsVal = JSON.parse(bulletsVal); } catch(e) {}
+    }
+    const newConcept = {
+      id: nextId,
+      title: params[0],
+      category: params[1],
+      highlight: params[2],
+      bullets: bulletsVal || [],
+      created_at: new Date().toISOString()
+    };
+    dbData.concepts.push(newConcept);
+    saveLocalDb(dbData);
+    return { rows: [newConcept] };
+  }
+
+  // UPDATE concepts SET title = $1, category = $2, highlight = $3, bullets = $4 WHERE id = $5 RETURNING *
+  if (normalizedSql.startsWith('update concepts')) {
+    if (!dbData.concepts) dbData.concepts = [];
+    const id = parseInt(params[4]);
+    const idx = dbData.concepts.findIndex(c => c.id === id);
+    if (idx !== -1) {
+      let bulletsVal = params[3];
+      if (typeof bulletsVal === 'string') {
+        try { bulletsVal = JSON.parse(bulletsVal); } catch(e) {}
+      }
+      dbData.concepts[idx] = {
+        ...dbData.concepts[idx],
+        title: params[0],
+        category: params[1],
+        highlight: params[2],
+        bullets: bulletsVal || []
+      };
+      saveLocalDb(dbData);
+      return { rows: [dbData.concepts[idx]] };
+    }
+    return { rows: [] };
+  }
+
+  // DELETE FROM concepts WHERE id = $1
+  if (normalizedSql.startsWith('delete from concepts where id =')) {
+    if (!dbData.concepts) dbData.concepts = [];
+    const id = parseInt(params[0]);
+    dbData.concepts = dbData.concepts.filter(c => c.id !== id);
+    saveLocalDb(dbData);
+    return { rows: [] };
+  }
+
+  // TRUNCATE TABLE concepts / DELETE FROM concepts (clear all for bulk upload)
+  if (normalizedSql.startsWith('truncate table concepts') || (normalizedSql.startsWith('delete from concepts') && !normalizedSql.includes('where'))) {
+    dbData.concepts = [];
+    saveLocalDb(dbData);
     return { rows: [] };
   }
 

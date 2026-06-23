@@ -1,8 +1,13 @@
 const express = require('express');
 const router = express.Router();
+const fs = require('fs');
+const multer = require('multer');
+const csv = require('csv-parser');
 const db = require('../db');
 const auth = require('../middleware/auth');
 const trial = require('../middleware/trial');
+
+const upload = multer({ dest: 'uploads/' });
 
 // Helper to check if admin
 const isAdmin = (req, res, next) => {
@@ -389,6 +394,152 @@ router.get('/revision', [auth, trial], async (req, res) => {
     console.error('Fetch revision questions error:', err.message);
     res.status(500).send('Server error');
   }
+});
+
+// @route   GET api/practice/concepts
+// @desc    Get all high-yield concepts
+// @access  Private
+router.get('/concepts', [auth, trial], async (req, res) => {
+  try {
+    const result = await db.query('SELECT * FROM concepts ORDER BY id ASC');
+    res.json(result.rows);
+  } catch (err) {
+    console.error('Fetch concepts error:', err.message);
+    res.status(500).send('Server error');
+  }
+});
+
+// @route   POST api/practice/concepts
+// @desc    Create a new concept
+// @access  Private (Admin only)
+router.post('/concepts', [auth, isAdmin], async (req, res) => {
+  const { title, category, highlight, bullets } = req.body;
+  if (!title || !category || !bullets) {
+    return res.status(400).json({ message: 'Title, category, and bullets are required.' });
+  }
+  try {
+    const result = await db.query(
+      'INSERT INTO concepts (title, category, highlight, bullets) VALUES ($1, $2, $3, $4) RETURNING *',
+      [title, category, highlight || null, JSON.stringify(bullets)]
+    );
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error('Create concept error:', err.message);
+    res.status(500).send('Server error');
+  }
+});
+
+// @route   PUT api/practice/concepts/:id
+// @desc    Update a concept
+// @access  Private (Admin only)
+router.put('/concepts/:id', [auth, isAdmin], async (req, res) => {
+  const { title, category, highlight, bullets } = req.body;
+  const conceptId = parseInt(req.params.id);
+  if (isNaN(conceptId)) {
+    return res.status(400).json({ message: 'Invalid concept ID.' });
+  }
+  if (!title || !category || !bullets) {
+    return res.status(400).json({ message: 'Title, category, and bullets are required.' });
+  }
+  try {
+    const result = await db.query(
+      'UPDATE concepts SET title = $1, category = $2, highlight = $3, bullets = $4 WHERE id = $5 RETURNING *',
+      [title, category, highlight || null, JSON.stringify(bullets), conceptId]
+    );
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: 'Concept not found.' });
+    }
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error('Update concept error:', err.message);
+    res.status(500).send('Server error');
+  }
+});
+
+// @route   DELETE api/practice/concepts/:id
+// @desc    Delete a concept
+// @access  Private (Admin only)
+router.delete('/concepts/:id', [auth, isAdmin], async (req, res) => {
+  const conceptId = parseInt(req.params.id);
+  if (isNaN(conceptId)) {
+    return res.status(400).json({ message: 'Invalid concept ID.' });
+  }
+  try {
+    await db.query('DELETE FROM concepts WHERE id = $1', [conceptId]);
+    res.json({ message: 'Concept deleted successfully.' });
+  } catch (err) {
+    console.error('Delete concept error:', err.message);
+    res.status(500).send('Server error');
+  }
+});
+
+// @route   POST api/practice/concepts/import
+// @desc    Bulk import concepts via CSV
+// @access  Private (Admin only)
+router.post('/concepts/import', [auth, isAdmin, upload.single('file')], async (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ message: 'No CSV file uploaded' });
+  }
+
+  const results = [];
+  const errors = [];
+  let rowNum = 1;
+
+  fs.createReadStream(req.file.path)
+    .pipe(csv())
+    .on('data', (data) => {
+      rowNum++;
+      const { title, category, highlight, bullets } = data;
+
+      if (!title || !category || !bullets) {
+        errors.push(`Row ${rowNum}: Title, Category, and Bullets are required.`);
+        return;
+      }
+
+      const bulletsArray = bullets.split(/[|;]/).map(b => b.trim()).filter(Boolean);
+      if (bulletsArray.length === 0) {
+        errors.push(`Row ${rowNum}: Bullets must contain at least one point.`);
+        return;
+      }
+
+      results.push({
+        title: title.trim(),
+        category: category.trim(),
+        highlight: highlight ? highlight.trim() : null,
+        bullets: bulletsArray
+      });
+    })
+    .on('end', async () => {
+      // Remove temporary file
+      fs.unlinkSync(req.file.path);
+
+      if (results.length === 0) {
+        return res.status(400).json({ message: 'No valid concepts parsed from CSV.', errors });
+      }
+
+      try {
+        // Clear all existing concepts to execute full sync
+        await db.query('DELETE FROM concepts');
+
+        const importedConcepts = [];
+        for (const c of results) {
+          const insertResult = await db.query(
+            'INSERT INTO concepts (title, category, highlight, bullets) VALUES ($1, $2, $3, $4) RETURNING *',
+            [c.title, c.category, c.highlight, JSON.stringify(c.bullets)]
+          );
+          importedConcepts.push(insertResult.rows[0]);
+        }
+
+        res.json({
+          message: `Successfully imported ${importedConcepts.length} concepts.`,
+          totalParsed: results.length,
+          errors: errors.length > 0 ? errors : null
+        });
+      } catch (err) {
+        console.error('Concepts CSV database import error:', err.message);
+        res.status(500).json({ message: 'Database insert failed during CSV import.', errors: [err.message] });
+      }
+    });
 });
 
 module.exports = router;

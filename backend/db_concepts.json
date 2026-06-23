@@ -1,0 +1,585 @@
+[
+  {
+    "id": 1,
+    "title": "Parkland Burn Resuscitation Formula",
+    "category": "Critical Care / Trauma",
+    "highlight": "Formula: 4 mL x Body Weight (kg) x TBSA (%)",
+    "bullets": [
+      "Administer half of the total calculated volume in the first 8 hours (calculated from the time of injury, not arrival).",
+      "Administer the remaining half of the volume over the next 16 hours.",
+      "The crystalloid of choice for resuscitation is Ringer's Lactate (RL)."
+    ]
+  },
+  {
+    "id": 2,
+    "title": "Blood Transfusion Guidelines & Reactions",
+    "category": "Clinical Nursing / Safety",
+    "highlight": "Complete transfusion within 4 hours maximum to avoid bacterial growth.",
+    "bullets": [
+      "Must verify patient identity and blood bag details with 2 registered nurses prior to administration.",
+      "Run the infusion slowly at 2 to 5 mL/min for the first 15 minutes to monitor for immediate reactions.",
+      "Closely monitor for hemolytic reactions (chills, severe lower back pain, dyspnea, fever, hypotension).",
+      "If a reaction occurs: Stop infusion immediately, disconnect tubing, run normal saline via new tubing, and notify provider."
+    ]
+  },
+  {
+    "id": 3,
+    "title": "ABG Systematic Interpretation",
+    "category": "Acid-Base / Critical Care",
+    "highlight": "pH: 7.35–7.45 | PaCO2: 35–45 mmHg | HCO3-: 22–26 mEq/L",
+    "bullets": [
+      "pH < 7.35 indicates acidosis; pH > 7.45 indicates alkalosis.",
+      "PaCO2 represents the respiratory component (normal range: 35 to 45 mmHg).",
+      "HCO3- represents the metabolic component (normal range: 22 to 26 mEq/L).",
+      "Match pH direction with PaCO2 and HCO3- changes to diagnose. Assess other systems for partial or full compensation."
+    ]
+  },
+  {
+    "id": 4,
+    "title": "Glasgow Coma Scale (GCS)",
+    "category": "Neurology / Assessment",
+    "highlight": "GCS ≤ 8 = Coma (Airway protection required: \"Less than 8, intubate!\")",
+    "bullets": [
+      "Maximum GCS score is 15 (fully awake); minimum score is 3 (deep coma/brain death).",
+      "Eye Opening (1-4): Spontaneous (4), To sound (3), To pressure/pain (2), None (1).",
+      "Verbal Response (1-5): Oriented (5), Confused (4), Words (3), Sounds (2), None (1).",
+      "Motor Response (1-6): Obeys command (6), Localizing (5), Normal flexion (4), Abnormal flexion/decorticate (3), Extension/decerebrate (2), None (1)."
+    ]
+  },
+  {
+    "id": 5,
+    "title": "IV Fluid Tonics (Hypo, Hyper, Isotonic)",
+    "category": "Fluids & Electrolytes",
+    "highlight": "Isotonic: stays in vessel | Hypotonic: swells cells | Hypertonic: shrinks cells",
+    "bullets": [
+      "Isotonic (0.9% NS, Ringer's Lactate): Equal osmolarity to blood. Expands intravascular volume. Used for fluid deficits.",
+      "Hypotonic (0.45% NS, 2.5% Dextrose): Lower osmolarity. Fluid shifts out of vessels into cells, causing cells to swell. Used for intracellular dehydration.",
+      "Hypertonic (3% NS, 5% NS, D5NS): Higher osmolarity. Fluid shifts out of cells into vascular space, causing cells to shrink. Monitor closely for circulatory overload and pulmonary edema."
+    ]
+  },
+  {
+    "id": 6,
+    "title": "Chest Tube Drainage Monitoring",
+    "category": "Respiratory / Critical Care",
+    "highlight": "Continuous bubbling in water seal chamber = Air Leak!",
+    "bullets": [
+      "Tidaling (fluctuations in the water level matching respiration) is normal. If tidaling stops, the lung has either fully re-expanded or the tube is kinked/blocked.",
+      "Continuous bubbling in the water seal chamber indicates an air leak in the chest tube system or pleural space.",
+      "Intermittent bubbling is normal in patients with a pneumothorax during coughing or deep breathing.",
+      "Never clamp a chest tube without a physician's order or during accidental system disconnection, as it can cause a tension pneumothorax."
+    ]
+  },
+  {
+    "id": 7,
+    "title": "Tracheostomy Suctioning Standards",
+    "category": "Respiratory / Clinical Skills",
+    "highlight": "Maximum suctioning time: 10-15 seconds | Pre-oxygenate with 100% O2",
+    "bullets": [
+      "Hyperoxygenate the patient with 100% O2 for at least 30-60 seconds prior to inserting the suction catheter.",
+      "Limit suction time to 10-15 seconds per pass to prevent severe hypoxia and vagal nerve stimulation.",
+      "Apply suction intermittently ONLY while withdrawing and rotating the catheter. Never apply suction during insertion.",
+      "Allow at least 1 minute between suction passes, limiting total passes to a maximum of 3."
+    ]
+  },
+  {
+    "id": 8,
+    "title": "Digoxin Toxicity Signs",
+    "category": "Pharmacology / Cardiology",
+    "highlight": "Therapeutic Range: 0.5–2.0 ng/mL | Hold if Apical Pulse < 60 bpm",
+    "bullets": [
+      "Early toxicity signs are gastrointestinal: anorexia, nausea, vomiting, and diarrhea.",
+      "Late/neuro-visual toxicity signs include fatigue, muscle weakness, blurred vision, and yellow-green halos around lights.",
+      "Hypokalemia (low potassium) significantly increases the risk of digoxin toxicity. Monitor serum potassium closely.",
+      "Always assess the apical pulse rate for a full 60 seconds before administering; hold if <60 bpm in adults."
+    ]
+  },
+  {
+    "id": 9,
+    "title": "Anticoagulant Monitoring & Antidotes",
+    "category": "Pharmacology / Hematology",
+    "highlight": "Heparin antidote: Protamine Sulfate | Warfarin antidote: Vitamin K",
+    "bullets": [
+      "Unfractionated Heparin: Monitored via activated partial thromboplastin time (aPTT). Normal range is 30-40 sec; therapeutic range is 1.5-2.5 times normal.",
+      "Heparin Antidote: Protamine Sulfate.",
+      "Warfarin (Coumadin): Monitored via Prothrombin Time (PT) and International Normalized Ratio (INR). Therapeutic target INR is usually 2.0-3.0.",
+      "Warfarin Antidote: Vitamin K (phytonadione)."
+    ]
+  },
+  {
+    "id": 10,
+    "title": "Potassium Chloride IV Infusion Rules",
+    "category": "Fluids & Electrolytes / Safety",
+    "highlight": "CRITICAL: NEVER give Potassium Chloride via IV push or bolus (causes cardiac arrest)!",
+    "bullets": [
+      "Maximum standard infusion rate is 10 mEq/hour. Always administer via an electronic infusion pump.",
+      "Verify adequate renal function: check that urine output is at least 30 mL/hour before starting potassium infusion.",
+      "KCl is highly irritating to peripheral veins. Assess the IV insertion site hourly for infiltration, phlebitis, or burning."
+    ]
+  },
+  {
+    "id": 11,
+    "title": "Magnesium Sulfate in Preeclampsia",
+    "category": "Obstetrics / Pharmacology",
+    "highlight": "Antidote: Calcium Gluconate (keep at bedside)",
+    "bullets": [
+      "Administered to preeclamptic patients as a central nervous system depressant to prevent seizures (eclampsia), not as an antihypertensive.",
+      "Monitor for magnesium toxicity: loss of deep tendon reflexes (patellar), respiratory rate < 12 breaths/min, and urine output < 30 mL/hour.",
+      "Therapeutic blood serum magnesium level is 4 to 7 mEq/L."
+    ]
+  },
+  {
+    "id": 12,
+    "title": "Cushing's Triad (ICP indicator)",
+    "category": "Neurology / Critical Care",
+    "highlight": "Sign of brainstem herniation due to severely increased intracranial pressure (ICP)",
+    "bullets": [
+      "1. Systolic hypertension with a widened pulse pressure (rising systolic, stable diastolic).",
+      "2. Bradycardia (slow, bounding heart rate).",
+      "3. Bradypnea (slow, irregular, or Cheyne-Stokes breathing patterns).",
+      "This is a late sign of intracranial hypertension and constitutes a medical emergency."
+    ]
+  },
+  {
+    "id": 13,
+    "title": "Cranial Nerve VII (Facial)",
+    "category": "Anatomy / Neurology",
+    "highlight": "Cranial Nerve VII regulates facial expression muscles and taste on anterior 2/3 of tongue.",
+    "bullets": [
+      "Tested clinically by asking the patient to smile, frown, raise eyebrows, close eyes tightly, and puff out their cheeks.",
+      "Assessed in patients suspected of Bell's Palsy or stroke. Look for unilateral facial droop, asymmetry, or inability to close one eye.",
+      "Stroke typically spares the forehead muscles, whereas Bell's Palsy affects both the upper and lower face."
+    ]
+  },
+  {
+    "id": 14,
+    "title": "Left-Sided Heart Failure symptoms",
+    "category": "Cardiology / Assessment",
+    "highlight": "Left-Sided Failure = Pulmonary Congestion (\"L\" for Lungs)",
+    "bullets": [
+      "Blood backs up into the left atrium and pulmonary veins, increasing pulmonary capillary pressure.",
+      "Assessment findings: dyspnea on exertion, orthopnea (difficulty breathing lying flat), paroxysmal nocturnal dyspnea (PND).",
+      "Auscultation reveals crackles (pulmonary edema), and the patient may cough up pink, frothy sputum."
+    ]
+  },
+  {
+    "id": 15,
+    "title": "Right-Sided Heart Failure symptoms",
+    "category": "Cardiology / Assessment",
+    "highlight": "Right-Sided Failure = Systemic Congestion (\"R\" for Rest of body)",
+    "bullets": [
+      "Blood backs up into the right atrium and systemic venous circulation.",
+      "Assessment findings: Jugular Venous Distention (JVD) at 45-degree bed elevation.",
+      "Systemic fluid retention leads to dependent peripheral edema, ascites, hepatomegaly (tender liver), and splenomegaly."
+    ]
+  },
+  {
+    "id": 16,
+    "title": "Appendicitis Physical Markers",
+    "category": "Gastrointestinal / Assessment",
+    "highlight": "Avoid applying heat or administering laxatives (increases risk of appendix rupture)",
+    "bullets": [
+      "Pain localizes in the Right Lower Quadrant (RLQ) at McBurney's point (located 1/3 the distance from the anterior superior iliac spine to the umbilicus).",
+      "Rebound Tenderness: Pain intensifies upon the sudden release of deep pressure in the abdominal wall.",
+      "Rovsing's Sign: Deep palpation of the Left Lower Quadrant (LLQ) elicits pain in the Right Lower Quadrant (RLQ).",
+      "Keep patient NPO in preparation for emergency appendectomy."
+    ]
+  },
+  {
+    "id": 17,
+    "title": "Pulmonary Embolism Prevention",
+    "category": "Clinical Nursing / Surgical Care",
+    "highlight": "Pulmonary Embolism (PE) is a life-threatening blockage of a pulmonary artery.",
+    "bullets": [
+      "Encourage early post-operative mobilization and active/passive range-of-motion exercises.",
+      "Apply Sequential Compression Devices (SCDs) or anti-embolism stockings to venous vessels.",
+      "Administer prophylactic low-molecular-weight heparin (Enoxaparin/Lovenox) as ordered.",
+      "Never massage the calves of a patient suspected of a Deep Vein Thrombosis (DVT), as this can dislodge the clot."
+    ]
+  },
+  {
+    "id": 18,
+    "title": "Diabetic Ketoacidosis (DKA) Features",
+    "category": "Endocrine / Critical Care",
+    "highlight": "Glucose > 300 mg/dL | Metabolic Acidosis | Ketones Present",
+    "bullets": [
+      "Severe hyperglycemia is caused by insulin deficiency. Ketone bodies accumulate in blood and urine.",
+      "Causes metabolic acidosis: blood pH < 7.35 and serum HCO3- < 15 mEq/L.",
+      "Characterized by Kussmaul respirations (deep, rapid breathing to blow off CO2) and a fruity breath odor (acetone).",
+      "Treatment priority: IV fluids (0.9% NS) for dehydration first, followed by regular insulin IV infusion."
+    ]
+  },
+  {
+    "id": 19,
+    "title": "Epinephrine Concentrations",
+    "category": "Pharmacology / Emergency",
+    "highlight": "IM Concentration = 1:1000 (1 mg/mL) | IV Concentration = 1:10,000 (0.1 mg/mL)",
+    "bullets": [
+      "Anaphylactic Shock: Administer Epinephrine 1:1000 concentration via the Intramuscular (IM) route (typically in the vastus lateralis).",
+      "Cardiac Arrest (CPR): Administer Epinephrine 1:10,000 concentration via the Intravenous (IV) or Intraosseous (IO) route.",
+      "Intravenous administration of 1:1000 Epinephrine is highly dangerous and can trigger severe dysrhythmias and myocardial infarction."
+    ]
+  },
+  {
+    "id": 20,
+    "title": "Lithium Carbonate Monitoring",
+    "category": "Mental Health / Pharmacology",
+    "highlight": "Therapeutic Index: 0.6–1.2 mEq/L (Toxicity begins > 1.5 mEq/L)",
+    "bullets": [
+      "Instruct the patient to maintain a normal dietary sodium and fluid intake. Hyponatremia (low sodium) causes lithium retention and toxicity.",
+      "Monitor for signs of mild toxicity: fine hand tremors, polyuria, polydipsia, and mild nausea.",
+      "Monitor for signs of severe toxicity: coarse hand tremors, vomiting, diarrhea, slurred speech, ataxia, and confusion.",
+      "Long-term treatment can cause hypothyroidism and nephrogenic diabetes insipidus (monitor TSH and renal function)."
+    ]
+  },
+  {
+    "id": 21,
+    "title": "Tensilon Test in Myasthenia Gravis",
+    "category": "Neurology / Diagnostics",
+    "highlight": "Tensilon (Edrophonium) administration: Improvement = Myasthenic Crisis; Worsening = Cholinergic Crisis",
+    "bullets": [
+      "Myasthenia Gravis is an autoimmune disease causing destruction of acetylcholine receptors at the neuromuscular junction.",
+      "Edrophonium chloride (Tensilon) is a rapid, short-acting acetylcholinesterase inhibitor used to diagnose MG.",
+      "If muscle strength improves significantly within 30-60 seconds, it is a Myasthenic Crisis (requires more anticholinesterase medication).",
+      "If muscle weakness worsens or flaccid paralysis occurs, it is a Cholinergic Crisis (overdosage; immediately administer antidote: Atropine Sulfate)."
+    ]
+  },
+  {
+    "id": 22,
+    "title": "Cardiac Biomarkers (MI Indicators)",
+    "category": "Cardiology / Diagnostics",
+    "highlight": "Troponin I is the most sensitive and specific indicator of myocardial injury.",
+    "bullets": [
+      "Troponin I: Rises within 3 to 4 hours, peaks at 12 to 24 hours, and remains elevated for 7 to 14 days (ideal for late diagnosis).",
+      "CK-MB (Creatine Kinase-MB): Rises in 4 to 6 hours, peaks at 18 to 24 hours, and returns to normal in 2 to 3 days (ideal for detecting re-infarction).",
+      "Myoglobin: Rises earliest (within 1 to 3 hours) but is highly non-specific as it is found in all muscle tissue.",
+      "Always obtain serial cardiac enzymes (usually drawn every 6 to 8 hours for 24 hours)."
+    ]
+  },
+  {
+    "id": 23,
+    "title": "Cranial Nerves Summary & Test Methods",
+    "category": "Neurology / Assessment",
+    "highlight": "CN I to XII regulate motor and sensory function of the head and neck.",
+    "bullets": [
+      "CN I (Olfactory): Sensory for smell. Test by asking the patient to identify non-irritating odors (e.g., coffee, mint) with eyes closed.",
+      "CN II (Optic): Sensory for vision. Test visual acuity using a Snellen chart and peripheral visual fields.",
+      "CN III, IV, VI (Oculomotor, Trochlear, Abducens): Motor for extraocular movements and pupillary constriction (CN III). Test six cardinal fields of gaze and pupillary response (PERRLA).",
+      "CN V (Trigeminal): Sensory to face, motor to muscles of mastication. Test facial sensation with a cotton wisp and ask to clench teeth."
+    ]
+  },
+  {
+    "id": 24,
+    "title": "Insulin Action Profiles (Onset, Peak, Duration)",
+    "category": "Endocrine / Pharmacology",
+    "highlight": "CRITICAL: Monitor for hypoglycemia during the peak action time of the administered insulin!",
+    "bullets": [
+      "Rapid-Acting (Lispro/Aspart/Glulisine): Onset: 15 min | Peak: 1-2 hours | Duration: 3-4 hours. Give within 15 minutes of a meal.",
+      "Short-Acting (Regular Insulin): Onset: 30-60 min | Peak: 2-4 hours | Duration: 5-8 hours. The only insulin that can be given IV.",
+      "Intermediate-Acting (NPH): Onset: 1-2 hours | Peak: 4-12 hours | Duration: 18-24 hours. Cloudy suspension; must roll gently to mix.",
+      "Long-Acting (Glargine/Detemir): Onset: 1-2 hours | Peak: None (peakless, flat plateau) | Duration: 24 hours. Do not mix with other insulins in the same syringe."
+    ]
+  },
+  {
+    "id": 25,
+    "title": "Hyperkalemia vs. Hypokalemia",
+    "category": "Fluids & Electrolytes",
+    "highlight": "Potassium range: 3.5–5.0 mEq/L | Key regulator of cardiac electrical conduction",
+    "bullets": [
+      "Hyperkalemia (>5.0 mEq/L): Causes: renal failure, potassium-sparing diuretics, burn injury. ECG: Tall peaked T-waves, widened QRS, flat P-waves. Treatment: Calcium Gluconate (protects heart), insulin + dextrose, Sodium Polystyrene Sulfonate (Kayexalate).",
+      "Hypokalemia (<3.5 mEq/L): Causes: vomiting, loop diuretics (Furosemide), Cushing's syndrome. ECG: Flat/inverted T-waves, prominent U-waves, ST depression.",
+      "Never give potassium IV push; dilute and infuse slowly (max 10 mEq/hr peripherally)."
+    ]
+  },
+  {
+    "id": 26,
+    "title": "Hypocalcemia Indicators (Chvostek & Trousseau)",
+    "category": "Fluids & Electrolytes / Assessment",
+    "highlight": "Calcium range: 9.0–10.5 mg/dL | Signs of neuromuscular irritability",
+    "bullets": [
+      "Hypocalcemia (<9.0 mg/dL) causes tetany and increased neuromuscular excitability.",
+      "Chvostek's Sign: Tapping the facial nerve in front of the earlobe triggers spasm/twitching of facial muscles on the same side.",
+      "Trousseau's Sign: Inflating a blood pressure cuff on the upper arm above systolic pressure for 3 minutes causes carpopedal spasm (adduction of thumb, flexion of fingers).",
+      "Treatment: Administer IV Calcium Gluconate slowly; monitor ECG for bradycardia and QT prolongation."
+    ]
+  },
+  {
+    "id": 27,
+    "title": "Shock States: CVP and Hemodynamics",
+    "category": "Critical Care / Cardiology",
+    "highlight": "CVP indicates right ventricular preload (Normal: 2–8 mmHg)",
+    "bullets": [
+      "Hypovolemic Shock: Caused by blood/fluid loss. Low CVP, low cardiac output, elevated heart rate, and high systemic vascular resistance (SVR). Treatment: IV crystalloids and blood products.",
+      "Cardiogenic Shock: Caused by pump failure (e.g., severe MI). Elevated CVP, elevated Pulmonary Artery Wedge Pressure (PAWP), low cardiac output. Treatment: Inotropes (Dobutamine) and vasodilators.",
+      "Septic/Anaphylactic/Neurogenic Shock (Distributive): Massive vasodilation. Low SVR, variable CVP. Anaphylaxis treatment: Epinephrine IM."
+    ]
+  },
+  {
+    "id": 28,
+    "title": "Peripheral Vascular Disease: Arterial vs. Venous",
+    "category": "Cardiology / Vascular",
+    "highlight": "Arterial = Decreased flow to extremities | Venous = Decreased return to heart",
+    "bullets": [
+      "Peripheral Arterial Disease (PAD): Intermittent claudication (muscle pain during walk, relieved by rest). Extremities are cool, pale/cyanotic, with weak pulses. Skin is shiny and hairless. Elevating legs increases pain; hanging legs down (rubor) relieves it.",
+      "Chronic Venous Insufficiency (CVI): Dull, achy pain. Extremities are warm, with thick/tough skin showing brown pigmentation (hemosiderin staining). Edema is present. Elevating legs relieves pain and promotes drainage.",
+      "Ulcerations: Arterial ulcers are circular, deep, and dry (toes/heels); Venous ulcers are irregular, shallow, and wet (medial malleolus)."
+    ]
+  },
+  {
+    "id": 29,
+    "title": "Pediatric Milestones: Ages 1 to 5 Years",
+    "category": "Pediatric Nursing",
+    "highlight": "Key physical, motor, and cognitive milestones dictate healthy development.",
+    "bullets": [
+      "1 Year: Walks with assistance, says 2-3 single words, uses neat pincer grasp, stacks 2 blocks.",
+      "2 Years: Walks up/down stairs one step at a time, runs, speaks in 2-3 word phrases, stacks 6 blocks, engages in parallel play.",
+      "3 Years: Rides a tricycle, goes up stairs alternating feet, copies a circle, stacks 9-10 blocks, toilet trained (daytime), asks \"why\".",
+      "4-5 Years: Hops on one foot, throws ball overhead, uses scissors, speaks in complete sentences, ties shoelaces (by age 5)."
+    ]
+  },
+  {
+    "id": 30,
+    "title": "MAOI Interactions & Tyramine Restrictions",
+    "category": "Mental Health / Pharmacology",
+    "highlight": "MAOIs + Tyramine = Severe Hypertensive Crisis!",
+    "bullets": [
+      "Monoamine Oxidase Inhibitors (MAOIs) include Phenelzine, Tranylcypromine, and Isocarboxazid.",
+      "These drugs prevent the breakdown of norepinephrine, serotonin, and dopamine in the synaptic cleft.",
+      "Eating tyramine-rich foods causes massive release of norepinephrine, leading to severe vasoconstriction, pounding headache, and malignant hypertension.",
+      "Restrict: Aged cheeses, red wine/beer, processed/cured meats (salami, sausage), bananas, avocados, and yeast extracts."
+    ]
+  },
+  {
+    "id": 31,
+    "title": "Pyloric Stenosis (Pediatric Highlight)",
+    "category": "Pediatric / Gastrointestinal",
+    "highlight": "Classic triad: Projectile non-bilious vomiting, olive-shaped mass, peristaltic waves",
+    "bullets": [
+      "Pyloric stenosis is the hypertrophy and hyperplasia of the pyloric sphincter, causing stomach outlet obstruction in infants.",
+      "Usually presents between 2 to 8 weeks of life with progressive, non-bilious projectile vomiting immediately after feeding.",
+      "Assessment: Palpable olive-shaped mass in the right upper quadrant, and visible left-to-right gastric peristaltic waves.",
+      "Nursing Priorities: Correct dehydration and electrolyte imbalances (hypokalemic hypochloric metabolic alkalosis) prior to pyloromyotomy surgery."
+    ]
+  },
+  {
+    "id": 32,
+    "title": "Autonomic Dysreflexia (SCI Emergency)",
+    "category": "Neurology / Critical Care",
+    "highlight": "Medical emergency occurring in spinal cord injuries at or above T6.",
+    "bullets": [
+      "Triggered by a noxious stimulus below the level of spinal injury, most commonly a distended bladder, fecal impaction, or tight clothing.",
+      "Sympathetic surge below injury causes severe, sudden vasoconstriction leading to life-threatening hypertension.",
+      "Baroreceptors trigger a parasympathetic response above injury, causing bradycardia, facial flushing, sweating, and headache.",
+      "Immediate interventions: Elevate head of bed to 90 degrees (high-Fowler's) to induce orthostatic pooling, loosen clothing, identify/remove stimulus, and administer antihypertensives if BP remains high."
+    ]
+  },
+  {
+    "id": 33,
+    "title": "Acute Epiglottitis Hallmarks",
+    "category": "Pediatric / Respiratory",
+    "highlight": "CRITICAL: Never inspect the throat with a tongue depressor/blade if epiglottitis is suspected!",
+    "bullets": [
+      "Epiglottitis is a rapidly progressive bacterial infection (most commonly Haemophilus influenzae type B) causing airway swelling.",
+      "Key clinical signs - The 4 D's: Drooling, Dysphagia (difficulty swallowing), Dysphonia (muffled voice), Distress (stridor, retractions).",
+      "Child characteristically sits in the \"tripod position\" (leaning forward with neck hyperextended and mouth open) to maximize airflow.",
+      "Nursing action: Keep the child calm and prepare for emergency intubation/tracheostomy. Avoid direct throat manipulation as it can trigger laryngospasm."
+    ]
+  },
+  {
+    "id": 34,
+    "title": "Thyroid Storm vs. Myxedema Coma",
+    "category": "Endocrine / Critical Care",
+    "highlight": "Thyroid Storm = Hyperactive state | Myxedema Coma = Hypoactive state",
+    "bullets": [
+      "Thyroid Storm (Extreme Hyperthyroidism): Triggered by stress, infection, or thyroid surgery. Symptoms: Hyperthermia (fever >104F), extreme tachycardia, agitation, delirium, diarrhea, tremors. Treatment: PTU, Beta-blockers, iodine, cooling blankets.",
+      "Myxedema Coma (Extreme Hypothyroidism): Triggered by cold exposure, abrupt medication cessation, or illness. Symptoms: Hypothermia, bradycardia, severe hypotension, hypoventilation, generalized edema. Treatment: IV Levothyroxine, airway support, warm blankets."
+    ]
+  },
+  {
+    "id": 35,
+    "title": "Cranial Nerve X (Vagus Nerve) Clinical Notes",
+    "category": "Neurology / Physiology",
+    "highlight": "The longest cranial nerve, providing extensive parasympathetic innervation.",
+    "bullets": [
+      "Regulates cardiac heart rate, bronchoconstriction, and gastrointestinal motility.",
+      "Vagal Stimulation (e.g., bearing down, carotid massage, coughing) slows conduction through the AV node, lowering heart rate.",
+      "Test clinically by asking the patient to say \"ah\" and observing for symmetrical elevation of the soft palate and uvula.",
+      "Damage results in hoarseness, dysphagia, and deviation of the uvula to the unaffected (opposite) side."
+    ]
+  },
+  {
+    "id": 36,
+    "title": "Ototoxicity and Cranial Nerve VIII",
+    "category": "Pharmacology / Neurology",
+    "highlight": "CN VIII (Vestibulocochlear) damage causes hearing loss and equilibrium loss.",
+    "bullets": [
+      "CN VIII has two branches: cochlear (hearing) and vestibular (balance). Test using the whisper test, Rinne/Weber tests, and Romberg test.",
+      "Aminoglycoside antibiotics (e.g., Gentamicin, Amikacin, Neomycin) are highly ototoxic and nephrotoxic.",
+      "Loop diuretics (e.g., Furosemide) administered too rapidly via IV push can cause transient or permanent tinnitus and hearing loss.",
+      "Instruct patients to report ringing in ears (tinnitus), vertigo, or balance issues immediately."
+    ]
+  },
+  {
+    "id": 37,
+    "title": "Hyperthyroidism vs. Hypothyroidism",
+    "category": "Endocrine / Assessment",
+    "highlight": "Hyperthyroidism = Metabolism accelerated | Hypothyroidism = Metabolism slowed",
+    "bullets": [
+      "Hyperthyroidism (Graves' Disease): High T3/T4, low TSH. Symptoms: weight loss, heat intolerance, diarrhea, smooth skin, anxiety, tachycardia, exophthalmos (bulging eyes).",
+      "Hypothyroidism (Hashimoto's Disease): Low T3/T4, high TSH. Symptoms: weight gain, cold intolerance, constipation, dry skin, fatigue, bradycardia, myxedema (waxy non-pitting edema).",
+      "Treatments: Hyperthyroidism = Methimazole/PTU, radioactive iodine, thyroidectomy. Hypothyroidism = Levothyroxine (Synthroid) taken in the morning on an empty stomach."
+    ]
+  },
+  {
+    "id": 38,
+    "title": "Parkinson's Disease Triad & Care",
+    "category": "Neurology / Chronic Care",
+    "highlight": "Parkinson's is caused by degeneration of dopamine-producing neurons in the substantia nigra.",
+    "bullets": [
+      "Classical Triad: Tremor (worse at rest, \"pill-rolling\"), Muscle Rigidity (cogwheel rigidity), Bradykinesia (slow movements).",
+      "Assessment shows a shuffling gait with loss of postural reflexes, mask-like facial expression, and micrographic handwriting.",
+      "Treatment: Carbidopa-Levodopa (increases dopamine levels). Avoid foods high in protein/vitamin B6 as they decrease absorption.",
+      "Nursing care: Encourage independence, use velcro closures, clear paths to prevent falls, and schedule medications on time."
+    ]
+  },
+  {
+    "id": 39,
+    "title": "Multiple Sclerosis (MS) & Charcot's Triad",
+    "category": "Neurology / Chronic Care",
+    "highlight": "Autoimmune demyelination of the central nervous system (brain and spinal cord).",
+    "bullets": [
+      "Characterized by periods of exacerbation and remission. Triggered by fatigue, stress, pregnancy, and temperature extremes.",
+      "Charcot's Neurologic Triad: 1. Nystagmus (involuntary eye movements), 2. Intention tremor (tremor during voluntary movement), 3. Scanning speech (slurred, spaced words).",
+      "Other symptoms include optic neuritis (vision loss), muscle weakness, paresthesias, and urinary incontinence.",
+      "Nursing action: Promote energy conservation, avoid hot baths (Uthoff's sign - symptoms worsen with heat), and administer immunomodulators."
+    ]
+  },
+  {
+    "id": 40,
+    "title": "COPD Oxygen Therapy & Hypoxic Drive",
+    "category": "Respiratory / Chronic Care",
+    "highlight": "Target O2 saturation in severe COPD is typically 88% to 92%.",
+    "bullets": [
+      "In healthy individuals, the primary stimulus to breathe is elevated arterial carbon dioxide (hypercapnia).",
+      "In chronic hypercapnic patients (severe COPD), the respiratory center becomes desensitized to high CO2 levels.",
+      "Their primary stimulus to breathe becomes low oxygen levels (hypoxic drive), detected by peripheral chemoreceptors.",
+      "Administering excessive oxygen can elevate arterial O2, eliminating their hypoxic drive and inducing hypoventilation/respiratory arrest."
+    ]
+  },
+  {
+    "id": 41,
+    "title": "Rheumatoid Arthritis vs. Osteoarthritis",
+    "category": "Musculoskeletal / Assessment",
+    "highlight": "RA is systemic and inflammatory | OA is localized and degenerative",
+    "bullets": [
+      "Rheumatoid Arthritis (RA): Autoimmune, bilateral/symmetrical joint involvement. Morning stiffness lasts > 1 hour. Joints are warm, swollen, and painful. Systemic symptoms: fatigue, fever, organ involvement. Features swan-neck and boutonniere deformities.",
+      "Osteoarthritis (OA): Degenerative \"wear-and-tear\", asymmetrical joint involvement. Stiffness resolves within 30 minutes of waking. Exacerbated by use, relieved by rest. Features Heberden's nodes (distal joints) and Bouchard's nodes (proximal joints)."
+    ]
+  },
+  {
+    "id": 42,
+    "title": "Glomerulonephritis vs. Nephrotic Syndrome",
+    "category": "Renal / Assessment",
+    "highlight": "Glomerulonephritis = Inflammatory damage | Nephrotic Syndrome = Massive protein leak",
+    "bullets": [
+      "Acute Glomerulonephritis (Nephritic): Often follows group A beta-hemolytic streptococcal infection. Key findings: Mild proteinuria, hematuria (\"cola-colored\" or smoky urine), oliguria, hypertension, and periorbital edema.",
+      "Nephrotic Syndrome: Glomerular basement membrane hyperpermeability. Key findings: Massive proteinuria (>3.5g/24hr), severe hypoalbuminemia, generalized edema (anasarca), hyperlipidemia, and frothy beer-like urine.",
+      "Nursing care: Weigh daily, monitor fluid balance, limit sodium, and administer corticosteroids as prescribed."
+    ]
+  },
+  {
+    "id": 43,
+    "title": "AHA CPR Guidelines (Basic Life Support)",
+    "category": "Emergency / Safety",
+    "highlight": "Adult compression-to-ventilation ratio: 30:2 (for single or double rescuers)",
+    "bullets": [
+      "Compression Rate: 100 to 120 compressions per minute.",
+      "Compression Depth: 2 to 2.4 inches (5 to 6 cm) in adults, allowing complete chest recoil between compressions.",
+      "Infant CPR: Compression depth is 1.5 inches (4 cm). Ratio is 30:2 for a single rescuer and 15:2 for two healthcare rescuers.",
+      "Minimize interruptions to chest compressions; check pulse and rhythm for no more than 10 seconds every 2 minutes (5 cycles)."
+    ]
+  },
+  {
+    "id": 44,
+    "title": "Chest Tube Emergency Protocols",
+    "category": "Respiratory / Emergency",
+    "highlight": "Be prepared for accidental system disconnection or tube displacement.",
+    "bullets": [
+      "If the chest tube becomes disconnected from the drainage system: Immediately submerge the distal end of the tube in 1-2 inches of sterile water or saline to create a temporary water seal and prevent air entry.",
+      "If the chest tube is accidentally pulled out of the patient's chest: Immediately cover the site with a sterile occlusive dressing (e.g., Vaseline gauze) and tape it securely on THREE sides.",
+      "Taping on three sides creates a flutter valve, allowing air to escape the pleural space but preventing atmospheric air from entering."
+    ]
+  },
+  {
+    "id": 45,
+    "title": "Transmission-Based Isolation Precautions",
+    "category": "Infection Control / Safety",
+    "highlight": "Always wear appropriate Personal Protective Equipment (PPE) based on transmission route.",
+    "bullets": [
+      "Airborne (Measles, Chickenpox/Varicella, Tuberculosis): Requires a private, negative-pressure room with 6-12 air exchanges/hour. Wear an N95 respirator mask.",
+      "Droplet (Influenza, Pertussis, Meningitis, Mumps): Requires a private room or cohorting. Wear a standard surgical mask when within 3 feet of the patient.",
+      "Contact (MRSA, VRE, C. difficile): Requires private room, gowns, and gloves. Wash hands with soap and water (not alcohol gel) for C. diff."
+    ]
+  },
+  {
+    "id": 46,
+    "title": "Disaster Triage Color Coding",
+    "category": "Emergency / Public Health",
+    "highlight": "Goal: Do the greatest good for the greatest number of casualties.",
+    "bullets": [
+      "RED (Immediate): Life-threatening injuries but salvageable with quick intervention (e.g., tension pneumothorax, airway obstruction, shock).",
+      "YELLOW (Delayed): Significant injuries requiring care but can wait 1-2 hours without immediate threat to life (e.g., stable fractures, large lacerations without active hemorrhage).",
+      "GREEN (Minor): \"Walking wounded\" with minor injuries; can delay treatment for hours.",
+      "BLACK (Expectant): Deceased or unsalvageable injuries (e.g., massive head trauma, deep burns over 90% body, pulselessness)."
+    ]
+  },
+  {
+    "id": 47,
+    "title": "Rule of Nines for Burn Calculation",
+    "category": "Trauma / Critical Care",
+    "highlight": "Divides the body into sections representing 9% (or multiples of 9%) of total body surface area.",
+    "bullets": [
+      "Head and Neck: 9% total (4.5% anterior, 4.5% posterior).",
+      "Torso (Trunk): 36% total (18% anterior chest/abdomen, 18% posterior back).",
+      "Each Arm: 9% total (4.5% anterior, 4.5% posterior).",
+      "Each Leg: 18% total (9% anterior, 9% posterior).",
+      "Perineum (Genitals): 1% total.",
+      "Use only partial-thickness (2nd degree) and full-thickness (3rd degree) burns in calculations."
+    ]
+  },
+  {
+    "id": 48,
+    "title": "Trigeminal Neuralgia (CN V)",
+    "category": "Neurology / Chronic Care",
+    "highlight": "Characterized by severe, sharp, stabbing, shock-like facial pain.",
+    "bullets": [
+      "Pain is localized along the branches of the trigeminal nerve (usually ophthalmic, maxillary, or mandibular).",
+      "Triggered by minimal sensory stimuli: light touch, washing the face, brushing teeth, eating, drinking, or cold drafts.",
+      "First-line pharmacological treatment is Carbamazepine (Tegretol), an anticonvulsant. Monitor CBC for bone marrow suppression.",
+      "Nursing care: Instruct patient to wash face with warm water and cotton pads, chew on the unaffected side, and eat soft, warm foods."
+    ]
+  },
+  {
+    "id": 49,
+    "title": "Meningitis Signs: Kernig & Brudzinski",
+    "category": "Neurology / Assessment",
+    "highlight": "Indicative of meningeal irritation / inflammation.",
+    "bullets": [
+      "Meningitis is inflammation of the meninges surrounding the brain and spinal cord, caused by bacterial or viral infection.",
+      "Kernig's Sign: With the patient supine, flex the hip and knee to 90 degrees. Attempting to extend the knee triggers severe pain and resistance in the hamstring.",
+      "Brudzinski's Sign: Flexing the patient's neck toward the chest triggers involuntary flexion of the patient's hips and knees.",
+      "Nursing Priorities: Initiate droplet precautions immediately for suspected bacterial meningitis, monitor for increased ICP, and prepare for lumbar puncture."
+    ]
+  },
+  {
+    "id": 50,
+    "title": "Liver Cirrhosis & Portal Hypertension",
+    "category": "Gastrointestinal / Chronic Care",
+    "highlight": "Complications: Esophageal varices, ascites, and hepatic encephalopathy.",
+    "bullets": [
+      "Portal Hypertension: Scarring of liver blocks blood flow, raising portal vein pressure. Leads to collateral vessel formation (esophageal varices). Variceal rupture is a life-threatening hemorrhage.",
+      "Hepatic Encephalopathy: Failing liver cannot convert ammonia (a neurotoxin byproduct of protein breakdown) to urea. Ammonia crosses blood-brain barrier.",
+      "Encephalopathy findings: confusion, altered sleep patterns, and asterixis (bilateral flapping tremor of hands when arms are extended and wrists dorsiflexed).",
+      "Treatment: Administer Lactulose to promote excretion of ammonia in the stool (aim for 2-3 soft stools per day)."
+    ]
+  }
+]

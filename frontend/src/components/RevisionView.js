@@ -8,7 +8,7 @@ import {
   RotateCcw, Sparkle, Stethoscope, GraduationCap, ArrowUpRight, Check, Brain
 } from 'lucide-react';
 
-export default function RevisionView({ onStartQuestionPractice }) {
+export default function RevisionView({ onStartQuestionPractice, user }) {
   const [bookmarkedList, setBookmarkedList] = useState([]);
   const [incorrectList, setIncorrectList] = useState([]);
   const [activeTab, setActiveTab] = useState('bookmarks'); // 'bookmarks' | 'incorrect' | 'notes' | 'concepts' | 'sureshot' | 'calculators'
@@ -66,9 +66,32 @@ export default function RevisionView({ onStartQuestionPractice }) {
   const [mapDbp, setMapDbp] = useState(80);
   const [mapResult, setMapResult] = useState(null);
 
+  // States for Dynamic Concepts Database
+  const [conceptsList, setConceptsList] = useState([]);
+  const [conceptsLoaded, setConceptsLoaded] = useState(false);
+
+  // States for Concept Form Modal
+  const [conceptModalOpen, setConceptModalOpen] = useState(false);
+  const [editingConcept, setEditingConcept] = useState(null);
+  const [conceptTitle, setConceptTitle] = useState('');
+  const [conceptCategory, setConceptCategory] = useState('');
+  const [conceptHighlight, setConceptHighlight] = useState('');
+  const [conceptBullets, setConceptBullets] = useState('');
+
   useEffect(() => {
     fetchRevisionData();
+    fetchConcepts();
   }, []);
+
+  const fetchConcepts = async () => {
+    try {
+      const data = await api.getConcepts();
+      setConceptsList(data || []);
+      setConceptsLoaded(true);
+    } catch (err) {
+      console.error('Error fetching concepts:', err);
+    }
+  };
 
   useEffect(() => {
     setConceptsPage(1);
@@ -80,6 +103,7 @@ export default function RevisionView({ onStartQuestionPractice }) {
       const data = await api.getRevisionList();
       setBookmarkedList(data.bookmarked || []);
       setIncorrectList(data.incorrect || []);
+      await fetchConcepts();
     } catch (err) {
       console.error('Error fetching revision data:', err);
     } finally {
@@ -365,6 +389,112 @@ export default function RevisionView({ onStartQuestionPractice }) {
     }
 
     setMapResult({ map: mapVal, interpretation, alertClass });
+  };
+
+  // Concepts Management Handlers
+  const handleDownloadTemplate = () => {
+    const csvContent = "title,category,highlight,bullets\n" +
+      "Parkland Burn Resuscitation Formula,Critical Care / Trauma,\"Formula: 4 mL x Body Weight (kg) x TBSA (%)\",\"Administer half of the total calculated volume in the first 8 hours (calculated from the time of injury | not arrival). | Administer the remaining half of the volume over the next 16 hours. | The crystalloid of choice for resuscitation is Ringer's Lactate (RL).\"\n" +
+      "Blood Transfusion Guidelines & Reactions,Clinical Nursing / Safety,Complete transfusion within 4 hours maximum to avoid bacterial growth.,\"Must verify patient identity and blood bag details with 2 registered nurses prior to administration. | Run the infusion slowly at 2 to 5 mL/min for the first 15 minutes to monitor for immediate reactions. | Closely monitor for hemolytic reactions (chills | severe lower back pain | dyspnea | fever | hypotension). | If a reaction occurs: Stop infusion immediately | disconnect tubing | run normal saline via new tubing | and notify provider.\"";
+      
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", "epion_concepts_template.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleBulkUploadConcepts = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    
+    const confirmUpload = window.confirm("Are you sure you want to bulk upload? This will replace all existing concepts with the concepts in the CSV file.");
+    if (!confirmUpload) return;
+    
+    setLoading(true);
+    try {
+      const response = await api.importConceptsCsv(file);
+      alert(response.message || "Bulk upload completed successfully.");
+      await fetchConcepts();
+    } catch (err) {
+      console.error("Bulk upload error:", err);
+      alert(err.message || "Bulk upload failed.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDeleteConcept = async (id, title, e) => {
+    e.stopPropagation();
+    const confirmDelete = window.confirm(`Are you sure you want to delete the concept "${title}"?`);
+    if (!confirmDelete) return;
+    
+    try {
+      await api.deleteConcept(id);
+      alert("Concept deleted successfully.");
+      await fetchConcepts();
+    } catch (err) {
+      console.error("Delete concept error:", err);
+      alert("Failed to delete concept.");
+    }
+  };
+
+  const openEditConceptModal = (concept, e) => {
+    e.stopPropagation();
+    setEditingConcept(concept);
+    setConceptTitle(concept.title);
+    setConceptCategory(concept.category);
+    setConceptHighlight(concept.highlight || '');
+    setConceptBullets(concept.bullets ? concept.bullets.join('\n') : '');
+    setConceptModalOpen(true);
+  };
+
+  const openAddConceptModal = () => {
+    setEditingConcept(null);
+    setConceptTitle('');
+    setConceptCategory('');
+    setConceptHighlight('');
+    setConceptBullets('');
+    setConceptModalOpen(true);
+  };
+
+  const handleSaveConcept = async (e) => {
+    e.preventDefault();
+    if (!conceptTitle.trim() || !conceptCategory.trim() || !conceptBullets.trim()) {
+      alert("Please fill in all required fields.");
+      return;
+    }
+    
+    const bulletsArray = conceptBullets.split('\n').map(b => b.trim()).filter(Boolean);
+    if (bulletsArray.length === 0) {
+      alert("Please enter at least one bullet point.");
+      return;
+    }
+    
+    const payload = {
+      title: conceptTitle.trim(),
+      category: conceptCategory.trim(),
+      highlight: conceptHighlight.trim() || null,
+      bullets: bulletsArray
+    };
+    
+    try {
+      if (editingConcept) {
+        await api.updateConcept(editingConcept.id, payload);
+        alert("Concept updated successfully.");
+      } else {
+        await api.createConcept(payload);
+        alert("Concept created successfully.");
+      }
+      setConceptModalOpen(false);
+      await fetchConcepts();
+    } catch (err) {
+      console.error("Save concept error:", err);
+      alert("Failed to save concept.");
+    }
   };
 
   // High-Yield One Page Notes dataset
@@ -1027,7 +1157,8 @@ export default function RevisionView({ onStartQuestionPractice }) {
   ];
 
   // Filtering concepts based on search
-  const filteredConcepts = coreConcepts.filter(c => 
+  const currentConcepts = conceptsLoaded ? conceptsList : coreConcepts;
+  const filteredConcepts = currentConcepts.filter(c => 
     c.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
     c.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
     (c.highlight && c.highlight.toLowerCase().includes(searchQuery.toLowerCase())) ||
@@ -1264,15 +1395,48 @@ export default function RevisionView({ onStartQuestionPractice }) {
       {/* 4. 50 CORE REPEATED CONCEPTS TAB VIEW */}
       {activeTab === 'concepts' && (
         <div className="space-y-4 animate-slide-up">
-          {/* Search concepts bar */}
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Search concepts by keyword (e.g. Parkland, GCS)..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-card border border-border px-4 py-2 text-sm text-foreground focus:outline-none focus:border-primary rounded-xl placeholder:text-muted-text/50"
-            />
+          {/* Search & Admin actions bar */}
+          <div className="flex flex-col gap-3">
+            {user?.role === 'admin' && (
+              <div className="flex flex-wrap gap-2.5 items-center justify-between bg-muted-bg/30 p-3 rounded-xl border border-border/80">
+                <span className="text-[10px] font-bold text-muted-text uppercase tracking-wider">Concept Management (Admin):</span>
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    onClick={openAddConceptModal}
+                    type="button"
+                    className="py-1.5 px-3 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-lg shadow-sm transition-colors flex items-center gap-1"
+                  >
+                    <span>+ Add Concept</span>
+                  </button>
+                  <button
+                    onClick={handleDownloadTemplate}
+                    type="button"
+                    className="py-1.5 px-3 bg-secondary/10 hover:bg-secondary/20 text-secondary text-xs font-bold rounded-lg transition-colors flex items-center gap-1"
+                  >
+                    <span>Download CSV Template</span>
+                  </button>
+                  <label className="py-1.5 px-3 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs font-bold rounded-lg border border-emerald-500/10 cursor-pointer transition-colors flex items-center gap-1 select-none">
+                    <span>Bulk Upload CSV</span>
+                    <input
+                      type="file"
+                      accept=".csv"
+                      onChange={handleBulkUploadConcepts}
+                      className="hidden"
+                    />
+                  </label>
+                </div>
+              </div>
+            )}
+
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Search concepts by keyword (e.g. Parkland, GCS)..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full bg-card border border-border px-4 py-2 text-sm text-foreground focus:outline-none focus:border-primary rounded-xl placeholder:text-muted-text/50"
+              />
+            </div>
           </div>
 
           <div className="space-y-2.5">
@@ -1298,11 +1462,33 @@ export default function RevisionView({ onStartQuestionPractice }) {
                       </span>
                       <span className="font-extrabold text-xs md:text-sm text-foreground leading-tight">{c.title}</span>
                     </div>
-                    {isExpanded ? (
-                      <ChevronUp className="w-4.5 h-4.5 text-primary shrink-0 transition-transform" />
-                    ) : (
-                      <ChevronDown className="w-4.5 h-4.5 text-muted-text shrink-0 hover:text-foreground transition-transform" />
-                    )}
+                    <div className="flex items-center gap-2 shrink-0">
+                      {user?.role === 'admin' && (
+                        <div className="flex items-center gap-1 mr-2 text-[10px]">
+                          <button
+                            onClick={(e) => openEditConceptModal(c, e)}
+                            type="button"
+                            className="py-1 px-2.5 bg-secondary/10 hover:bg-secondary/25 text-secondary font-bold rounded transition-colors"
+                            title="Edit Concept"
+                          >
+                            Edit
+                          </button>
+                          <button
+                            onClick={(e) => handleDeleteConcept(c.id, c.title, e)}
+                            type="button"
+                            className="py-1 px-2.5 bg-danger-light hover:bg-danger text-danger hover:text-white font-bold rounded transition-colors"
+                            title="Delete Concept"
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      )}
+                      {isExpanded ? (
+                        <ChevronUp className="w-4.5 h-4.5 text-primary shrink-0 transition-transform" />
+                      ) : (
+                        <ChevronDown className="w-4.5 h-4.5 text-muted-text shrink-0 hover:text-foreground transition-transform" />
+                      )}
+                    </div>
                   </button>
                   {isExpanded && (
                     <div className="p-5 bg-card animate-slide-up space-y-4">
@@ -1921,6 +2107,96 @@ export default function RevisionView({ onStartQuestionPractice }) {
             )}
           </div>
 
+        </div>
+      )}
+
+      {/* Concept Add/Edit Modal */}
+      {conceptModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
+          <div className="bg-card border border-border w-full max-w-lg rounded-2xl shadow-xl overflow-hidden animate-slide-up flex flex-col max-h-[90vh]">
+            {/* Header */}
+            <div className="p-5 border-b border-border/80 flex items-center justify-between">
+              <h3 className="font-extrabold text-foreground text-base">
+                {editingConcept ? 'Edit Repeated Concept' : 'Add New Repeated Concept'}
+              </h3>
+              <button
+                onClick={() => setConceptModalOpen(false)}
+                type="button"
+                className="text-muted-text hover:text-foreground p-1 text-lg font-bold"
+              >
+                &times;
+              </button>
+            </div>
+            
+            {/* Form */}
+            <form onSubmit={handleSaveConcept} className="p-5 space-y-4 overflow-y-auto flex-1 text-xs">
+              <div className="space-y-1">
+                <label className="font-bold text-muted-text uppercase tracking-wider block">Concept Title</label>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. Parkland Burn Resuscitation Formula"
+                  value={conceptTitle}
+                  onChange={(e) => setConceptTitle(e.target.value)}
+                  className="w-full py-2 px-3 bg-muted-bg border border-border rounded-lg text-foreground focus:outline-none text-xs"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="font-bold text-muted-text uppercase tracking-wider block">Category</label>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. Critical Care / Trauma"
+                  value={conceptCategory}
+                  onChange={(e) => setConceptCategory(e.target.value)}
+                  className="w-full py-2 px-3 bg-muted-bg border border-border rounded-lg text-foreground focus:outline-none text-xs"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="font-bold text-muted-text uppercase tracking-wider block">Highlight / Formula Box (Optional)</label>
+                <input
+                  type="text"
+                  placeholder="e.g. Formula: 4 mL x Body Weight (kg) x TBSA (%)"
+                  value={conceptHighlight}
+                  onChange={(e) => setConceptHighlight(e.target.value)}
+                  className="w-full py-2 px-3 bg-muted-bg border border-border rounded-lg text-foreground focus:outline-none text-xs"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="font-bold text-muted-text uppercase tracking-wider block">
+                  Clinical Guidelines / Key Points (One bullet point per line)
+                </label>
+                <textarea
+                  required
+                  rows={6}
+                  placeholder="Administer half of the total calculated volume in the first 8 hours.&#10;Administer the remaining half of the volume over the next 16 hours.&#10;The crystalloid of choice is Ringer's Lactate (RL)."
+                  value={conceptBullets}
+                  onChange={(e) => setConceptBullets(e.target.value)}
+                  className="w-full py-2 px-3 bg-muted-bg border border-border rounded-lg text-foreground focus:outline-none text-xs leading-relaxed font-sans"
+                />
+              </div>
+
+              {/* Actions */}
+              <div className="flex justify-end gap-2 pt-2 border-t border-border/80">
+                <button
+                  type="button"
+                  onClick={() => setConceptModalOpen(false)}
+                  className="px-4 py-2 border border-border hover:bg-muted-bg/30 text-foreground font-semibold rounded-xl transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-primary hover:bg-primary-hover text-white font-semibold rounded-xl shadow-sm transition-colors"
+                >
+                  Save Concept
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       )}
     </div>

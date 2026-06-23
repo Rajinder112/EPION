@@ -480,6 +480,7 @@ export default function Home() {
         {activeTab === 'revision' && (
           <RevisionView 
             onStartQuestionPractice={handleStartQuestionPractice}
+            user={user}
           />
         )}
         
