@@ -8,6 +8,13 @@ const rateLimit = require('express-rate-limit');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// Enable CORS for frontend requests
+app.use(cors({
+  origin: '*', // Allow all origins for dev/sandbox ease
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
 // Enable Helmet for secure HTTP headers
 app.use(helmet({
   crossOriginResourcePolicy: { policy: "cross-origin" }
@@ -35,13 +42,6 @@ app.use('/api', limiter);
 // Apply stricter limiters to authentication routes
 app.use('/api/auth/login', authLimiter);
 app.use('/api/auth/register', authLimiter);
-
-// Enable CORS for frontend requests
-app.use(cors({
-  origin: '*', // Allow all origins for dev/sandbox ease
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
 
 // Request logging middleware
 app.use((req, res, next) => {
