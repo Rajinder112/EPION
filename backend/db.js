@@ -1607,39 +1607,69 @@ function simulateQuery(text, params = []) {
 
 // Seeding admin user helper for PostgreSQL
 async function seedPostgresAdmin() {
+  const bcrypt = require('bcryptjs');
+  
+  // Seed First Admin: Rajinder Singh
   try {
-    const adminEmail = 's.rajinder321@gmail.com';
-    const checkUser = await pool.query('SELECT * FROM users WHERE email = $1', [adminEmail]);
-    if (checkUser.rows.length === 0) {
-      console.log('Seeding PostgreSQL admin user...');
-      const bcrypt = require('bcryptjs');
+    const adminEmail1 = 's.rajinder321@gmail.com';
+    const checkUser1 = await pool.query('SELECT * FROM users WHERE email = $1', [adminEmail1]);
+    if (checkUser1.rows.length === 0) {
+      console.log('Seeding PostgreSQL admin user: s.rajinder321@gmail.com...');
       const salt = await bcrypt.genSalt(10);
       const password_hash = await bcrypt.hash('#@!Raji#@!1', salt);
       await pool.query(
         'INSERT INTO users (name, email, password_hash, google_id, role, xp_points, streak, is_paid) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)',
-        ['Rajinder Singh (Admin)', adminEmail, password_hash, null, 'admin', 500, 1, true]
+        ['Rajinder Singh (Admin)', adminEmail1, password_hash, null, 'admin', 500, 1, true]
       );
-      console.log('PostgreSQL admin user seeded successfully.');
+      console.log('PostgreSQL admin user s.rajinder321@gmail.com seeded successfully.');
     }
   } catch (err) {
-    console.error('Error seeding PostgreSQL admin user:', err.message);
+    console.error('Error seeding PostgreSQL admin user s.rajinder321@gmail.com:', err.message);
+  }
+
+  // Seed Second Admin: Amandeep Singh
+  try {
+    const adminEmail2 = 'amandeepsingh151296@gmail.com';
+    const checkUser2 = await pool.query('SELECT * FROM users WHERE email = $1', [adminEmail2]);
+    if (checkUser2.rows.length === 0) {
+      console.log('Seeding PostgreSQL admin user: amandeepsingh151296@gmail.com...');
+      const salt = await bcrypt.genSalt(10);
+      const password_hash = await bcrypt.hash('doLo@650', salt);
+      await pool.query(
+        'INSERT INTO users (name, email, password_hash, google_id, role, xp_points, streak, is_paid) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)',
+        ['Amandeep Singh (Admin)', adminEmail2, password_hash, null, 'admin', 500, 1, true]
+      );
+      console.log('PostgreSQL admin user amandeepsingh151296@gmail.com seeded successfully.');
+    } else {
+      const salt = await bcrypt.genSalt(10);
+      const password_hash = await bcrypt.hash('doLo@650', salt);
+      await pool.query(
+        'UPDATE users SET role = $1, password_hash = $2, is_email_verified = true WHERE email = $3',
+        ['admin', password_hash, adminEmail2]
+      );
+      console.log('PostgreSQL admin user amandeepsingh151296@gmail.com updated successfully.');
+    }
+  } catch (err) {
+    console.error('Error seeding PostgreSQL admin user amandeepsingh151296@gmail.com:', err.message);
   }
 }
 
 // Seeding admin user helper for Local JSON fallback DB
 async function seedLocalDbAdmin(dbData) {
+  const bcrypt = require('bcryptjs');
+
+  // Seed First Admin: Rajinder Singh
   try {
-    const adminEmail = 's.rajinder321@gmail.com';
-    const hasAdmin = dbData.users.some(u => u.email.toLowerCase() === adminEmail.toLowerCase());
-    if (!hasAdmin) {
-      console.log('Seeding Local JSON admin user...');
-      const bcrypt = require('bcryptjs');
+    const adminEmail1 = 's.rajinder321@gmail.com';
+    const hasAdmin1 = dbData.users.some(u => u.email.toLowerCase() === adminEmail1.toLowerCase());
+    if (!hasAdmin1) {
+      console.log('Seeding Local JSON admin user: s.rajinder321@gmail.com...');
       const salt = await bcrypt.genSalt(10);
       const password_hash = await bcrypt.hash('#@!Raji#@!1', salt);
       dbData.users.push({
         id: require('crypto').randomUUID(),
         name: 'Rajinder Singh (Admin)',
-        email: adminEmail,
+        email: adminEmail1,
         password_hash,
         google_id: null,
         role: 'admin',
@@ -1650,10 +1680,46 @@ async function seedLocalDbAdmin(dbData) {
         created_at: new Date().toISOString()
       });
       saveLocalDb(dbData);
-      console.log('Local JSON admin user seeded successfully.');
+      console.log('Local JSON admin user s.rajinder321@gmail.com seeded successfully.');
     }
   } catch (err) {
-    console.error('Error seeding local JSON admin user:', err);
+    console.error('Error seeding local JSON admin user s.rajinder321@gmail.com:', err);
+  }
+
+  // Seed Second Admin: Amandeep Singh
+  try {
+    const adminEmail2 = 'amandeepsingh151296@gmail.com';
+    const idx = dbData.users.findIndex(u => u.email.toLowerCase() === adminEmail2.toLowerCase());
+    const salt = await bcrypt.genSalt(10);
+    const password_hash = await bcrypt.hash('doLo@650', salt);
+
+    if (idx === -1) {
+      console.log('Seeding Local JSON admin user: amandeepsingh151296@gmail.com...');
+      dbData.users.push({
+        id: require('crypto').randomUUID(),
+        name: 'Amandeep Singh (Admin)',
+        email: adminEmail2,
+        password_hash,
+        google_id: null,
+        role: 'admin',
+        xp_points: 500,
+        streak: 1,
+        is_paid: true,
+        last_active_date: new Date().toISOString().split('T')[0],
+        created_at: new Date().toISOString()
+      });
+      saveLocalDb(dbData);
+      console.log('Local JSON admin user amandeepsingh151296@gmail.com seeded successfully.');
+    } else {
+      console.log('Updating Local JSON admin user amandeepsingh151296@gmail.com...');
+      dbData.users[idx].role = 'admin';
+      dbData.users[idx].password_hash = password_hash;
+      dbData.users[idx].is_email_verified = true;
+      saveLocalDb(dbData);
+      console.log('Local JSON admin user amandeepsingh151296@gmail.com updated successfully.');
+    }
+  } catch (err) {
+    console.error('Error seeding local JSON admin user amandeepsingh151296@gmail.com:', err);
   }
 }
 
