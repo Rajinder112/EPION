@@ -358,4 +358,64 @@ export const api = {
   
   getAiRecommendations: () => 
     request('/analytics/ai-recommendations'),
+
+  // NCLEX Notes API Helper endpoints
+  getNclexNotes: (filters = {}) => {
+    const params = new URLSearchParams();
+    Object.entries(filters).forEach(([key, val]) => {
+      if (val !== undefined && val !== null && val !== '') params.append(key, val);
+    });
+    return request(`/nclex-notes?${params.toString()}`);
+  },
+
+  getAdminNclexNotes: () => 
+    request('/nclex-notes/admin-list'),
+
+  createNclexNote: async (formData) => {
+    const token = localStorage.getItem('token');
+    const headers = {};
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+    const response = await fetch(`${BASE_URL}/nclex-notes`, {
+      method: 'POST',
+      headers,
+      body: formData,
+    });
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.message || 'Failed to upload NCLEX note');
+    }
+    return response.json();
+  },
+
+  updateNclexNote: async (id, formData) => {
+    const token = localStorage.getItem('token');
+    const headers = {};
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+    const response = await fetch(`${BASE_URL}/nclex-notes/${id}`, {
+      method: 'PUT',
+      headers,
+      body: formData,
+    });
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.message || 'Failed to update NCLEX note');
+    }
+    return response.json();
+  },
+
+  deleteNclexNote: (id) => 
+    request(`/nclex-notes/${id}`, { method: 'DELETE' }),
+
+  toggleBookmarkNote: (id, bookmarked) => 
+    request(`/nclex-notes/${id}/bookmark`, { method: 'POST', body: { bookmarked } }),
+
+  updateNoteProgress: (id, last_page, progress_percent, completed) => 
+    request(`/nclex-notes/${id}/progress`, { method: 'POST', body: { last_page, progress_percent, completed } }),
+
+  incrementNoteViews: (id) => 
+    request(`/nclex-notes/${id}/view`, { method: 'POST' }),
 };

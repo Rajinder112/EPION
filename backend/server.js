@@ -58,6 +58,10 @@ const uploadsDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir);
 }
+const nclexNotesUploadsDir = path.join(uploadsDir, 'nclex_notes');
+if (!fs.existsSync(nclexNotesUploadsDir)) {
+  fs.mkdirSync(nclexNotesUploadsDir);
+}
 
 // Import db to trigger connection checker
 require('./db');
@@ -79,6 +83,7 @@ app.use('/api/questions', require('./routes/questions'));
 app.use('/api/practice', require('./routes/practice'));
 app.use('/api/mocks', require('./routes/mocks'));
 app.use('/api/analytics', require('./routes/analytics'));
+app.use('/api/nclex-notes', require('./routes/nclexNotes'));
 
 // Centralized error handler
 app.use((err, req, res, next) => {

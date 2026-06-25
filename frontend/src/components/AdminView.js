@@ -61,6 +61,125 @@ export default function AdminView() {
   const [searchQuery, setSearchQuery] = useState('');
   const [filterSubject, setFilterSubject] = useState('');
 
+  // NCLEX Notes States
+  const [nclexNotes, setNclexNotes] = useState([]);
+  const [nclexLoading, setNclexLoading] = useState(false);
+  const [isNclexFormOpen, setIsNclexFormOpen] = useState(false);
+  const [editingNote, setEditingNote] = useState(null);
+
+  // NCLEX Note inputs
+  const [noteTopicName, setNoteTopicName] = useState('');
+  const [noteDescription, setNoteDescription] = useState('');
+  const [noteCategory, setNoteCategory] = useState('Fundamentals');
+  const [noteDifficulty, setNoteDifficulty] = useState('Beginner');
+  const [noteStatus, setNoteStatus] = useState('Published');
+  const [noteDisplayOrder, setNoteDisplayOrder] = useState(0);
+  const [noteFile, setNoteFile] = useState(null);
+
+  const fetchNclexNotes = async () => {
+    setNclexLoading(true);
+    try {
+      const data = await api.getAdminNclexNotes();
+      setNclexNotes(data || []);
+    } catch (err) {
+      console.error('Error fetching NCLEX notes:', err);
+    } finally {
+      setNclexLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (activeSubTab === 'nclex_notes') {
+      fetchNclexNotes();
+    }
+  }, [activeSubTab]);
+
+  const handleOpenNoteForm = (note = null) => {
+    if (note) {
+      setEditingNote(note);
+      setNoteTopicName(note.topic_name);
+      setNoteDescription(note.description || '');
+      setNoteCategory(note.category);
+      setNoteDifficulty(note.difficulty);
+      setNoteStatus(note.status || 'Published');
+      setNoteDisplayOrder(note.display_order || 0);
+      setNoteFile(null);
+    } else {
+      setEditingNote(null);
+      setNoteTopicName('');
+      setNoteDescription('');
+      setNoteCategory('Fundamentals');
+      setNoteDifficulty('Beginner');
+      setNoteStatus('Published');
+      setNoteDisplayOrder(0);
+      setNoteFile(null);
+    }
+    setIsNclexFormOpen(true);
+  };
+
+  const handleSaveNote = async (e) => {
+    e.preventDefault();
+    if (!noteTopicName || !noteCategory || !noteDifficulty) {
+      alert('Please fill out all required fields.');
+      return;
+    }
+    if (!editingNote && !noteFile) {
+      alert('Please select a PDF file to upload.');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('topic_name', noteTopicName);
+    formData.append('description', noteDescription);
+    formData.append('category', noteCategory);
+    formData.append('difficulty', noteDifficulty);
+    formData.append('status', noteStatus);
+    formData.append('display_order', noteDisplayOrder);
+    if (noteFile) {
+      formData.append('pdf', noteFile);
+    }
+
+    try {
+      if (editingNote) {
+        await api.updateNclexNote(editingNote.id, formData);
+        alert('NCLEX Note updated successfully.');
+      } else {
+        await api.createNclexNote(formData);
+        alert('NCLEX Note uploaded successfully.');
+      }
+      setIsNclexFormOpen(false);
+      fetchNclexNotes();
+    } catch (err) {
+      console.error(err);
+      alert(err.message || 'Failed to save NCLEX Note.');
+    }
+  };
+
+  const handleDeleteNote = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this NCLEX Note?')) return;
+    try {
+      await api.deleteNclexNote(id);
+      alert('NCLEX Note deleted successfully.');
+      fetchNclexNotes();
+    } catch (err) {
+      console.error(err);
+      alert(err.message || 'Failed to delete NCLEX Note.');
+    }
+  };
+
+  const handleDuplicateNote = (note) => {
+    setEditingNote(null);
+    setNoteTopicName(`${note.topic_name} (Copy)`);
+    setNoteDescription(note.description || '');
+    setNoteCategory(note.category);
+    setNoteDifficulty(note.difficulty);
+    setNoteStatus('Draft');
+    setNoteDisplayOrder((note.display_order || 0) + 1);
+    setNoteFile(null);
+    setIsNclexFormOpen(true);
+    alert('Note details duplicated to form. Select a PDF file to save as a new note.');
+  };
+
   const fetchCandidatesAndBatches = async () => {
     try {
       const [candidatesData, batchesData] = await Promise.all([
@@ -505,6 +624,16 @@ export default function AdminView() {
           }`}
         >
           Practice Subjects
+        </button>
+        <button
+          onClick={() => setActiveSubTab('nclex_notes')}
+          className={`px-4 py-2 text-xs font-bold rounded-lg transition-all ${
+            activeSubTab === 'nclex_notes' 
+              ? 'bg-card text-primary shadow-sm border border-border' 
+              : 'text-muted-text hover:text-foreground'
+          }`}
+        >
+          📘 NCLEX Notes
         </button>
       </div>
 
@@ -1237,6 +1366,268 @@ export default function AdminView() {
                 className="w-full py-2.5 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-xl shadow-md transition-colors"
               >
                 Save MCQ Card
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* NCLEX Notes Table List for Admin View */}
+      {activeSubTab === 'nclex_notes' && (
+        <div className="space-y-6">
+          {/* Analytics aggregators */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="bg-card border border-border rounded-xl p-4 shadow-sm flex flex-col justify-between">
+              <span className="text-[10px] font-bold text-muted-text uppercase tracking-widest">Total Uploaded Notes</span>
+              <span className="text-2xl font-extrabold text-foreground mt-2">{nclexNotes.length}</span>
+            </div>
+            <div className="bg-card border border-border rounded-xl p-4 shadow-sm flex flex-col justify-between">
+              <span className="text-[10px] font-bold text-muted-text uppercase tracking-widest">Published vs Draft</span>
+              <span className="text-2xl font-extrabold text-foreground mt-2">
+                {nclexNotes.filter(n => n.status === 'Published').length} / {nclexNotes.filter(n => n.status === 'Draft' || n.status === 'Hidden').length}
+              </span>
+            </div>
+            <div className="bg-card border border-border rounded-xl p-4 shadow-sm flex flex-col justify-between">
+              <span className="text-[10px] font-bold text-muted-text uppercase tracking-widest">Cumulative Views</span>
+              <span className="text-2xl font-extrabold text-primary mt-2">
+                {nclexNotes.reduce((acc, curr) => acc + (curr.views || 0), 0)}
+              </span>
+            </div>
+            <div className="bg-card border border-border rounded-xl p-4 shadow-sm flex flex-col justify-between">
+              <span className="text-[10px] font-bold text-muted-text uppercase tracking-widest">Cumulative Downloads</span>
+              <span className="text-2xl font-extrabold text-primary mt-2">
+                {nclexNotes.reduce((acc, curr) => acc + (curr.downloads || 0), 0)}
+              </span>
+            </div>
+          </div>
+
+          {/* Catalog & Table list */}
+          <div className="bg-card border border-border rounded-2xl shadow-sm overflow-hidden">
+            <div className="p-5 border-b border-border flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <h3 className="font-extrabold text-foreground text-sm">NCLEX-RN Notes Audit Log</h3>
+                <p className="text-xs text-muted-text mt-0.5">Manage study resources, check page volumes, and view user completion stats.</p>
+              </div>
+              <button
+                onClick={() => handleOpenNoteForm()}
+                className="px-4 py-2 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-lg flex items-center gap-1.5 transition-all shadow shrink-0 self-start sm:self-auto"
+              >
+                <Plus className="w-4 h-4" /> Add NCLEX Note
+              </button>
+            </div>
+
+            {nclexLoading ? (
+              <div className="py-12 flex flex-col items-center justify-center gap-2">
+                <div className="w-8 h-8 border-3 border-primary border-t-transparent rounded-full animate-spin"></div>
+                <span className="text-xs text-muted-text font-semibold">Loading notes syllabus...</span>
+              </div>
+            ) : nclexNotes.length === 0 ? (
+              <div className="py-12 text-center text-xs text-muted-text font-semibold">
+                No NCLEX notes uploaded yet. Click "+ Add NCLEX Note" to upload the first file.
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs border-collapse">
+                  <thead>
+                    <tr className="bg-muted-bg/50 border-b border-border text-muted-text font-bold uppercase tracking-wider text-[10px]">
+                      <th className="p-4">Topic Details</th>
+                      <th className="p-4">Category</th>
+                      <th className="p-4">Pages / Size</th>
+                      <th className="p-4">Status</th>
+                      <th className="p-4 text-center">Analytics (Views/DLs)</th>
+                      <th className="p-4 text-center">Completion Rate</th>
+                      <th className="p-4 text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-border/60">
+                    {nclexNotes.map((note) => (
+                      <tr key={note.id} className="hover:bg-muted-bg/10 transition-colors">
+                        <td className="p-4">
+                          <div className="font-bold text-foreground">{note.topic_name}</div>
+                          <div className="text-[10px] text-muted-text mt-0.5 max-w-[240px] truncate">{note.description || 'No description provided.'}</div>
+                        </td>
+                        <td className="p-4">
+                          <span className="px-2 py-0.5 text-[9px] bg-primary-light text-primary font-black rounded uppercase border border-primary/10">
+                            {note.category}
+                          </span>
+                        </td>
+                        <td className="p-4 font-semibold text-muted-text">
+                          {note.pages} pages <span className="text-[9px] font-medium block">({note.file_size || 'N/A'})</span>
+                        </td>
+                        <td className="p-4">
+                          <span className={`px-1.5 py-0.5 text-[9px] font-black rounded uppercase tracking-wider ${
+                            note.status === 'Published'
+                              ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
+                              : 'bg-amber-500/10 text-amber-600 dark:text-amber-400'
+                          }`}>
+                            {note.status || 'Published'}
+                          </span>
+                        </td>
+                        <td className="p-4 text-center font-bold text-foreground">
+                          <span className="flex items-center justify-center gap-2">
+                            <span title="Views">👁️ {note.views || 0}</span>
+                            <span title="Downloads">📥 {note.downloads || 0}</span>
+                          </span>
+                        </td>
+                        <td className="p-4 text-center">
+                          <div className="font-semibold text-foreground">{note.completion_count || 0} users</div>
+                          <div className="text-[9px] text-muted-text mt-0.5">Avg: {note.avg_progress || 0}% progress</div>
+                        </td>
+                        <td className="p-4 text-right">
+                          <div className="flex items-center justify-end gap-1.5">
+                            <button
+                              onClick={() => handleOpenNoteForm(note)}
+                              className="p-1.5 hover:bg-muted-bg text-muted-text hover:text-foreground rounded-lg transition-colors border border-border"
+                              title="Edit Note"
+                            >
+                              <Edit2 className="w-3.5 h-3.5" />
+                            </button>
+                            <button
+                              onClick={() => handleDuplicateNote(note)}
+                              className="p-1.5 hover:bg-muted-bg text-muted-text hover:text-primary rounded-lg transition-colors border border-border"
+                              title="Duplicate Note"
+                            >
+                              <Sparkles className="w-3.5 h-3.5" />
+                            </button>
+                            <button
+                              onClick={() => handleDeleteNote(note.id)}
+                              className="p-1.5 hover:bg-danger-light text-muted-text hover:text-danger rounded-lg transition-colors border border-border"
+                              title="Delete Note"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* NCLEX NOTES ADD/EDIT FORM MODAL */}
+      {isNclexFormOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fade-in">
+          <div className="max-w-md w-full bg-card border border-border rounded-2xl p-6 shadow-xl space-y-4 max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-center border-b border-border/80 pb-3">
+              <h3 className="font-extrabold text-foreground text-base flex items-center gap-2">
+                <FileText className="w-5 h-5 text-primary" />
+                <span>{editingNote ? `Edit Note: ${editingNote.topic_name}` : 'Upload New NCLEX Note'}</span>
+              </h3>
+              <button onClick={() => setIsNclexFormOpen(false)} className="text-muted-text hover:text-foreground">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <form onSubmit={handleSaveNote} className="space-y-4 text-xs">
+              {/* Topic Name */}
+              <div className="space-y-1">
+                <label className="font-bold text-muted-text uppercase tracking-wider block">Topic Name *</label>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. Acid-Base Imbalances Study Guide"
+                  value={noteTopicName}
+                  onChange={(e) => setNoteTopicName(e.target.value)}
+                  className="w-full py-2.5 px-3 bg-muted-bg border border-border rounded-lg text-sm text-foreground focus:outline-none"
+                />
+              </div>
+
+              {/* Description */}
+              <div className="space-y-1">
+                <label className="font-bold text-muted-text uppercase tracking-wider block">Description</label>
+                <textarea
+                  rows={2}
+                  placeholder="Brief summary of note contents or focus concepts..."
+                  value={noteDescription}
+                  onChange={(e) => setNoteDescription(e.target.value)}
+                  className="w-full p-3 bg-muted-bg border border-border rounded-lg text-sm text-foreground focus:outline-none"
+                ></textarea>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                {/* Category */}
+                <div className="space-y-1">
+                  <label className="font-bold text-muted-text uppercase tracking-wider block">Category *</label>
+                  <select
+                    value={noteCategory}
+                    onChange={(e) => setNoteCategory(e.target.value)}
+                    className="w-full py-2.5 px-3 bg-muted-bg border border-border rounded-lg text-sm text-foreground focus:outline-none focus:border-primary"
+                  >
+                    <option value="Fundamentals">Fundamentals</option>
+                    <option value="Adult Health">Adult Health</option>
+                    <option value="Medical Surgical Nursing">Medical Surgical Nursing</option>
+                    <option value="Critical Care">Critical Care</option>
+                    <option value="Pharmacology">Pharmacology</option>
+                    <option value="Maternity">Maternity</option>
+                    <option value="Pediatrics">Pediatrics</option>
+                    <option value="Psychiatric">Psychiatric</option>
+                  </select>
+                </div>
+
+                {/* Difficulty */}
+                <div className="space-y-1">
+                  <label className="font-bold text-muted-text uppercase tracking-wider block">Difficulty *</label>
+                  <select
+                    value={noteDifficulty}
+                    onChange={(e) => setNoteDifficulty(e.target.value)}
+                    className="w-full py-2.5 px-3 bg-muted-bg border border-border rounded-lg text-sm text-foreground focus:outline-none focus:border-primary"
+                  >
+                    <option value="Beginner">Beginner</option>
+                    <option value="Intermediate">Intermediate</option>
+                    <option value="Advanced">Advanced</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                {/* Status */}
+                <div className="space-y-1">
+                  <label className="font-bold text-muted-text uppercase tracking-wider block">Status *</label>
+                  <select
+                    value={noteStatus}
+                    onChange={(e) => setNoteStatus(e.target.value)}
+                    className="w-full py-2.5 px-3 bg-muted-bg border border-border rounded-lg text-sm text-foreground focus:outline-none focus:border-primary"
+                  >
+                    <option value="Published">Published</option>
+                    <option value="Draft">Draft</option>
+                  </select>
+                </div>
+
+                {/* Display Order */}
+                <div className="space-y-1">
+                  <label className="font-bold text-muted-text uppercase tracking-wider block">Display Order</label>
+                  <input
+                    type="number"
+                    value={noteDisplayOrder}
+                    onChange={(e) => setNoteDisplayOrder(parseInt(e.target.value) || 0)}
+                    className="w-full py-2.5 px-3 bg-muted-bg border border-border rounded-lg text-sm text-foreground focus:outline-none"
+                  />
+                </div>
+              </div>
+
+              {/* PDF file upload */}
+              <div className="space-y-1.5 border border-dashed border-border rounded-xl p-4 bg-muted-bg/25">
+                <label className="font-bold text-muted-text uppercase tracking-wider block">
+                  {editingNote ? 'Replace PDF notes file (Optional)' : 'Select PDF notes file *'}
+                </label>
+                <input
+                  type="file"
+                  accept="application/pdf"
+                  onChange={(e) => setNoteFile(e.target.files[0])}
+                  className="text-xs text-foreground"
+                />
+                <p className="text-[10px] text-muted-text">Max size: 100MB. PDF formats only. Page counts are auto-calculated on upload.</p>
+              </div>
+
+              <button
+                type="submit"
+                className="w-full py-2.5 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-xl shadow-md transition-all active:scale-95 cursor-pointer"
+              >
+                {editingNote ? 'Save Changes' : 'Upload Notes File'}
               </button>
             </form>
           </div>

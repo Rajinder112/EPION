@@ -21,6 +21,8 @@ const batchesPath = path.join(__dirname, 'db_batches.json');
 const practiceSubjectsPath = path.join(__dirname, 'db_practice_subjects.json');
 const conceptsPath = path.join(__dirname, 'db_concepts.json');
 const sureshotPath = path.join(__dirname, 'db_sureshot.json');
+const nclexNotesPath = path.join(__dirname, 'db_nclex_notes.json');
+const userNoteProgressPath = path.join(__dirname, 'db_user_note_progress.json');
 
 const questionFiles = {
   'Medical Surgical Nursing': path.join(__dirname, 'db_questions_medical_surgical.json'),
@@ -352,6 +354,39 @@ if (process.env.DATABASE_URL) {
         explanation TEXT NOT NULL,
         created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
     );
+
+    CREATE TABLE IF NOT EXISTS nclex_notes (
+        id SERIAL PRIMARY KEY,
+        topic_name VARCHAR(255) NOT NULL,
+        slug VARCHAR(255) NOT NULL,
+        description TEXT,
+        category VARCHAR(100) NOT NULL,
+        difficulty VARCHAR(50) CHECK (difficulty IN ('Beginner', 'Intermediate', 'Advanced')),
+        pdf_path VARCHAR(255) NOT NULL,
+        thumbnail VARCHAR(255),
+        pages INT DEFAULT 0,
+        file_size VARCHAR(50),
+        reading_time INT DEFAULT 0,
+        downloads INT DEFAULT 0,
+        views INT DEFAULT 0,
+        status VARCHAR(50) DEFAULT 'Published' CHECK (status IN ('Published', 'Draft', 'Hidden')),
+        display_order INT DEFAULT 0,
+        created_by UUID,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    );
+
+    CREATE TABLE IF NOT EXISTS user_note_progress (
+        id SERIAL PRIMARY KEY,
+        user_id UUID,
+        note_id INT REFERENCES nclex_notes(id) ON DELETE CASCADE,
+        last_page INT DEFAULT 1,
+        progress_percent INT DEFAULT 0,
+        bookmarked BOOLEAN DEFAULT FALSE,
+        completed BOOLEAN DEFAULT FALSE,
+        last_opened TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+        UNIQUE (user_id, note_id)
+    );
   `).then(() => {
     console.log('Postgres migrations completed successfully.');
   }).catch(err => {
@@ -501,6 +536,12 @@ function loadLocalDb() {
     
     // Load sureshot questions
     const sureshot = readJsonOrInit(sureshotPath, []);
+
+    // Load NCLEX notes
+    const nclex_notes = readJsonOrInit(nclexNotesPath, []);
+
+    // Load user note progress
+    const user_note_progress = readJsonOrInit(userNoteProgressPath, []);
     
     // 6. Load questions from all split files
     let questions = [];
@@ -544,7 +585,9 @@ function loadLocalDb() {
       batches,
       practice_subjects,
       concepts,
-      sureshot_questions: sureshot
+      sureshot_questions: sureshot,
+      nclex_notes,
+      user_note_progress
     };
   } catch (err) {
     console.error('Error loading separated local DB files, using defaults:', err);
@@ -601,6 +644,14 @@ function saveLocalDb(data) {
     // Save sureshot questions
     if (data.sureshot_questions) {
       fs.writeFileSync(sureshotPath, JSON.stringify(data.sureshot_questions || [], null, 2));
+    }
+    // Save NCLEX notes
+    if (data.nclex_notes) {
+      fs.writeFileSync(nclexNotesPath, JSON.stringify(data.nclex_notes || [], null, 2));
+    }
+    // Save user note progress
+    if (data.user_note_progress) {
+      fs.writeFileSync(userNoteProgressPath, JSON.stringify(data.user_note_progress || [], null, 2));
     }
   } catch (err) {
     console.error('Error saving separated local DB files:', err);
@@ -1322,6 +1373,232 @@ function simulateQuery(text, params = []) {
     dbData.sureshot_questions = [];
     saveLocalDb(dbData);
     return { rows: [] };
+  }
+
+  // === NCLEX Notes Queries ===
+
+  // 1. SELECT FROM nclex_notes with LEFT JOIN user_note_progress
+  if (normalizedSql.startsWith('select') && normalizedSql.includes('from nclex_notes') && (normalizedSql.includes('left join user_note_progress') || normalizedSql.includes('user_note_progress'))) {
+    const userId = params[0];
+    const notes = dbData.nclex_notes || [];
+    const progress = dbData.user_note_progress || [];
+
+    let rows = notes.map(n => {
+      const up = progress.find(p => p.note_id === n.id && p.user_id === userId);
+      return {
+        ...n,
+        last_page: up ? up.last_page : 1,
+        progress_percent: up ? up.progress_percent : 0,
+        bookmarked: up ? !!up.bookmarked : false,
+        completed: up ? !!up.completed : false,
+        last_opened: up ? up.last_opened : null
+      };
+    });
+
+    if (normalizedSql.includes("status = 'published'") || normalizedSql.includes("status = $2")) {
+      rows = rows.filter(r => r.status === 'Published');
+    }
+
+    rows.sort((a, b) => {
+      const doA = a.display_order || 0;
+      const doB = b.display_order || 0;
+      if (doA !== doB) return doA - doB;
+      return b.id - a.id;
+    });
+
+    return { rows };
+  }
+
+  // 2. SELECT * FROM nclex_notes (without progress join, e.g. for admin or single check)
+  if (normalizedSql.startsWith('select') && normalizedSql.includes('from nclex_notes')) {
+    const notes = dbData.nclex_notes || [];
+    const progress = dbData.user_note_progress || [];
+    
+    if (normalizedSql.includes('completion_count') || normalizedSql.includes('avg_progress')) {
+      const rows = notes.map(n => {
+        const noteProgressList = progress.filter(p => p.note_id === n.id);
+        const completion_count = noteProgressList.filter(p => p.completed).length;
+        const totalProgress = noteProgressList.reduce((sum, p) => sum + (p.progress_percent || 0), 0);
+        const avg_progress = noteProgressList.length > 0 ? Math.round(totalProgress / noteProgressList.length) : 0;
+        return {
+          ...n,
+          completion_count,
+          avg_progress
+        };
+      });
+      rows.sort((a, b) => b.id - a.id);
+      return { rows };
+    }
+
+    if (normalizedSql.includes('where id =') || normalizedSql.includes('where n.id =')) {
+      const id = parseInt(params[0]);
+      const note = notes.find(n => parseInt(n.id) === parseInt(id));
+      return { rows: note ? [note] : [] };
+    }
+
+    return { rows: notes };
+  }
+
+  // 3. INSERT INTO nclex_notes
+  if (normalizedSql.startsWith('insert into nclex_notes')) {
+    if (!dbData.nclex_notes) dbData.nclex_notes = [];
+    const id = dbData.nclex_notes.length > 0 ? Math.max(...dbData.nclex_notes.map(n => n.id)) + 1 : 1;
+    const newNote = {
+      id,
+      topic_name: params[0],
+      slug: params[1],
+      description: params[2],
+      category: params[3],
+      difficulty: params[4],
+      pdf_path: params[5],
+      thumbnail: params[6],
+      pages: parseInt(params[7]) || 0,
+      file_size: params[8],
+      reading_time: parseInt(params[9]) || 0,
+      downloads: 0,
+      views: 0,
+      status: params[10] || 'Published',
+      display_order: parseInt(params[11]) || 0,
+      created_by: params[12],
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    };
+    dbData.nclex_notes.push(newNote);
+    saveLocalDb(dbData);
+    return { rows: [newNote] };
+  }
+
+  // 4. UPDATE nclex_notes
+  if (normalizedSql.startsWith('update nclex_notes')) {
+    if (!dbData.nclex_notes) dbData.nclex_notes = [];
+    
+    if (normalizedSql.includes('views = views + 1')) {
+      const id = parseInt(params[0]);
+      const note = dbData.nclex_notes.find(n => parseInt(n.id) === parseInt(id));
+      if (note) {
+        note.views = (note.views || 0) + 1;
+        saveLocalDb(dbData);
+        return { rows: [note] };
+      }
+      return { rows: [] };
+    }
+    if (normalizedSql.includes('downloads = downloads + 1')) {
+      const id = parseInt(params[0]);
+      const note = dbData.nclex_notes.find(n => parseInt(n.id) === parseInt(id));
+      if (note) {
+        note.downloads = (note.downloads || 0) + 1;
+        saveLocalDb(dbData);
+        return { rows: [note] };
+      }
+      return { rows: [] };
+    }
+
+    let id;
+    let updatedNote;
+    if (params.length === 9) {
+      id = parseInt(params[8]);
+      const note = dbData.nclex_notes.find(n => parseInt(n.id) === parseInt(id));
+      if (note) {
+        note.topic_name = params[0];
+        note.description = params[1];
+        note.category = params[2];
+        note.difficulty = params[3];
+        note.pdf_path = params[4];
+        note.thumbnail = params[5];
+        note.status = params[6];
+        note.display_order = parseInt(params[7]) || 0;
+        note.updated_at = new Date().toISOString();
+        updatedNote = note;
+      }
+    } else {
+      id = parseInt(params[6]);
+      const note = dbData.nclex_notes.find(n => parseInt(n.id) === parseInt(id));
+      if (note) {
+        note.topic_name = params[0];
+        note.description = params[1];
+        note.category = params[2];
+        note.difficulty = params[3];
+        note.status = params[4];
+        note.display_order = parseInt(params[5]) || 0;
+        note.updated_at = new Date().toISOString();
+        updatedNote = note;
+      }
+    }
+    
+    if (updatedNote) {
+      saveLocalDb(dbData);
+      return { rows: [updatedNote] };
+    }
+    return { rows: [] };
+  }
+
+  // 5. DELETE FROM nclex_notes WHERE id = $1
+  if (normalizedSql.startsWith('delete from nclex_notes where id =') || normalizedSql.includes('delete from nclex_notes')) {
+    if (!dbData.nclex_notes) dbData.nclex_notes = [];
+    const id = parseInt(params[0]);
+    dbData.nclex_notes = dbData.nclex_notes.filter(n => parseInt(n.id) !== parseInt(id));
+    if (dbData.user_note_progress) {
+      dbData.user_note_progress = dbData.user_note_progress.filter(p => parseInt(p.note_id) !== parseInt(id));
+    }
+    saveLocalDb(dbData);
+    return { rows: [] };
+  }
+
+  // 6. UPSERT user_note_progress
+  if (normalizedSql.includes('user_note_progress')) {
+    if (!dbData.user_note_progress) dbData.user_note_progress = [];
+    const userId = params[0];
+    const noteId = parseInt(params[1]);
+
+    let entry = dbData.user_note_progress.find(p => p.user_id === userId && parseInt(p.note_id) === parseInt(noteId));
+
+    if (normalizedSql.includes('bookmarked')) {
+      const bookmarked = params[2] === true || params[2] === 'true' || params[2] === 1;
+      if (entry) {
+        entry.bookmarked = bookmarked;
+        entry.last_opened = new Date().toISOString();
+      } else {
+        const id = dbData.user_note_progress.length > 0 ? Math.max(...dbData.user_note_progress.map(p => p.id)) + 1 : 1;
+        entry = {
+          id,
+          user_id: userId,
+          note_id: noteId,
+          last_page: 1,
+          progress_percent: 0,
+          bookmarked,
+          completed: false,
+          last_opened: new Date().toISOString()
+        };
+        dbData.user_note_progress.push(entry);
+      }
+    } else {
+      const lastPage = parseInt(params[2]) || 1;
+      const progressPercent = parseInt(params[3]) || 0;
+      const completed = params[4] === true || params[4] === 'true' || params[4] === 1;
+
+      if (entry) {
+        entry.last_page = lastPage;
+        entry.progress_percent = progressPercent;
+        entry.completed = completed || entry.completed;
+        entry.last_opened = new Date().toISOString();
+      } else {
+        const id = dbData.user_note_progress.length > 0 ? Math.max(...dbData.user_note_progress.map(p => p.id)) + 1 : 1;
+        entry = {
+          id,
+          user_id: userId,
+          note_id: noteId,
+          last_page: lastPage,
+          progress_percent: progressPercent,
+          bookmarked: false,
+          completed,
+          last_opened: new Date().toISOString()
+        };
+        dbData.user_note_progress.push(entry);
+      }
+    }
+
+    saveLocalDb(dbData);
+    return { rows: [entry] };
   }
 
   // Default return empty array

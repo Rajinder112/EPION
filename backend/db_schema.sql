@@ -99,3 +99,45 @@ CREATE INDEX IF NOT EXISTS idx_questions_topic ON questions(topic);
 CREATE INDEX IF NOT EXISTS idx_attempts_user_id ON question_attempts(user_id);
 CREATE INDEX IF NOT EXISTS idx_attempts_question_id ON question_attempts(question_id);
 CREATE INDEX IF NOT EXISTS idx_mock_attempts_user ON mock_test_attempts(user_id);
+
+-- 8. NCLEX-RN Notes Table
+CREATE TABLE IF NOT EXISTS nclex_notes (
+    id SERIAL PRIMARY KEY,
+    topic_name VARCHAR(255) NOT NULL,
+    slug VARCHAR(255) NOT NULL,
+    description TEXT,
+    category VARCHAR(100) NOT NULL,
+    difficulty VARCHAR(50) CHECK (difficulty IN ('Beginner', 'Intermediate', 'Advanced')),
+    pdf_path VARCHAR(255) NOT NULL,
+    thumbnail VARCHAR(255),
+    pages INT DEFAULT 0,
+    file_size VARCHAR(50),
+    reading_time INT DEFAULT 0,
+    downloads INT DEFAULT 0,
+    views INT DEFAULT 0,
+    status VARCHAR(50) DEFAULT 'Published' CHECK (status IN ('Published', 'Draft', 'Hidden')),
+    display_order INT DEFAULT 0,
+    created_by UUID REFERENCES users(id) ON DELETE SET NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 9. User Note Progress Table
+CREATE TABLE IF NOT EXISTS user_note_progress (
+    id SERIAL PRIMARY KEY,
+    user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+    note_id INT REFERENCES nclex_notes(id) ON DELETE CASCADE,
+    last_page INT DEFAULT 1,
+    progress_percent INT DEFAULT 0,
+    bookmarked BOOLEAN DEFAULT FALSE,
+    completed BOOLEAN DEFAULT FALSE,
+    last_opened TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE (user_id, note_id)
+);
+
+-- Indices for NCLEX Notes optimization
+CREATE INDEX IF NOT EXISTS idx_nclex_notes_slug ON nclex_notes(slug);
+CREATE INDEX IF NOT EXISTS idx_nclex_notes_category ON nclex_notes(category);
+CREATE INDEX IF NOT EXISTS idx_note_progress_user ON user_note_progress(user_id);
+CREATE INDEX IF NOT EXISTS idx_note_progress_note ON user_note_progress(note_id);
+

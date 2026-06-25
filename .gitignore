@@ -13,6 +13,8 @@ backend/db_bookmarks.json
 backend/db_mock_tests.json
 backend/db_question_attempts.json
 backend/db_batches.json
+backend/db_nclex_notes.json
+backend/db_user_note_progress.json
 backend/local_db.json
 backend/local_db.json.bak
 

@@ -11,6 +11,7 @@ import LeaderboardView from '../components/LeaderboardView';
 import AdminView from '../components/AdminView';
 import ReportsView from '../components/ReportsView';
 import SettingsView from '../components/SettingsView';
+import NclexNotesView from '../components/NclexNotesView';
 
 import { 
   LayoutDashboard, BookOpen, Trophy, Bookmark, 
@@ -274,6 +275,7 @@ export default function Home() {
     { id: 'practice', name: 'Practice Zone', icon: BookOpen },
     { id: 'mocks', name: 'Mock Exams', icon: Trophy },
     { id: 'revision', name: 'Revision Vault', icon: Bookmark },
+    { id: 'nclex-notes', name: '📘 NCLEX-RN Notes', icon: BookOpen },
     { id: 'leaderboard', name: 'Leaderboard', icon: Award },
     { id: 'settings', name: 'Settings', icon: Settings },
   ];
@@ -480,6 +482,12 @@ export default function Home() {
         {activeTab === 'revision' && (
           <RevisionView 
             onStartQuestionPractice={handleStartQuestionPractice}
+            user={user}
+          />
+        )}
+
+        {activeTab === 'nclex-notes' && (
+          <NclexNotesView 
             user={user}
           />
         )}

@@ -84,6 +84,74 @@ async function runSelfTest() {
     assert(perfObj.subject === 'Medical Surgical Nursing', 'Incorrect attempt correctly mapped to Medical Surgical Nursing.');
     assert(parseInt(perfObj.attempted) === 1 && parseInt(perfObj.correct) === 0, 'Accuracy correctly computed as 0% for Medical Surgical.');
 
+    // 7. Test NCLEX-RN Notes & User Progress system
+    console.log('\n--- Test 6: NCLEX-RN Notes & Progress System ---');
+    
+    // Insert NCLEX Note
+    const noteQuery = `
+      INSERT INTO nclex_notes (topic_name, slug, description, category, difficulty, pdf_path, thumbnail, pages, file_size, reading_time, status, display_order, created_by)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+      RETURNING *
+    `;
+    const noteResult = await db.query(noteQuery, [
+      'Acid-Base Balances',
+      'acid-base-balances',
+      'A guide on acid-base indicators.',
+      'Fundamentals',
+      'Beginner',
+      'uploads/nclex_notes/fundamentals/test.pdf',
+      null,
+      12,
+      '2.4 MB',
+      30,
+      'Published',
+      1,
+      newUser.id
+    ]);
+    assert(noteResult.rows.length === 1, 'Successfully created a new NCLEX note record.');
+    const newNote = noteResult.rows[0];
+
+    // Fetch notes catalog with left join progress
+    const selectNotesQuery = `
+      SELECT n.*, np.last_page, np.progress_percent, np.bookmarked, np.completed, np.last_opened
+      FROM nclex_notes n
+      LEFT JOIN user_note_progress np ON n.id = np.note_id AND np.user_id = $1
+      WHERE n.status = 'Published'
+    `;
+    const catalogResult = await db.query(selectNotesQuery, [newUser.id]);
+    assert(catalogResult.rows.length >= 1, 'Successfully fetched published NCLEX notes with user progress JOIN.');
+    const fetchedNote = catalogResult.rows.find(n => n.id === newNote.id);
+    assert(fetchedNote !== undefined, 'Found newly created note in catalog.');
+    assert(fetchedNote.last_page === 1 && fetchedNote.progress_percent === 0, 'Initial progress is correctly 0% on page 1.');
+
+    // Update Bookmark State
+    const toggleBookmarkQuery = `
+      INSERT INTO user_note_progress (user_id, note_id, bookmarked)
+      VALUES ($1, $2, $3)
+      ON CONFLICT (user_id, note_id)
+      DO UPDATE SET bookmarked = EXCLUDED.bookmarked
+      RETURNING *
+    `;
+    const bookmarkUpdateResult = await db.query(toggleBookmarkQuery, [newUser.id, newNote.id, true]);
+    assert(bookmarkUpdateResult.rows.length === 1 && bookmarkUpdateResult.rows[0].bookmarked === true, 'Successfully bookmarked NCLEX note.');
+
+    // Update Reading Progress
+    const updateProgressQuery = `
+      INSERT INTO user_note_progress (user_id, note_id, last_page, progress_percent, completed)
+      VALUES ($1, $2, $3, $4, $5)
+      ON CONFLICT (user_id, note_id)
+      DO UPDATE SET last_page = EXCLUDED.last_page, progress_percent = EXCLUDED.progress_percent, completed = EXCLUDED.completed
+      RETURNING *
+    `;
+    const progressUpdateResult = await db.query(updateProgressQuery, [newUser.id, newNote.id, 6, 50, false]);
+    assert(progressUpdateResult.rows.length === 1 && parseInt(progressUpdateResult.rows[0].last_page) === 6, 'Successfully updated NCLEX note reading progress.');
+
+    // Delete note
+    const deleteNoteQuery = 'DELETE FROM nclex_notes WHERE id = $1';
+    await db.query(deleteNoteQuery, [newNote.id]);
+    const verifyDeleteResult = await db.query('SELECT * FROM nclex_notes WHERE id = $1', [newNote.id]);
+    assert(verifyDeleteResult.rows.length === 0, 'Successfully deleted NCLEX note from database.');
+
     console.log('\n=============================================');
     console.log(`Verification completed: ${testsPassed} passed, ${testsFailed} failed.`);
     console.log('=============================================');
