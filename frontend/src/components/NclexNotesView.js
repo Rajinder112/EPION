@@ -1,10 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { api } from '../utils/api';
 import { 
   Search, Filter, BookOpen, Bookmark, Clock, Eye, Download, 
-  ExternalLink, X, CheckCircle, Info, ChevronRight, AlertCircle, RefreshCw
+  X, CheckCircle, Info, ChevronRight, AlertCircle, RefreshCw,
+  ChevronDown, ChevronUp, Edit2, Trash2, Plus, FileText, Sparkles
 } from 'lucide-react';
 
 const CATEGORIES = [
@@ -29,10 +30,24 @@ export default function NclexNotesView({ user }) {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [sortBy, setSortBy] = useState('default'); // 'default', 'popular', 'alphabetical', 'oldest'
 
-  // Viewer Modal State
-  const [activeNote, setActiveNote] = useState(null);
+  // Expanded Row State (Only one note expanded at a time, Kindle reader style)
+  const [expandedNoteId, setExpandedNoteId] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [viewerKey, setViewerKey] = useState(0); // to force iframe refresh if page hash changes
+  const [pdfDoc, setPdfDoc] = useState(null);
+  const [pdfLoading, setPdfLoading] = useState(false);
+  const [pdfError, setPdfError] = useState('');
+  const [windowWidth, setWindowWidth] = useState(0);
+
+  // Admin Add/Edit Form Modal State
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [editingNote, setEditingNote] = useState(null);
+  const [noteTopicName, setNoteTopicName] = useState('');
+  const [noteDescription, setNoteDescription] = useState('');
+  const [noteCategory, setNoteCategory] = useState('Fundamentals');
+  const [noteDifficulty, setNoteDifficulty] = useState('Beginner');
+  const [noteStatus, setNoteStatus] = useState('Published');
+  const [noteDisplayOrder, setNoteDisplayOrder] = useState(0);
+  const [noteFile, setNoteFile] = useState(null);
 
   // Toast Notification State
   const [toast, setToast] = useState(null);
@@ -40,6 +55,154 @@ export default function NclexNotesView({ user }) {
   useEffect(() => {
     fetchNotes();
   }, [selectedCategory, sortBy]);
+
+  // Inject PDF.js script dynamically
+  useEffect(() => {
+    if (typeof window !== 'undefined' && !window.pdfjsLib) {
+      const script = document.createElement('script');
+      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+      script.async = true;
+      script.onload = () => {
+        if (window.pdfjsLib) {
+          window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        }
+      };
+      document.head.appendChild(script);
+    }
+  }, []);
+
+  // Track window size for responsive canvas redraws
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    setWindowWidth(window.innerWidth);
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Load PDF document when expandedNoteId changes
+  useEffect(() => {
+    if (!expandedNoteId) {
+      setPdfDoc(null);
+      setPdfError('');
+      return;
+    }
+
+    let isMounted = true;
+    const loadPdf = async () => {
+      setPdfLoading(true);
+      setPdfError('');
+      setPdfDoc(null);
+
+      // Ensure PDF.js is loaded
+      let attempts = 0;
+      while (typeof window !== 'undefined' && !window.pdfjsLib && attempts < 10) {
+        await new Promise(resolve => setTimeout(resolve, 300));
+        attempts++;
+      }
+
+      if (typeof window !== 'undefined' && !window.pdfjsLib) {
+        if (isMounted) {
+          setPdfError('PDF reader library failed to load from CDN. Please check your internet connection.');
+          setPdfLoading(false);
+        }
+        return;
+      }
+
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`/api/nclex-notes/${expandedNoteId}/pdf`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error(`Failed to fetch PDF: ${response.statusText}`);
+        }
+
+        const arrayBuffer = await response.arrayBuffer();
+        if (!isMounted) return;
+
+        window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        const loadingTask = window.pdfjsLib.getDocument({ data: arrayBuffer });
+        const doc = await loadingTask.promise;
+
+        if (isMounted) {
+          setPdfDoc(doc);
+        }
+      } catch (err) {
+        console.error('Error loading PDF:', err);
+        if (isMounted) {
+          setPdfError('Could not load PDF document. Please try again.');
+        }
+      } finally {
+        if (isMounted) {
+          setPdfLoading(false);
+        }
+      }
+    };
+
+    loadPdf();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [expandedNoteId]);
+
+  // Render active page to canvas
+  useEffect(() => {
+    if (!pdfDoc) return;
+
+    let isMounted = true;
+    let renderTask = null;
+
+    const renderPage = async () => {
+      try {
+        const page = await pdfDoc.getPage(currentPage);
+        if (!isMounted) return;
+
+        const canvas = document.getElementById(`pdf-canvas-${expandedNoteId}`);
+        if (!canvas) return;
+
+        const context = canvas.getContext('2d');
+        const container = canvas.parentElement;
+        const containerWidth = container.clientWidth || 800;
+
+        const unscaledViewport = page.getViewport({ scale: 1.0 });
+        const scale = (containerWidth - 24) / unscaledViewport.width; // leave small padding
+        const viewport = page.getViewport({ scale: scale || 1.2 });
+
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
+
+        const renderContext = {
+          canvasContext: context,
+          viewport: viewport
+        };
+
+        if (renderTask) {
+          renderTask.cancel();
+        }
+
+        renderTask = page.render(renderContext);
+        await renderTask.promise;
+      } catch (err) {
+        if (err.name !== 'RenderingCancelledException') {
+          console.error('Error rendering PDF page:', err);
+        }
+      }
+    };
+
+    renderPage();
+
+    return () => {
+      isMounted = false;
+      if (renderTask) {
+        renderTask.cancel();
+      }
+    };
+  }, [pdfDoc, currentPage, expandedNoteId, windowWidth]);
 
   const showToast = (message, type = 'success') => {
     setToast({ message, type });
@@ -54,7 +217,12 @@ export default function NclexNotesView({ user }) {
         category: selectedCategory === 'All' ? '' : selectedCategory,
         sort: sortBy
       };
-      const data = await api.getNclexNotes(filters);
+      let data = [];
+      if (user?.role === 'admin') {
+        data = await api.getAdminNclexNotes();
+      } else {
+        data = await api.getNclexNotes(filters);
+      }
       setNotes(data || []);
     } catch (err) {
       console.error('Error fetching NCLEX notes:', err);
@@ -64,39 +232,19 @@ export default function NclexNotesView({ user }) {
     }
   };
 
-  // Search Filter
-  const filteredNotes = notes.filter(note => {
-    const query = searchQuery.toLowerCase();
-    return (
-      note.topic_name.toLowerCase().includes(query) ||
-      (note.description && note.description.toLowerCase().includes(query))
-    );
-  });
-
-  // Recently Viewed & In Progress
-  const inProgressNotes = notes.filter(n => n.progress_percent > 0 && n.progress_percent < 100);
-  // Bookmarked notes
-  const bookmarkedNotes = notes.filter(n => n.bookmarked);
-
   // Toggle Bookmark helper
   const handleToggleBookmark = async (e, noteId, currentStatus) => {
-    e.stopPropagation(); // prevent card click
+    e.stopPropagation(); // prevent row collapse/expand
     try {
       const newStatus = !currentStatus;
       await api.toggleBookmarkNote(noteId, newStatus);
       
-      // Update local state
       setNotes(prev => prev.map(n => {
         if (n.id === noteId) {
           return { ...n, bookmarked: newStatus };
         }
         return n;
       }));
-
-      // If active note is open, sync bookmark status
-      if (activeNote && activeNote.id === noteId) {
-        setActiveNote(prev => ({ ...prev, bookmarked: newStatus }));
-      }
 
       showToast(newStatus ? 'Added to Bookmarks' : 'Removed from Bookmarks', 'success');
     } catch (err) {
@@ -105,49 +253,54 @@ export default function NclexNotesView({ user }) {
     }
   };
 
-  // Stream PDF Viewer Open
-  const handleOpenNote = async (note) => {
-    try {
-      setActiveNote(note);
+  // Expand Note Row (opens Kindle Reader inline)
+  const handleToggleExpand = (note) => {
+    if (expandedNoteId === note.id) {
+      setExpandedNoteId(null);
+    } else {
+      setExpandedNoteId(note.id);
       setCurrentPage(note.last_page || 1);
-      setViewerKey(prev => prev + 1);
-      
-      // Increment view count locally
+
+      // Increment view count locally and on backend
       setNotes(prev => prev.map(n => {
         if (n.id === note.id) {
           return { ...n, views: (n.views || 0) + 1 };
         }
         return n;
       }));
-
-      // Call API views increment in background
       api.incrementNoteViews(note.id).catch(console.error);
-    } catch (err) {
-      console.error('Error opening note:', err);
-      showToast('Could not load PDF viewer', 'error');
     }
   };
 
-  // Close PDF Viewer
-  const handleCloseNote = () => {
-    setActiveNote(null);
+  // Kindle Page Flipping: Next Page
+  const handleNextPage = (note) => {
+    if (currentPage < (note.pages || 1)) {
+      const nextPage = currentPage + 1;
+      handleSaveProgress(note, nextPage);
+    }
   };
 
-  // Save progress manually / next page
-  const handleSaveProgress = async (pageNum, isFinished = false) => {
-    if (!activeNote) return;
-    
-    const targetPage = Math.max(1, Math.min(activeNote.pages || 1, pageNum));
+  // Kindle Page Flipping: Prev Page
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      const prevPage = currentPage - 1;
+      const note = notes.find(n => n.id === expandedNoteId);
+      if (note) handleSaveProgress(note, prevPage);
+    }
+  };
+
+  // Save progress on page flip or manual page click
+  const handleSaveProgress = async (note, pageNum, isFinished = false) => {
+    const targetPage = Math.max(1, Math.min(note.pages || 1, pageNum));
     const calculatedProgress = isFinished 
       ? 100 
-      : Math.round((targetPage / (activeNote.pages || 1)) * 100);
+      : Math.round((targetPage / (note.pages || 1)) * 100);
 
     try {
-      await api.updateNoteProgress(activeNote.id, targetPage, calculatedProgress, isFinished);
+      await api.updateNoteProgress(note.id, targetPage, calculatedProgress, isFinished);
       
-      // Update local notes array
       setNotes(prev => prev.map(n => {
-        if (n.id === activeNote.id) {
+        if (n.id === note.id) {
           return {
             ...n,
             last_page: targetPage,
@@ -158,19 +311,8 @@ export default function NclexNotesView({ user }) {
         return n;
       }));
 
-      // Update active note state
-      setActiveNote(prev => ({
-        ...prev,
-        last_page: targetPage,
-        progress_percent: calculatedProgress,
-        completed: isFinished || prev.completed
-      }));
-
       setCurrentPage(targetPage);
-      
-      // Force iframe update
-      setViewerKey(prev => prev + 1);
-      showToast(isFinished ? 'Note marked as completed!' : 'Progress saved successfully');
+      showToast(isFinished ? 'Note marked as completed!' : `Moved to page ${targetPage}`);
     } catch (err) {
       console.error('Error updating progress:', err);
       showToast('Failed to save reading progress', 'error');
@@ -189,7 +331,7 @@ export default function NclexNotesView({ user }) {
         }
       });
 
-      if (!response.ok) throw new Error('Download request failed');
+      if (!response.ok) throw new Error('Download failed');
 
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
@@ -201,7 +343,6 @@ export default function NclexNotesView({ user }) {
       document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
 
-      // Increment downloads count in local state
       setNotes(prev => prev.map(n => {
         if (n.id === noteId) {
           return { ...n, downloads: (n.downloads || 0) + 1 };
@@ -216,22 +357,97 @@ export default function NclexNotesView({ user }) {
     }
   };
 
-  if (error) {
-    return (
-      <div className="p-6 max-w-lg mx-auto mt-12 bg-card border border-border rounded-xl text-center shadow-sm">
-        <AlertCircle className="w-12 h-12 text-danger mx-auto mb-3" />
-        <h3 className="text-lg font-bold text-foreground mb-1">Could Not Load Notes</h3>
-        <p className="text-muted-text text-sm mb-4">{error}</p>
-        <button 
-          onClick={fetchNotes}
-          className="px-4 py-2 bg-primary hover:bg-primary-hover text-white text-sm font-semibold rounded-lg flex items-center gap-2 mx-auto transition-colors"
-        >
-          <RefreshCw className="w-4 h-4" />
-          <span>Try Again</span>
-        </button>
-      </div>
-    );
-  }
+  // Open Admin Form for Add/Edit Note
+  const handleOpenForm = (e = null, note = null) => {
+    if (e) e.stopPropagation(); // prevent row expand/collapse
+    if (note) {
+      setEditingNote(note);
+      setNoteTopicName(note.topic_name);
+      setNoteDescription(note.description || '');
+      setNoteCategory(note.category);
+      setNoteDifficulty(note.difficulty);
+      setNoteStatus(note.status || 'Published');
+      setNoteDisplayOrder(note.display_order || 0);
+      setNoteFile(null);
+    } else {
+      setEditingNote(null);
+      setNoteTopicName('');
+      setNoteDescription('');
+      setNoteCategory('Fundamentals');
+      setNoteDifficulty('Beginner');
+      setNoteStatus('Published');
+      setNoteDisplayOrder(notes.length + 1);
+      setNoteFile(null);
+    }
+    setIsFormOpen(true);
+  };
+
+  // Save Note CRUD (Add/Edit)
+  const handleSaveNote = async (e) => {
+    e.preventDefault();
+    if (!noteTopicName || !noteCategory || !noteDifficulty) {
+      alert('Please fill out all required fields.');
+      return;
+    }
+    if (!editingNote && !noteFile) {
+      alert('Please select a PDF file to upload.');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('topic_name', noteTopicName);
+    formData.append('description', noteDescription);
+    formData.append('category', noteCategory);
+    formData.append('difficulty', noteDifficulty);
+    formData.append('status', noteStatus);
+    formData.append('display_order', noteDisplayOrder);
+    if (noteFile) {
+      formData.append('pdf', noteFile);
+    }
+
+    try {
+      if (editingNote) {
+        await api.updateNclexNote(editingNote.id, formData);
+        showToast('Note updated successfully!', 'success');
+      } else {
+        await api.createNclexNote(formData);
+        showToast('NCLEX Note uploaded successfully!', 'success');
+      }
+      setIsFormOpen(false);
+      fetchNotes();
+    } catch (err) {
+      console.error(err);
+      alert(err.message || 'Failed to save NCLEX Note.');
+    }
+  };
+
+  // Delete Note CRUD
+  const handleDeleteNote = async (e, id, title) => {
+    e.stopPropagation(); // prevent row expand/collapse
+    if (!window.confirm(`Are you sure you want to delete the NCLEX Note: "${title}"?`)) return;
+    try {
+      await api.deleteNclexNote(id);
+      showToast('NCLEX Note deleted successfully', 'success');
+      if (expandedNoteId === id) setExpandedNoteId(null);
+      fetchNotes();
+    } catch (err) {
+      console.error(err);
+      alert(err.message || 'Failed to delete NCLEX Note.');
+    }
+  };
+
+  // Search/Filter matching notes
+  const filteredNotes = notes.filter(note => {
+    const query = searchQuery.toLowerCase();
+    const matchesSearch = 
+      note.topic_name.toLowerCase().includes(query) ||
+      (note.description && note.description.toLowerCase().includes(query));
+
+    const matchesCategory = 
+      selectedCategory === 'All' || note.category === selectedCategory;
+
+    return matchesSearch && matchesCategory;
+  });
 
   return (
     <div className="space-y-6 pb-20 animate-fade-in relative">
@@ -250,7 +466,7 @@ export default function NclexNotesView({ user }) {
         </div>
       )}
 
-      {/* Header section */}
+      {/* Header Banner */}
       <div className="bg-gradient-to-r from-card to-primary-light border border-border p-5 rounded-2xl shadow-sm relative overflow-hidden">
         <div className="absolute -right-10 -top-10 w-32 h-32 bg-primary/10 rounded-full blur-2xl"></div>
         <div className="space-y-1">
@@ -264,122 +480,37 @@ export default function NclexNotesView({ user }) {
         </div>
       </div>
 
-      {/* RECENTLY VIEWED / CONTINUE READING SECTION */}
-      {inProgressNotes.length > 0 && (
-        <div className="space-y-3">
-          <h3 className="text-base font-extrabold text-foreground flex items-center gap-2">
-            <Clock className="w-4.5 h-4.5 text-primary" />
-            <span>Recently Viewed & In Progress</span>
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {inProgressNotes.slice(0, 3).map(note => (
-              <div 
-                key={note.id} 
-                onClick={() => handleOpenNote(note)}
-                className="bg-card border border-border hover:border-primary/40 rounded-xl p-4 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer flex flex-col justify-between group"
-              >
-                <div>
-                  <div className="flex justify-between items-start gap-2">
-                    <span className="px-2 py-0.5 text-[10px] bg-primary-light text-primary font-black rounded uppercase border border-primary/10 truncate">
-                      {note.category}
-                    </span>
-                    <span className="text-xs text-muted-text font-bold flex items-center gap-1 shrink-0">
-                      Page {note.last_page}/{note.pages}
-                    </span>
-                  </div>
-                  <h4 className="text-sm font-bold text-foreground mt-2 group-hover:text-primary transition-colors line-clamp-1">
-                    {note.topic_name}
-                  </h4>
-                  <p className="text-xs text-muted-text mt-1 line-clamp-1">
-                    {note.description || 'No description provided.'}
-                  </p>
-                </div>
-                
-                <div className="mt-4 space-y-2">
-                  {/* Progress bar */}
-                  <div className="space-y-1">
-                    <div className="flex justify-between text-[10px] font-bold text-muted-text">
-                      <span>Reading Progress</span>
-                      <span>{note.progress_percent}%</span>
-                    </div>
-                    <div className="w-full bg-muted-bg rounded-full h-1.5 overflow-hidden">
-                      <div 
-                        className="bg-primary h-1.5 rounded-full transition-all duration-500" 
-                        style={{ width: `${note.progress_percent}%` }}
-                      ></div>
-                    </div>
-                  </div>
-                  
-                  <div className="flex justify-between items-center pt-1 text-[11px] font-bold text-primary">
-                    <span>Continue Reading</span>
-                    <ChevronRight className="w-4 h-4 transform group-hover:translate-x-0.5 transition-transform" />
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+      {/* ADMIN CONTROL PANEL: ADD NOTES */}
+      {user?.role === 'admin' && (
+        <div className="flex flex-wrap gap-2.5 items-center justify-between bg-muted-bg/30 p-3 rounded-xl border border-border/80">
+          <span className="text-[10px] font-bold text-muted-text uppercase tracking-wider">Concept Notes Management (Admin):</span>
+          <button
+            onClick={(e) => handleOpenForm(e)}
+            className="py-1.5 px-3 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-lg shadow-sm transition-colors flex items-center gap-1 cursor-pointer"
+          >
+            <span>+ Add Note</span>
+          </button>
         </div>
       )}
 
-      {/* BOOKMARKS SECTION */}
-      {bookmarkedNotes.length > 0 && !selectedCategory && searchQuery === '' && (
-        <div className="space-y-3">
-          <h3 className="text-base font-extrabold text-foreground flex items-center gap-2">
-            <Bookmark className="w-4.5 h-4.5 text-primary" fill="currentColor" />
-            <span>Bookmarked Topics</span>
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {bookmarkedNotes.map(note => (
-              <div 
-                key={note.id}
-                onClick={() => handleOpenNote(note)}
-                className="bg-card border border-border hover:border-primary/40 rounded-xl p-3 shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer flex flex-col justify-between group"
-              >
-                <div>
-                  <div className="flex justify-between items-start gap-1">
-                    <span className="px-1.5 py-0.5 text-[9px] bg-primary-light text-primary font-black rounded uppercase border border-primary/10 truncate">
-                      {note.category}
-                    </span>
-                    <button 
-                      onClick={(e) => handleToggleBookmark(e, note.id, note.bookmarked)}
-                      className="p-1 text-primary hover:bg-primary-light rounded-lg transition-colors shrink-0"
-                    >
-                      <Bookmark className="w-3.5 h-3.5" fill="currentColor" />
-                    </button>
-                  </div>
-                  <h4 className="text-xs font-bold text-foreground mt-2 group-hover:text-primary transition-colors line-clamp-1">
-                    {note.topic_name}
-                  </h4>
-                </div>
-                <div className="flex justify-between items-center text-[10px] font-semibold text-muted-text mt-3 pt-2 border-t border-border/60">
-                  <span>{note.pages} Pages</span>
-                  <span className="flex items-center gap-0.5 text-primary font-bold">
-                    Read Note <ChevronRight className="w-3 h-3" />
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* FILTER & SORT BAR */}
+      {/* FILTER, SEARCH, SORT BOX */}
       <div className="bg-card border border-border rounded-xl p-4 shadow-sm space-y-4">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          {/* Search */}
+          
+          {/* Keyword Search Input */}
           <div className="relative flex-1">
             <Search className="absolute left-3 top-2.5 w-4 h-4 text-muted-text" />
             <input
               type="text"
-              placeholder="Search topic or keywords..."
+              placeholder="Search concepts by keyword (e.g. Acid-Base, Cardiac)..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-muted-bg border border-border hover:border-primary/20 focus:border-primary rounded-xl py-2 pl-9 pr-4 text-sm text-foreground placeholder:text-muted-text focus:outline-none transition-colors"
+              className="w-full bg-muted-bg border border-border hover:border-primary/20 focus:border-primary rounded-xl py-2 pl-9 pr-4 text-sm text-foreground placeholder:text-muted-text/50 focus:outline-none transition-colors"
             />
           </div>
 
           <div className="flex items-center gap-3 shrink-0">
-            {/* Sort */}
+            {/* Sort Select */}
             <div className="flex items-center gap-2">
               <span className="text-xs font-bold text-muted-text">Sort By:</span>
               <select
@@ -394,14 +525,14 @@ export default function NclexNotesView({ user }) {
               </select>
             </div>
 
-            {/* Total Badge */}
+            {/* Total count badge */}
             <div className="px-3 py-1.5 bg-primary-light border border-primary/20 text-primary font-bold rounded-lg text-xs">
               {filteredNotes.length} Note{filteredNotes.length !== 1 ? 's' : ''} Found
             </div>
           </div>
         </div>
 
-        {/* Categories Pills */}
+        {/* Categories Pill List */}
         <div className="space-y-1.5">
           <div className="text-xs font-bold text-muted-text flex items-center gap-1.5">
             <Filter className="w-3.5 h-3.5 text-primary" />
@@ -428,11 +559,11 @@ export default function NclexNotesView({ user }) {
         </div>
       </div>
 
-      {/* NOTES CATALOG GRID */}
+      {/* CONCEPT NOTE EXPANDABLE LIST (Kindle Reader Layout) */}
       {loading ? (
         <div className="py-20 flex flex-col items-center justify-center gap-2.5">
           <div className="w-9 h-9 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
-          <p className="text-xs text-muted-text font-semibold">Fetching study notes...</p>
+          <p className="text-xs text-muted-text font-semibold">Loading NCLEX-RN syllabus notes...</p>
         </div>
       ) : filteredNotes.length === 0 ? (
         <div className="text-center py-16 bg-card border border-border border-dashed rounded-xl">
@@ -441,244 +572,428 @@ export default function NclexNotesView({ user }) {
           <p className="text-xs text-muted-text mt-0.5">Try searching with other keywords or changing categories.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredNotes.map(note => {
-            const hasStarted = note.progress_percent > 0;
+        <div className="space-y-2.5 animate-slide-up">
+          {filteredNotes.map((note, idx) => {
+            const isExpanded = expandedNoteId === note.id;
+            const progressPercent = note.progress_percent || 0;
             const isCompleted = note.completed;
-            
+
             return (
-              <div
-                key={note.id}
-                onClick={() => handleOpenNote(note)}
-                className="bg-card border border-border hover:border-primary/30 rounded-2xl shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 cursor-pointer flex flex-col justify-between group overflow-hidden"
+              <div 
+                key={note.id} 
+                className="bg-card border border-border hover:border-primary/30 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-200"
               >
-                {/* Accent Top Bar based on difficulty */}
-                <div className={`h-1.5 w-full ${
-                  note.difficulty === 'Beginner' 
-                    ? 'bg-emerald-500' 
-                    : note.difficulty === 'Intermediate' 
-                    ? 'bg-amber-500' 
-                    : 'bg-rose-500'
-                }`}></div>
-
-                <div className="p-5 flex-1 flex flex-col justify-between">
-                  <div>
-                    {/* Tags row */}
-                    <div className="flex justify-between items-start gap-2">
-                      <span className="px-2 py-0.5 text-[9px] bg-primary-light text-primary font-black rounded uppercase border border-primary/10 truncate">
-                        {note.category}
-                      </span>
-                      <div className="flex items-center gap-1.5">
-                        {/* Difficulty Badge */}
-                        <span className={`px-1.5 py-0.5 text-[9px] font-black rounded uppercase tracking-wider ${
-                          note.difficulty === 'Beginner'
-                            ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
-                            : note.difficulty === 'Intermediate'
-                            ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400'
-                            : 'bg-rose-500/10 text-rose-600 dark:text-rose-400'
-                        }`}>
-                          {note.difficulty}
-                        </span>
-                        
-                        {/* Bookmark Icon */}
-                        <button
-                          onClick={(e) => handleToggleBookmark(e, note.id, note.bookmarked)}
-                          className="p-1 hover:bg-muted-bg rounded-lg transition-colors text-muted-text hover:text-primary shrink-0"
-                          title={note.bookmarked ? 'Remove bookmark' : 'Bookmark note'}
-                        >
-                          <Bookmark 
-                            className="w-4.5 h-4.5" 
-                            fill={note.bookmarked ? 'currentColor' : 'none'} 
-                            style={{ color: note.bookmarked ? 'var(--primary)' : 'inherit' }}
-                          />
-                        </button>
-                      </div>
-                    </div>
-
-                    <h4 className="text-base font-bold text-foreground mt-3 group-hover:text-primary transition-colors line-clamp-2">
+                {/* Header Row (Expand trigger) styled exactly like Concept Card rows in uploaded image */}
+                <div
+                  onClick={() => handleToggleExpand(note)}
+                  className={`w-full p-4 flex flex-col sm:flex-row sm:items-center justify-between text-left transition-colors duration-150 gap-4 cursor-pointer ${
+                    isExpanded 
+                      ? 'bg-primary-light/40 text-primary border-b border-border/80' 
+                      : 'bg-card hover:bg-muted-bg/30'
+                  }`}
+                >
+                  <div className="flex items-center gap-3 pr-4 flex-1 min-w-0">
+                    {/* Index Number Badge - Styled exactly like the uploaded image (orange text on peach bg) */}
+                    <span className="w-8 h-8 rounded-lg text-xs font-black flex items-center justify-center shrink-0 bg-[#FFF8F5] text-[#FF6A39] border border-[#FF6A39]/20">
+                      {idx + 1}
+                    </span>
+                    
+                    {/* Note Title (Heading) */}
+                    <span className="font-extrabold text-sm text-foreground leading-tight truncate">
                       {note.topic_name}
-                    </h4>
+                    </span>
 
-                    <p className="text-xs text-muted-text mt-1.5 line-clamp-3">
-                      {note.description || 'Access full study syllabus notes compiled by waheguru nursing classes expert educators.'}
-                    </p>
+                    {/* Draft Indicator (Admin only) */}
+                    {user?.role === 'admin' && note.status === 'Draft' && (
+                      <span className="px-1.5 py-0.5 text-[8px] bg-amber-500/10 text-amber-600 dark:text-amber-400 font-bold border border-amber-500/10 rounded tracking-wider uppercase shrink-0">
+                        Draft
+                      </span>
+                    )}
                   </div>
 
-                  <div className="mt-5 space-y-4 pt-3 border-t border-border/50">
-                    {/* Stats metrics */}
-                    <div className="flex items-center justify-between text-[11px] font-bold text-muted-text">
-                      <div className="flex items-center gap-1">
-                        <Clock className="w-3.5 h-3.5 text-primary" />
-                        <span>{note.reading_time} Min Read</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className="flex items-center gap-0.5">
-                          <Eye className="w-3.5 h-3.5" /> {note.views || 0}
-                        </span>
-                        <span className="flex items-center gap-0.5">
-                          <Download className="w-3.5 h-3.5" /> {note.downloads || 0}
-                        </span>
-                      </div>
+                  {/* Metadata & Actions Row */}
+                  <div className="flex items-center justify-between sm:justify-end gap-3 shrink-0">
+                    
+                    {/* Category badge */}
+                    <div className="hidden xs:flex items-center gap-1.5 text-[9px] font-black uppercase tracking-wider shrink-0 text-muted-text">
+                      <span className="px-1.5 py-0.5 bg-muted-bg border border-border rounded">
+                        {note.category}
+                      </span>
                     </div>
 
-                    {/* Progress tracking */}
-                    {hasStarted && (
-                      <div className="space-y-1">
-                        <div className="flex justify-between text-[10px] font-bold text-muted-text">
-                          <span>{isCompleted ? 'Completed' : 'Last read progress'}</span>
-                          <span>{note.progress_percent}%</span>
-                        </div>
-                        <div className="w-full bg-muted-bg rounded-full h-1">
-                          <div 
-                            className={`h-1 rounded-full transition-all duration-300 ${isCompleted ? 'bg-emerald-500' : 'bg-primary'}`} 
-                            style={{ width: `${note.progress_percent}%` }}
-                          ></div>
-                        </div>
-                      </div>
-                    )}
+                    {/* Action buttons on the right side of the row */}
+                    <div className="flex items-center gap-1.5">
+                      
+                      {/* Bookmark Icon */}
+                      <span 
+                        onClick={(e) => handleToggleBookmark(e, note.id, note.bookmarked)}
+                        className="p-1.5 hover:bg-muted-bg rounded-lg text-muted-text hover:text-primary transition-colors cursor-pointer"
+                        title={note.bookmarked ? 'Remove bookmark' : 'Bookmark topic'}
+                      >
+                        <Bookmark 
+                          className="w-4 h-4" 
+                          fill={note.bookmarked ? 'currentColor' : 'none'} 
+                          style={{ color: note.bookmarked ? 'var(--primary)' : 'inherit' }}
+                        />
+                      </span>
 
-                    {/* Actions bar */}
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() => handleOpenNote(note)}
-                        className="flex-1 py-2 px-3 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 transition-all shadow-sm hover:shadow active:scale-95 cursor-pointer"
-                      >
-                        <BookOpen className="w-3.5 h-3.5" />
-                        <span>{hasStarted ? 'Resume Reading' : 'Read Notes'}</span>
-                      </button>
-                      <button
-                        onClick={(e) => handleDownload(e, note.id, note.topic_name)}
-                        className="p-2 bg-card hover:bg-muted-bg text-muted-text hover:text-foreground border border-border rounded-xl transition-all cursor-pointer"
-                        title="Download PDF note"
-                      >
-                        <Download className="w-4 h-4" />
-                      </button>
+                      {/* Admin edit & delete options - Styled exactly like the uploaded image */}
+                      {user?.role === 'admin' && (
+                        <div className="flex items-center gap-1 text-[10px] font-bold">
+                          <span
+                            onClick={(e) => handleOpenForm(e, note)}
+                            className="py-1 px-2.5 bg-[#EFF6FF] text-[#2563EB] border border-[#2563EB]/15 rounded hover:bg-[#DBEAFE] transition-colors cursor-pointer"
+                            title="Edit Note"
+                          >
+                            Edit
+                          </span>
+                          <span
+                            onClick={(e) => handleDeleteNote(e, note.id, note.topic_name)}
+                            className="py-1 px-2.5 bg-[#FEF2F2] text-[#DC2626] border border-[#DC2626]/15 rounded hover:bg-[#FEE2E2] transition-colors cursor-pointer"
+                            title="Delete Note"
+                          >
+                            Delete
+                          </span>
+                        </div>
+                      )}
+
+                      {/* Toggle Expand Arrow */}
+                      <span className="text-muted-text ml-1 shrink-0">
+                        {isExpanded ? (
+                          <ChevronUp className="w-4.5 h-4.5 text-primary" />
+                        ) : (
+                          <ChevronDown className="w-4.5 h-4.5" />
+                        )}
+                      </span>
                     </div>
                   </div>
                 </div>
+
+                {/* Kindle Page-by-Page View Inline Panel */}
+                {isExpanded && (
+                  <div className="p-5 bg-card border-t border-border space-y-4 animate-slide-down">
+                    
+                    {/* Top Panel Description */}
+                    {note.description && (
+                      <div className="p-3 bg-muted-bg/50 border border-border/80 rounded-xl text-xs text-muted-text leading-relaxed">
+                        <span className="font-extrabold text-foreground block mb-0.5">Syllabus Overview:</span>
+                        {note.description}
+                      </div>
+                    )}
+
+                    {/* KINDLE-STYLE CONTROLLER BAR */}
+                    <div className="bg-primary-light/35 border border-primary/10 rounded-xl p-3 flex flex-col md:flex-row items-center justify-between gap-3 text-xs">
+                      
+                      {/* Left: Stats & Progress percent */}
+                      <div className="flex flex-wrap items-center gap-4 text-foreground font-bold">
+                        <div className="flex items-center gap-1 text-muted-text font-semibold">
+                          <Clock className="w-3.5 h-3.5 text-primary" />
+                          <span>{note.reading_time} Min Read</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span>Reading Status:</span>
+                          <span className={`px-2 py-0.5 rounded-full text-[9px] font-black uppercase ${
+                            isCompleted ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' : 'bg-primary/10 text-primary'
+                          }`}>
+                            {isCompleted ? 'Completed' : 'In Progress'}
+                          </span>
+                          <span className="text-[10px] text-muted-text">({progressPercent}% read)</span>
+                        </div>
+                      </div>
+
+                      {/* Middle: Kindle Page Selector & Flippers & Progress Slider */}
+                      <div className="flex flex-wrap items-center gap-3 font-bold justify-center">
+                        <div className="flex items-center gap-2">
+                          <button
+                            disabled={currentPage <= 1}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handlePrevPage();
+                            }}
+                            className="px-2.5 py-1 bg-card border border-border hover:border-primary disabled:opacity-40 disabled:hover:border-border rounded-lg text-foreground transition-all cursor-pointer select-none"
+                            title="Previous Page"
+                          >
+                            &larr; Prev Page
+                          </button>
+                          
+                          <div className="flex items-center gap-1.5 px-2">
+                            <span className="text-muted-text">Page</span>
+                            <input
+                              type="number"
+                              min={1}
+                              max={note.pages || 1}
+                              value={currentPage}
+                              onChange={(e) => {
+                                const val = parseInt(e.target.value);
+                                if (!isNaN(val)) handleSaveProgress(note, val);
+                              }}
+                              className="w-11 bg-card border border-border hover:border-primary/20 focus:border-primary rounded-lg text-center font-bold text-xs py-0.5 text-foreground focus:outline-none"
+                            />
+                            <span className="text-muted-text">of {note.pages}</span>
+                          </div>
+
+                          <button
+                            disabled={currentPage >= (note.pages || 1)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleNextPage(note);
+                            }}
+                            className="px-2.5 py-1 bg-card border border-border hover:border-primary disabled:opacity-40 disabled:hover:border-border rounded-lg text-foreground transition-all cursor-pointer select-none"
+                            title="Next Page"
+                          >
+                            Next Page &rarr;
+                          </button>
+                        </div>
+
+                        {/* Page Slider for Kindle e-reader paging control */}
+                        <div className="flex items-center gap-1.5 w-32 shrink-0">
+                          <input
+                            type="range"
+                            min={1}
+                            max={note.pages || 1}
+                            value={currentPage}
+                            onChange={(e) => {
+                              handleSaveProgress(note, parseInt(e.target.value));
+                            }}
+                            className="w-full h-1 bg-muted-bg rounded-lg appearance-none cursor-pointer accent-primary border-none"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Right: Actions (Mark Complete / Download) */}
+                      <div className="flex items-center gap-2">
+                        {!isCompleted && (
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleSaveProgress(note, note.pages, true);
+                            }}
+                            className="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg transition-colors flex items-center gap-1 cursor-pointer"
+                          >
+                            <CheckCircle className="w-3.5 h-3.5" />
+                            <span>Mark Completed</span>
+                          </button>
+                        )}
+                        <button
+                          onClick={(e) => handleDownload(e, note.id, note.topic_name)}
+                          className="px-3 py-1 bg-card hover:bg-muted-bg text-muted-text hover:text-foreground border border-border rounded-lg transition-colors flex items-center gap-1 cursor-pointer"
+                          title="Download PDF"
+                        >
+                          <Download className="w-3.5 h-3.5" />
+                          <span>Download</span>
+                        </button>
+                      </div>
+
+                    </div>
+
+                    {/* Progress percentage bar indicator */}
+                    <div className="w-full bg-muted-bg rounded-full h-1 overflow-hidden">
+                      <div 
+                        className={`h-1 rounded-full transition-all duration-300 ${isCompleted ? 'bg-emerald-500' : 'bg-primary'}`} 
+                        style={{ width: `${progressPercent}%` }}
+                      ></div>
+                    </div>
+
+                    {/* DYNAMIC CANVAS-BASED KINDLE READER VIEWPORT */}
+                    <div className="border border-border rounded-xl bg-[#F8F9FA] dark:bg-[#1E2022] overflow-hidden relative shadow-inner flex items-center justify-center p-4" style={{ minHeight: '650px' }}>
+                      {pdfLoading ? (
+                        <div className="flex flex-col items-center justify-center gap-2">
+                          <div className="w-8 h-8 border-3 border-primary border-t-transparent rounded-full animate-spin"></div>
+                          <p className="text-xs text-muted-text font-bold">Loading book pages...</p>
+                        </div>
+                      ) : pdfError ? (
+                        <div className="flex flex-col items-center justify-center gap-2 p-6 text-center">
+                          <AlertCircle className="w-8 h-8 text-danger" />
+                          <p className="text-xs text-danger font-bold">{pdfError}</p>
+                          <button 
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              // Re-trigger document load
+                              const prev = expandedNoteId;
+                              setExpandedNoteId(null);
+                              setTimeout(() => setExpandedNoteId(prev), 50);
+                            }}
+                            className="mt-2 py-1 px-3 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-lg transition-colors"
+                          >
+                            Retry
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="relative w-full flex justify-center bg-white dark:bg-zinc-900 rounded-lg overflow-hidden select-none p-2 border border-border/40 shadow-sm max-w-[850px]">
+                          {/* Left Navigation Overlay Zone */}
+                          <div 
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handlePrevPage();
+                            }}
+                            className={`absolute left-0 top-0 bottom-0 w-16 flex items-center justify-center opacity-0 hover:opacity-100 bg-gradient-to-r from-black/10 to-transparent cursor-pointer transition-opacity z-10 ${currentPage <= 1 ? 'pointer-events-none' : ''}`}
+                            title="Previous Page"
+                          >
+                            <span className="w-8 h-8 rounded-full bg-white/90 dark:bg-zinc-800/90 shadow flex items-center justify-center text-foreground font-black text-sm border border-border/40 shadow-sm">&larr;</span>
+                          </div>
+
+                          {/* Render Page Canvas */}
+                          <canvas 
+                            id={`pdf-canvas-${note.id}`} 
+                            className="shadow-md rounded-md max-w-full"
+                            style={{ display: 'block' }}
+                          />
+
+                          {/* Right Navigation Overlay Zone */}
+                          <div 
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleNextPage(note);
+                            }}
+                            className={`absolute right-0 top-0 bottom-0 w-16 flex items-center justify-center opacity-0 hover:opacity-100 bg-gradient-to-l from-black/10 to-transparent cursor-pointer transition-opacity z-10 ${currentPage >= (note.pages || 1) ? 'pointer-events-none' : ''}`}
+                            title="Next Page"
+                          >
+                            <span className="w-8 h-8 rounded-full bg-white/90 dark:bg-zinc-800/90 shadow flex items-center justify-center text-foreground font-black text-sm border border-border/40 shadow-sm">&rarr;</span>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Footer Watermark */}
+                    <div className="flex items-center justify-between text-[10px] text-muted-text font-semibold pt-1">
+                      <span className="flex items-center gap-1.5">
+                        <Eye className="w-3.5 h-3.5" /> {note.views || 0} views
+                        <span className="w-1 h-1 rounded-full bg-muted-text/30"></span>
+                        <Download className="w-3.5 h-3.5" /> {note.downloads || 0} downloads
+                      </span>
+                      <span>Prepared in collaboration with Waheguru Nursing Classes (WNC)</span>
+                    </div>
+
+                  </div>
+                )}
               </div>
             );
           })}
         </div>
       )}
 
-      {/* NATIVE PDF READER MODAL */}
-      {activeNote && (
-        <div className="fixed inset-0 bg-background/95 backdrop-blur-sm z-50 flex items-center justify-center p-0 md:p-4 animate-fade-in">
-          <div className="w-full h-full md:max-w-6xl md:max-h-[92vh] md:border md:border-border md:rounded-2xl bg-card shadow-2xl flex flex-col overflow-hidden animate-scale-up relative">
-            
-            {/* Modal Header */}
-            <div className="bg-card border-b border-border px-4 py-3 flex items-center justify-between shrink-0">
-              <div className="flex items-center gap-3 min-w-0">
-                <span className="px-2 py-0.5 text-[9px] bg-primary-light text-primary font-black rounded uppercase border border-primary/10 shrink-0">
-                  {activeNote.category}
-                </span>
-                <div className="min-w-0">
-                  <h3 className="font-bold text-foreground text-sm truncate leading-tight">
-                    {activeNote.topic_name}
-                  </h3>
-                  <p className="text-[10px] text-muted-text mt-0.5 truncate hidden sm:block">
-                    {activeNote.pages} pages • Resumed at page {currentPage}
-                  </p>
+      {/* NCLEX NOTES ADD/EDIT FORM MODAL */}
+      {isFormOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fade-in">
+          <div className="max-w-md w-full bg-card border border-border rounded-2xl p-6 shadow-xl space-y-4 max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-center border-b border-border/80 pb-3">
+              <h3 className="font-extrabold text-foreground text-base flex items-center gap-2">
+                <FileText className="w-5 h-5 text-primary" />
+                <span>{editingNote ? `Edit Note: ${editingNote.topic_name}` : 'Upload New NCLEX Note'}</span>
+              </h3>
+              <button onClick={() => setIsFormOpen(false)} className="text-muted-text hover:text-foreground">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <form onSubmit={handleSaveNote} className="space-y-4 text-xs">
+              {/* Topic Name */}
+              <div className="space-y-1">
+                <label className="font-bold text-muted-text uppercase tracking-wider block">Topic Name (Heading) *</label>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. Parkland Burn Resuscitation Formula"
+                  value={noteTopicName}
+                  onChange={(e) => setNoteTopicName(e.target.value)}
+                  className="w-full py-2.5 px-3 bg-muted-bg border border-border rounded-lg text-sm text-foreground focus:outline-none focus:border-primary"
+                />
+              </div>
+
+              {/* Description */}
+              <div className="space-y-1">
+                <label className="font-bold text-muted-text uppercase tracking-wider block">Description</label>
+                <textarea
+                  rows={2}
+                  placeholder="Brief summary of note contents or focus concepts..."
+                  value={noteDescription}
+                  onChange={(e) => setNoteDescription(e.target.value)}
+                  className="w-full p-3 bg-muted-bg border border-border rounded-lg text-sm text-foreground focus:outline-none"
+                ></textarea>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                {/* Category */}
+                <div className="space-y-1">
+                  <label className="font-bold text-muted-text uppercase tracking-wider block">Category *</label>
+                  <select
+                    value={noteCategory}
+                    onChange={(e) => setNoteCategory(e.target.value)}
+                    className="w-full py-2.5 px-3 bg-muted-bg border border-border rounded-lg text-sm text-foreground focus:outline-none focus:border-primary"
+                  >
+                    <option value="Fundamentals">Fundamentals</option>
+                    <option value="Adult Health">Adult Health</option>
+                    <option value="Medical Surgical Nursing">Medical Surgical Nursing</option>
+                    <option value="Critical Care">Critical Care</option>
+                    <option value="Pharmacology">Pharmacology</option>
+                    <option value="Maternity">Maternity</option>
+                    <option value="Pediatrics">Pediatrics</option>
+                    <option value="Psychiatric">Psychiatric</option>
+                  </select>
+                </div>
+
+                {/* Difficulty */}
+                <div className="space-y-1">
+                  <label className="font-bold text-muted-text uppercase tracking-wider block">Difficulty *</label>
+                  <select
+                    value={noteDifficulty}
+                    onChange={(e) => setNoteDifficulty(e.target.value)}
+                    className="w-full py-2.5 px-3 bg-muted-bg border border-border rounded-lg text-sm text-foreground focus:outline-none focus:border-primary"
+                  >
+                    <option value="Beginner">Beginner</option>
+                    <option value="Intermediate">Intermediate</option>
+                    <option value="Advanced">Advanced</option>
+                  </select>
                 </div>
               </div>
 
-              {/* Controls area */}
-              <div className="flex items-center gap-2">
-                {/* Bookmark toggle inside modal */}
-                <button
-                  onClick={(e) => handleToggleBookmark(e, activeNote.id, activeNote.bookmarked)}
-                  className={`p-1.5 border border-border rounded-lg hover:bg-muted-bg transition-colors shrink-0 ${
-                    activeNote.bookmarked ? 'text-primary' : 'text-muted-text'
-                  }`}
-                  title={activeNote.bookmarked ? 'Bookmarked' : 'Add bookmark'}
-                >
-                  <Bookmark className="w-4 h-4" fill={activeNote.bookmarked ? 'currentColor' : 'none'} />
-                </button>
+              <div className="grid grid-cols-2 gap-4">
+                {/* Status */}
+                <div className="space-y-1">
+                  <label className="font-bold text-muted-text uppercase tracking-wider block">Status *</label>
+                  <select
+                    value={noteStatus}
+                    onChange={(e) => setNoteStatus(e.target.value)}
+                    className="w-full py-2.5 px-3 bg-muted-bg border border-border rounded-lg text-sm text-foreground focus:outline-none focus:border-primary"
+                  >
+                    <option value="Published">Published</option>
+                    <option value="Draft">Draft</option>
+                  </select>
+                </div>
 
-                {/* Secure Direct Download */}
-                <button
-                  onClick={(e) => handleDownload(e, activeNote.id, activeNote.topic_name)}
-                  className="p-1.5 border border-border rounded-lg hover:bg-muted-bg text-muted-text hover:text-foreground transition-colors shrink-0"
-                  title="Download offline notes copy"
-                >
-                  <Download className="w-4 h-4" />
-                </button>
-
-                {/* Close Button */}
-                <button
-                  onClick={handleCloseNote}
-                  className="p-1.5 border border-border rounded-lg bg-danger/5 text-danger hover:bg-danger/10 transition-colors shrink-0"
-                  title="Close Viewer"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-
-            {/* Modal Sub-Header Control Bar (Resumes / Updates Progress) */}
-            <div className="bg-primary-light/40 border-b border-primary/10 px-4 py-2 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shrink-0">
-              <div className="flex items-center gap-2.5 text-xs text-foreground font-bold">
-                <Info className="w-4.5 h-4.5 text-primary shrink-0" />
-                <span>Reading Status:</span>
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-black uppercase bg-primary/15 text-primary">
-                  {activeNote.completed ? 'Completed' : 'In Progress'}
-                </span>
-                <span className="text-[11px] text-muted-text font-semibold">({activeNote.progress_percent || 0}% read)</span>
-              </div>
-
-              {/* Progress Saver Input & Buttons */}
-              <div className="flex items-center gap-3">
-                <div className="flex items-center gap-1.5">
-                  <span className="text-xs font-semibold text-muted-text">I am currently at Page:</span>
+                {/* Display Order */}
+                <div className="space-y-1">
+                  <label className="font-bold text-muted-text uppercase tracking-wider block">Display Order</label>
                   <input
                     type="number"
-                    min={1}
-                    max={activeNote.pages || 1}
-                    value={currentPage}
-                    onChange={(e) => {
-                      const val = parseInt(e.target.value);
-                      if (!isNaN(val)) setCurrentPage(val);
-                    }}
-                    className="w-14 bg-card border border-border hover:border-primary/20 focus:border-primary rounded-lg text-center font-bold text-xs py-1 text-foreground focus:outline-none"
+                    value={noteDisplayOrder}
+                    onChange={(e) => setNoteDisplayOrder(parseInt(e.target.value) || 0)}
+                    className="w-full py-2.5 px-3 bg-muted-bg border border-border rounded-lg text-sm text-foreground focus:outline-none"
                   />
-                  <span className="text-xs font-semibold text-muted-text">/ {activeNote.pages}</span>
-                  
-                  <button
-                    onClick={() => handleSaveProgress(currentPage)}
-                    className="ml-1.5 px-3 py-1 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-lg transition-colors cursor-pointer"
-                  >
-                    Save Page
-                  </button>
                 </div>
-
-                {!activeNote.completed && (
-                  <button
-                    onClick={() => handleSaveProgress(activeNote.pages, true)}
-                    className="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-lg transition-colors flex items-center gap-1 cursor-pointer"
-                  >
-                    <CheckCircle className="w-3.5 h-3.5" />
-                    <span>Complete Note</span>
-                  </button>
-                )}
               </div>
-            </div>
 
-            {/* Embedded Native PDF Viewer Frame */}
-            <div className="flex-1 bg-muted-bg relative">
-              <iframe
-                key={viewerKey}
-                src={`/api/nclex-notes/${activeNote.id}/pdf#page=${currentPage}`}
-                className="w-full h-full border-none"
-                title={`PDF notes: ${activeNote.topic_name}`}
-              ></iframe>
-            </div>
+              {/* PDF file upload */}
+              <div className="space-y-1.5 border border-dashed border-border rounded-xl p-4 bg-muted-bg/25">
+                <label className="font-bold text-muted-text uppercase tracking-wider block">
+                  {editingNote ? 'Replace PDF notes file (Optional)' : 'Select PDF notes file *'}
+                </label>
+                <input
+                  type="file"
+                  accept="application/pdf"
+                  onChange={(e) => setNoteFile(e.target.files[0])}
+                  className="text-xs text-foreground"
+                />
+                <p className="text-[10px] text-muted-text">Max size: 100MB. PDF formats only. Page counts are auto-calculated on upload.</p>
+              </div>
 
-            {/* Educational watermark / partner banner */}
-            <div className="bg-card border-t border-border px-4 py-2 text-center text-[10px] text-muted-text font-semibold shrink-0">
-              NCLEX-RN Notes curated in academic collaboration with <span className="text-primary font-bold">Waheguru Nursing Classes (WNC)</span>. For personal candidate review only.
-            </div>
-
+              <button
+                type="submit"
+                className="w-full py-2.5 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-xl shadow-md transition-all active:scale-95 cursor-pointer"
+              >
+                {editingNote ? 'Save Changes' : 'Upload Notes File'}
+              </button>
+            </form>
           </div>
         </div>
       )}
