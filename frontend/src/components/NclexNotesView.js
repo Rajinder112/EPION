@@ -48,6 +48,7 @@ export default function NclexNotesView({ user }) {
   const [noteStatus, setNoteStatus] = useState('Published');
   const [noteDisplayOrder, setNoteDisplayOrder] = useState(0);
   const [noteFile, setNoteFile] = useState(null);
+  const fileInputRef = useRef(null);
 
   // Toast Notification State
   const [toast, setToast] = useState(null);
@@ -978,13 +979,22 @@ export default function NclexNotesView({ user }) {
                 <label className="font-bold text-muted-text uppercase tracking-wider block">
                   {editingNote ? 'Replace PDF notes file (Optional)' : 'Select PDF notes file *'}
                 </label>
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="w-full py-2.5 px-3 bg-card hover:bg-muted-bg border border-border text-foreground font-semibold rounded-lg flex items-center justify-center gap-2 cursor-pointer transition-colors text-xs"
+                >
+                  <Plus className="w-4 h-4 text-primary shrink-0" />
+                  <span className="truncate">{noteFile ? noteFile.name : 'Choose PDF File'}</span>
+                </button>
                 <input
                   type="file"
+                  ref={fileInputRef}
                   accept="application/pdf"
                   onChange={(e) => setNoteFile(e.target.files[0])}
-                  className="text-xs text-foreground"
+                  className="hidden"
                 />
-                <p className="text-[10px] text-muted-text">Max size: 100MB. PDF formats only. Page counts are auto-calculated on upload.</p>
+                <p className="text-[10px] text-muted-text mt-1">Max size: 100MB. PDF formats only. Page counts are auto-calculated on upload.</p>
               </div>
 
               <button
