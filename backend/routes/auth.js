@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const db = require('../db');
 const auth = require('../middleware/auth');
+const cryptoHelper = require('../utils/cryptoHelper');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'sgpgi_nursing_prep_secret_key';
 // @route   POST api/auth/register
@@ -30,6 +31,14 @@ router.post('/register', async (req, res) => {
     // Generate email verification token
     const verificationToken = require('crypto').randomBytes(20).toString('hex');
 
+    // Encrypt sensitive user data
+    const encryptedPhone = cryptoHelper.encrypt(phone);
+    const encryptedCountry = cryptoHelper.encrypt(country);
+    const encryptedState = cryptoHelper.encrypt(state);
+    const encryptedAddress = cryptoHelper.encrypt(address);
+    const encryptedSecurityQuestion = cryptoHelper.encrypt(securityQuestion);
+    const encryptedSecurityAnswer = cryptoHelper.encrypt(securityAnswer);
+
     // Insert user (unverified by default)
     await db.query(
       `INSERT INTO users (
@@ -39,7 +48,7 @@ router.post('/register', async (req, res) => {
       ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)`,
       [
         name, email, password_hash, null, 'user',
-        phone, country, state, address, securityQuestion, securityAnswer,
+        encryptedPhone, encryptedCountry, encryptedState, encryptedAddress, encryptedSecurityQuestion, encryptedSecurityAnswer,
         false, verificationToken, null
       ]
     );
@@ -494,7 +503,19 @@ router.get('/candidates', auth, async (req, res) => {
     const usersResult = await db.query(
       'SELECT id, name, email, role, phone, country, state, address, is_email_verified, batch_id, created_at, xp_points, is_paid, security_question, security_answer FROM users'
     );
-    res.json(usersResult.rows);
+    
+    // Decrypt sensitive fields for candidates audit
+    const candidates = usersResult.rows.map(u => ({
+      ...u,
+      phone: cryptoHelper.decrypt(u.phone),
+      country: cryptoHelper.decrypt(u.country),
+      state: cryptoHelper.decrypt(u.state),
+      address: cryptoHelper.decrypt(u.address),
+      security_question: cryptoHelper.decrypt(u.security_question),
+      security_answer: cryptoHelper.decrypt(u.security_answer)
+    }));
+    
+    res.json(candidates);
   } catch (err) {
     console.error('Get candidates error:', err.message);
     res.status(500).send('Server error');

@@ -10,12 +10,21 @@ const trial = require('../middleware/trial');
 
 const upload = multer({ dest: 'uploads/' });
 
-// Helper to check if admin
-const isAdmin = (req, res, next) => {
-  if (req.user && req.user.role === 'admin') {
-    next();
-  } else {
-    res.status(403).json({ message: 'Access denied: Admin role required' });
+// Helper to check if admin (multilayer database verification)
+const isAdmin = async (req, res, next) => {
+  try {
+    if (!req.user || !req.user.id) {
+      return res.status(401).json({ message: 'No token, authorization denied' });
+    }
+    const result = await db.query('SELECT role FROM users WHERE id = $1', [req.user.id]);
+    if (result.rows.length > 0 && result.rows[0].role === 'admin') {
+      next();
+    } else {
+      res.status(403).json({ message: 'Access denied: Admin role required' });
+    }
+  } catch (err) {
+    console.error('Admin authorization middleware query error:', err.message);
+    res.status(500).json({ message: 'Server authorization error' });
   }
 };
 

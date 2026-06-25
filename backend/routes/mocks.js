@@ -9,12 +9,21 @@ const csv = require('csv-parser');
 const fs = require('fs');
 
 
-// Helper to check if admin
-const isAdmin = (req, res, next) => {
-  if (req.user && req.user.role === 'admin') {
-    next();
-  } else {
-    res.status(403).json({ message: 'Access denied: Admin role required' });
+// Helper to check if admin (multilayer database verification)
+const isAdmin = async (req, res, next) => {
+  try {
+    if (!req.user || !req.user.id) {
+      return res.status(401).json({ message: 'No token, authorization denied' });
+    }
+    const result = await db.query('SELECT role FROM users WHERE id = $1', [req.user.id]);
+    if (result.rows.length > 0 && result.rows[0].role === 'admin') {
+      next();
+    } else {
+      res.status(403).json({ message: 'Access denied: Admin role required' });
+    }
+  } catch (err) {
+    console.error('Admin authorization middleware query error:', err.message);
+    res.status(500).json({ message: 'Server authorization error' });
   }
 };
 
@@ -25,8 +34,12 @@ router.get('/', [auth, trial], async (req, res) => {
   try {
     const result = await db.query('SELECT * FROM mock_tests ORDER BY id DESC');
     
-    // Check if current user is admin
-    const isAdminUser = req.user && req.user.role === 'admin';
+    // Check if current user is admin (database verified)
+    let isAdminUser = false;
+    if (req.user && req.user.id) {
+      const userRes = await db.query('SELECT role FROM users WHERE id = $1', [req.user.id]);
+      isAdminUser = userRes.rows.length > 0 && userRes.rows[0].role === 'admin';
+    }
     
     let mockTests = result.rows;
     if (!isAdminUser) {

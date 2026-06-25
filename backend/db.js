@@ -1,6 +1,7 @@
 const { Pool } = require('pg');
 const fs = require('fs');
 const path = require('path');
+const cryptoHelper = require('./utils/cryptoHelper');
 
 const envPath = path.join(__dirname, '.env');
 if (fs.existsSync(envPath)) {
@@ -1400,6 +1401,76 @@ async function checkConnection() {
     useLocalDb = true;
     const dbData = loadLocalDb();
     await seedLocalDbAdmin(dbData);
+  }
+
+  // Run data encryption migration check on server startup
+  await encryptExistingUsers();
+}
+
+// Asynchronous check & encryption migration for existing users
+async function encryptExistingUsers() {
+  console.log('Running user data encryption migration check...');
+  if (useLocalDb) {
+    try {
+      const dbData = loadLocalDb();
+      let updated = false;
+      dbData.users.forEach(u => {
+        const encPhone = cryptoHelper.encrypt(u.phone);
+        const encCountry = cryptoHelper.encrypt(u.country);
+        const encState = cryptoHelper.encrypt(u.state);
+        const encAddress = cryptoHelper.encrypt(u.address);
+        const encQuestion = cryptoHelper.encrypt(u.security_question);
+        const encAnswer = cryptoHelper.encrypt(u.security_answer);
+
+        if (encPhone !== u.phone || encCountry !== u.country || encState !== u.state || 
+            encAddress !== u.address || encQuestion !== u.security_question || encAnswer !== u.security_answer) {
+          u.phone = encPhone;
+          u.country = encCountry;
+          u.state = encState;
+          u.address = encAddress;
+          u.security_question = encQuestion;
+          u.security_answer = encAnswer;
+          updated = true;
+        }
+      });
+      if (updated) {
+        saveLocalDb(dbData);
+        console.log('Local JSON fallback user database successfully encrypted!');
+      } else {
+        console.log('All local JSON fallback users are already encrypted.');
+      }
+    } catch (err) {
+      console.error('Error migrating local JSON user database:', err.message);
+    }
+  } else {
+    try {
+      const result = await pool.query('SELECT id, phone, country, state, address, security_question, security_answer FROM users');
+      let updateCount = 0;
+      for (const row of result.rows) {
+        const encPhone = cryptoHelper.encrypt(row.phone);
+        const encCountry = cryptoHelper.encrypt(row.country);
+        const encState = cryptoHelper.encrypt(row.state);
+        const encAddress = cryptoHelper.encrypt(row.address);
+        const encQuestion = cryptoHelper.encrypt(row.security_question);
+        const encAnswer = cryptoHelper.encrypt(row.security_answer);
+
+        if (encPhone !== row.phone || encCountry !== row.country || encState !== row.state || 
+            encAddress !== row.address || encQuestion !== row.security_question || encAnswer !== row.security_answer) {
+          await pool.query(
+            'UPDATE users SET phone = $1, country = $2, state = $3, address = $4, security_question = $5, security_answer = $6 WHERE id = $7',
+            [encPhone, encCountry, encState, encAddress, encQuestion, encAnswer, row.id]
+          );
+          updateCount++;
+        }
+      }
+      if (updateCount > 0) {
+        console.log(`PostgreSQL database: ${updateCount} user records migrated and encrypted successfully.`);
+      } else {
+        console.log('PostgreSQL database: All user records are already encrypted.');
+      }
+    } catch (err) {
+      console.error('Error migrating PostgreSQL user database:', err.message);
+    }
   }
 }
 
