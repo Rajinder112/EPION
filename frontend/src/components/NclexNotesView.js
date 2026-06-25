@@ -233,8 +233,9 @@ export default function NclexNotesView({ user }) {
         if (!canvas) return;
 
         const context = canvas.getContext('2d');
-        const container = canvas.parentElement;
-        const containerWidth = container.clientWidth || 800;
+        const container = canvas.parentElement?.parentElement || canvas.parentElement;
+        const maxAvailableWidth = isFullScreen ? container.clientWidth : Math.min(container.clientWidth, 850);
+        const containerWidth = maxAvailableWidth || 800;
         
         // Dynamic height scaling for fullscreen mode to prevent scrolling
         const containerHeight = isFullScreen 
@@ -243,7 +244,7 @@ export default function NclexNotesView({ user }) {
 
         const unscaledViewport = page.getViewport({ scale: 1.0 });
         
-        const scaleX = (containerWidth - 24) / unscaledViewport.width;
+        const scaleX = (containerWidth - (isFullScreen ? 64 : 48)) / unscaledViewport.width;
         const scaleY = containerHeight / unscaledViewport.height;
         const scale = isFullScreen ? Math.min(scaleX, scaleY) : scaleX;
 
