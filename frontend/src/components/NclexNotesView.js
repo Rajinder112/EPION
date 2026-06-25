@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { api } from '../utils/api';
+import { api, BASE_URL } from '../utils/api';
 import { 
   Search, Filter, BookOpen, Bookmark, Clock, Eye, Download, 
   X, CheckCircle, Info, ChevronRight, AlertCircle, RefreshCw,
@@ -112,7 +112,7 @@ export default function NclexNotesView({ user }) {
 
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch(`/api/nclex-notes/${expandedNoteId}/pdf`, {
+        const response = await fetch(`${BASE_URL}/nclex-notes/${expandedNoteId}/pdf`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -326,7 +326,7 @@ export default function NclexNotesView({ user }) {
     showToast('Preparing download...', 'info');
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`/api/nclex-notes/${noteId}/download`, {
+      const response = await fetch(`${BASE_URL}/nclex-notes/${noteId}/download`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }

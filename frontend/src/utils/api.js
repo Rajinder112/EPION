@@ -8,7 +8,7 @@ const getBaseUrl = () => {
   return 'http://localhost:5000/api';
 };
 
-const BASE_URL = getBaseUrl();
+export const BASE_URL = getBaseUrl();
 
 // Helper for making authenticated requests
 async function request(endpoint, options = {}) {
