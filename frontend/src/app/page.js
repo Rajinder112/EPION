@@ -275,7 +275,7 @@ export default function Home() {
     { id: 'practice', name: 'Practice Zone', icon: BookOpen },
     { id: 'mocks', name: 'Mock Exams', icon: Trophy },
     { id: 'revision', name: 'Revision Vault', icon: Bookmark },
-    { id: 'nclex-notes', name: '📘 NCLEX-RN Notes', icon: BookOpen },
+    { id: 'nclex-notes', name: 'NCLEX-RN Notes', icon: BookOpen },
     { id: 'leaderboard', name: 'Leaderboard', icon: Award },
     { id: 'settings', name: 'Settings', icon: Settings },
   ];
