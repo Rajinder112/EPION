@@ -1471,6 +1471,19 @@ function simulateQuery(text, params = []) {
   // 4. UPDATE nclex_notes
   if (normalizedSql.startsWith('update nclex_notes')) {
     if (!dbData.nclex_notes) dbData.nclex_notes = [];
+
+    if (normalizedSql.includes('pages =')) {
+      const pages = parseInt(params[0]);
+      const id = parseInt(params[1]);
+      const note = dbData.nclex_notes.find(n => parseInt(n.id) === parseInt(id));
+      if (note) {
+        note.pages = pages;
+        note.reading_time = Math.max(1, Math.round(pages * 2.5));
+        saveLocalDb(dbData);
+        return { rows: [note] };
+      }
+      return { rows: [] };
+    }
     
     if (normalizedSql.includes('views = views + 1')) {
       const id = parseInt(params[0]);

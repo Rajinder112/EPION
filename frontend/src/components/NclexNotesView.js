@@ -5,7 +5,7 @@ import { api, BASE_URL } from '../utils/api';
 import { 
   Search, Filter, BookOpen, Bookmark, Clock, Eye, Download, 
   X, CheckCircle, Info, ChevronRight, AlertCircle, RefreshCw,
-  ChevronDown, ChevronUp, Edit2, Trash2, Plus, FileText, Sparkles
+  ChevronDown, ChevronUp, Edit2, Trash2, Plus, FileText, Sparkles, Maximize2
 } from 'lucide-react';
 
 const CATEGORIES = [
@@ -37,6 +37,13 @@ export default function NclexNotesView({ user }) {
   const [pdfLoading, setPdfLoading] = useState(false);
   const [pdfError, setPdfError] = useState('');
   const [windowWidth, setWindowWidth] = useState(0);
+  const [pageInput, setPageInput] = useState('1');
+  const [isFullScreen, setIsFullScreen] = useState(false);
+
+  const notesRef = useRef(notes);
+  useEffect(() => {
+    notesRef.current = notes;
+  }, [notes]);
 
   // Admin Add/Edit Form Modal State
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -81,6 +88,41 @@ export default function NclexNotesView({ user }) {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  // Sync page input field text with the current page state
+  useEffect(() => {
+    setPageInput(currentPage.toString());
+  }, [currentPage]);
+
+  // Handle fullscreen scrolling lock and keyboard handlers
+  useEffect(() => {
+    if (isFullScreen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isFullScreen]);
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (!isFullScreen) return;
+      if (e.key === 'Escape') {
+        setIsFullScreen(false);
+      } else if (e.key === 'ArrowLeft') {
+        handlePrevPage();
+      } else if (e.key === 'ArrowRight') {
+        const note = notesRef.current.find(n => n.id === expandedNoteId);
+        if (note) handleNextPage(note);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isFullScreen, currentPage, expandedNoteId]);
+
   // Load PDF document when expandedNoteId changes
   useEffect(() => {
     if (!expandedNoteId) {
@@ -94,6 +136,8 @@ export default function NclexNotesView({ user }) {
       setPdfLoading(true);
       setPdfError('');
       setPdfDoc(null);
+      
+      const activeNote = notesRef.current.find(n => n.id === expandedNoteId);
 
       // Ensure PDF.js is loaded
       let attempts = 0;
@@ -131,6 +175,26 @@ export default function NclexNotesView({ user }) {
 
         if (isMounted) {
           setPdfDoc(doc);
+
+          // Overwrite page count dynamically if different
+          if (doc.numPages && activeNote && doc.numPages !== activeNote.pages) {
+            setNotes(prev => prev.map(n => {
+              if (n.id === expandedNoteId) {
+                return { ...n, pages: doc.numPages };
+              }
+              return n;
+            }));
+            
+            // Silently notify the backend to update total pages in database
+            fetch(`${BASE_URL}/nclex-notes/${expandedNoteId}/update-pages`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+              },
+              body: JSON.stringify({ pages: doc.numPages })
+            }).catch(err => console.warn('Could not sync page count on backend:', err.message));
+          }
         }
       } catch (err) {
         console.error('Error loading PDF:', err);
@@ -163,15 +227,26 @@ export default function NclexNotesView({ user }) {
         const page = await pdfDoc.getPage(currentPage);
         if (!isMounted) return;
 
-        const canvas = document.getElementById(`pdf-canvas-${expandedNoteId}`);
+        // In fullscreen, query the fullscreen canvas element instead of inline
+        const canvasId = isFullScreen ? `pdf-canvas-fullscreen` : `pdf-canvas-${expandedNoteId}`;
+        const canvas = document.getElementById(canvasId);
         if (!canvas) return;
 
         const context = canvas.getContext('2d');
         const container = canvas.parentElement;
         const containerWidth = container.clientWidth || 800;
+        
+        // Dynamic height scaling for fullscreen mode to prevent scrolling
+        const containerHeight = isFullScreen 
+          ? (window.innerHeight - 150) 
+          : 650;
 
         const unscaledViewport = page.getViewport({ scale: 1.0 });
-        const scale = (containerWidth - 24) / unscaledViewport.width; // leave small padding
+        
+        const scaleX = (containerWidth - 24) / unscaledViewport.width;
+        const scaleY = containerHeight / unscaledViewport.height;
+        const scale = isFullScreen ? Math.min(scaleX, scaleY) : scaleX;
+
         const viewport = page.getViewport({ scale: scale || 1.2 });
 
         canvas.height = viewport.height;
@@ -195,15 +270,17 @@ export default function NclexNotesView({ user }) {
       }
     };
 
-    renderPage();
+    // Delay slightly to ensure canvas DOM node has updated height/width properties
+    const timeoutId = setTimeout(renderPage, 50);
 
     return () => {
       isMounted = false;
+      clearTimeout(timeoutId);
       if (renderTask) {
         renderTask.cancel();
       }
     };
-  }, [pdfDoc, currentPage, expandedNoteId, windowWidth]);
+  }, [pdfDoc, currentPage, expandedNoteId, windowWidth, isFullScreen]);
 
   const showToast = (message, type = 'success') => {
     setToast({ message, type });
@@ -274,8 +351,9 @@ export default function NclexNotesView({ user }) {
   };
 
   // Kindle Page Flipping: Next Page
-  const handleNextPage = (note) => {
-    if (currentPage < (note.pages || 1)) {
+  const handleNextPage = (noteArg = null) => {
+    const note = noteArg || notes.find(n => n.id === expandedNoteId);
+    if (note && currentPage < (note.pages || 1)) {
       const nextPage = currentPage + 1;
       handleSaveProgress(note, nextPage);
     }
@@ -287,6 +365,19 @@ export default function NclexNotesView({ user }) {
       const prevPage = currentPage - 1;
       const note = notes.find(n => n.id === expandedNoteId);
       if (note) handleSaveProgress(note, prevPage);
+    }
+  };
+
+  // Handle manual page number jump
+  const handlePageSubmit = () => {
+    const val = parseInt(pageInput);
+    const note = notes.find(n => n.id === expandedNoteId);
+    if (note && !isNaN(val)) {
+      const targetPage = Math.max(1, Math.min(note.pages || 1, val));
+      handleSaveProgress(note, targetPage);
+      setPageInput(targetPage.toString());
+    } else {
+      setPageInput(currentPage.toString());
     }
   };
 
@@ -720,14 +811,17 @@ export default function NclexNotesView({ user }) {
                           <div className="flex items-center gap-1.5 px-2">
                             <span className="text-muted-text">Page</span>
                             <input
-                              type="number"
-                              min={1}
-                              max={note.pages || 1}
-                              value={currentPage}
+                              type="text"
+                              value={pageInput}
                               onChange={(e) => {
-                                const val = parseInt(e.target.value);
-                                if (!isNaN(val)) handleSaveProgress(note, val);
+                                setPageInput(e.target.value);
                               }}
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                  handlePageSubmit();
+                                }
+                              }}
+                              onBlur={handlePageSubmit}
                               className="w-11 bg-card border border-border hover:border-primary/20 focus:border-primary rounded-lg text-center font-bold text-xs py-0.5 text-foreground focus:outline-none"
                             />
                             <span className="text-muted-text">of {note.pages}</span>
@@ -761,7 +855,7 @@ export default function NclexNotesView({ user }) {
                         </div>
                       </div>
 
-                      {/* Right: Actions (Mark Complete / Download) */}
+                      {/* Right: Actions (Mark Complete / Download / Full Screen) */}
                       <div className="flex items-center gap-2">
                         {!isCompleted && (
                           <button
@@ -782,6 +876,17 @@ export default function NclexNotesView({ user }) {
                         >
                           <Download className="w-3.5 h-3.5" />
                           <span>Download</span>
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setIsFullScreen(true);
+                          }}
+                          className="px-3 py-1 bg-card hover:bg-muted-bg text-muted-text hover:text-foreground border border-border rounded-lg transition-colors flex items-center gap-1 cursor-pointer"
+                          title="Full Screen"
+                        >
+                          <Maximize2 className="w-3.5 h-3.5" />
+                          <span>Full Screen</span>
                         </button>
                       </div>
 
@@ -1007,6 +1112,162 @@ export default function NclexNotesView({ user }) {
           </div>
         </div>
       )}
+
+      {/* FULLSCREEN IMMERSIVE READER MODAL */}
+      {isFullScreen && (() => {
+        const note = notes.find(n => n.id === expandedNoteId);
+        if (!note) return null;
+        
+        const progressPercent = note.pages ? Math.round((currentPage / note.pages) * 100) : 0;
+        const isCompleted = note.completed || progressPercent >= 100;
+        
+        return (
+          <div className="fixed inset-0 z-[100] flex flex-col bg-slate-950 text-slate-100 select-none animate-fade-in">
+            {/* Header: Title and controls */}
+            <div className="bg-slate-900 border-b border-slate-800 p-4 flex flex-col md:flex-row items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <span className="bg-primary/20 text-primary px-2.5 py-1 rounded-lg text-xs font-black uppercase">
+                  NCLEX Notes
+                </span>
+                <h2 className="font-extrabold text-sm md:text-base text-white truncate max-w-xs md:max-w-md">
+                  {note.topic_name}
+                </h2>
+              </div>
+
+              {/* Navigation Controls in Fullscreen */}
+              <div className="flex items-center gap-3 font-bold text-xs">
+                <button
+                  disabled={currentPage <= 1}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handlePrevPage();
+                  }}
+                  className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 disabled:opacity-40 rounded-lg text-white transition-all cursor-pointer"
+                  title="Previous Page"
+                >
+                  &larr; Prev
+                </button>
+
+                <div className="flex items-center gap-1.5 px-1.5 text-slate-300">
+                  <span>Page</span>
+                  <input
+                    type="text"
+                    value={pageInput}
+                    onChange={(e) => setPageInput(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        handlePageSubmit();
+                      }
+                    }}
+                    onBlur={handlePageSubmit}
+                    className="w-12 bg-slate-800 border border-slate-700 focus:border-primary rounded-lg text-center font-bold text-xs py-1 text-white focus:outline-none"
+                  />
+                  <span>of {note.pages || 1}</span>
+                </div>
+
+                <button
+                  disabled={currentPage >= (note.pages || 1)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleNextPage(note);
+                  }}
+                  className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 disabled:opacity-40 rounded-lg text-white transition-all cursor-pointer"
+                  title="Next Page"
+                >
+                  Next &rarr;
+                </button>
+
+                {/* Progress range input */}
+                <input
+                  type="range"
+                  min={1}
+                  max={note.pages || 1}
+                  value={currentPage}
+                  onChange={(e) => {
+                    handleSaveProgress(note, parseInt(e.target.value));
+                  }}
+                  className="w-24 md:w-32 h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-primary border-none"
+                />
+                
+                <span className="text-[10px] text-slate-400">({progressPercent}% read)</span>
+              </div>
+
+              {/* Right: Actions */}
+              <div className="flex items-center gap-2">
+                {!isCompleted && (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleSaveProgress(note, note.pages, true);
+                    }}
+                    className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg text-xs transition-colors flex items-center gap-1 cursor-pointer"
+                  >
+                    <CheckCircle className="w-3.5 h-3.5" />
+                    <span className="hidden sm:inline">Mark Completed</span>
+                  </button>
+                )}
+                
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsFullScreen(false);
+                  }}
+                  className="p-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white rounded-lg transition-colors flex items-center justify-center cursor-pointer"
+                  title="Exit Full Screen"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+
+            {/* Main Immersive Canvas Area */}
+            <div className="flex-1 flex items-center justify-center p-4 relative overflow-hidden bg-slate-950">
+              {pdfLoading ? (
+                <div className="flex flex-col items-center justify-center gap-2">
+                  <div className="w-10 h-10 border-3 border-primary border-t-transparent rounded-full animate-spin"></div>
+                  <p className="text-xs text-slate-400 font-bold">Loading book pages...</p>
+                </div>
+              ) : pdfError ? (
+                <div className="flex flex-col items-center justify-center gap-2 p-6 text-center">
+                  <AlertCircle className="w-10 h-10 text-rose-500" />
+                  <p className="text-xs text-rose-500 font-bold">{pdfError}</p>
+                </div>
+              ) : (
+                <div className="relative flex justify-center bg-white dark:bg-zinc-950 rounded-lg shadow-2xl max-w-full max-h-full overflow-hidden select-none p-1 border border-slate-800">
+                  {/* Left Navigation Zone Overlay */}
+                  <div 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handlePrevPage();
+                    }}
+                    className={`absolute left-0 top-0 bottom-0 w-24 flex items-center justify-center opacity-0 hover:opacity-100 bg-gradient-to-r from-black/25 to-transparent cursor-pointer transition-opacity z-10 ${currentPage <= 1 ? 'pointer-events-none' : ''}`}
+                  >
+                    <span className="w-10 h-10 rounded-full bg-slate-900/90 text-white shadow-lg flex items-center justify-center font-black text-lg border border-slate-700">&larr;</span>
+                  </div>
+
+                  {/* Canvas for rendering PDF */}
+                  <canvas 
+                    id="pdf-canvas-fullscreen" 
+                    className="shadow-2xl rounded-md max-w-full max-h-[85vh] object-contain"
+                    style={{ display: 'block' }}
+                  />
+
+                  {/* Right Navigation Zone Overlay */}
+                  <div 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleNextPage(note);
+                    }}
+                    className={`absolute right-0 top-0 bottom-0 w-24 flex items-center justify-center opacity-0 hover:opacity-100 bg-gradient-to-l from-black/25 to-transparent cursor-pointer transition-opacity z-10 ${currentPage >= (note.pages || 1) ? 'pointer-events-none' : ''}`}
+                  >
+                    <span className="w-10 h-10 rounded-full bg-slate-900/90 text-white shadow-lg flex items-center justify-center font-black text-lg border border-slate-700">&rarr;</span>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        );
+      })()}
 
     </div>
   );

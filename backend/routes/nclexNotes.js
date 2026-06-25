@@ -473,4 +473,36 @@ router.post('/:id/progress', auth, async (req, res) => {
   }
 });
 
+// @route   POST api/nclex-notes/:id/update-pages
+// @desc    Dynamically update/correct note page count and reading time in database
+// @access  Private (Authenticated Users)
+router.post('/:id/update-pages', auth, async (req, res) => {
+  const noteId = parseInt(req.params.id);
+  const { pages } = req.body;
+
+  if (pages === undefined || isNaN(pages) || pages <= 0) {
+    return res.status(400).json({ message: 'Valid page count required' });
+  }
+
+  try {
+    const readingTime = Math.max(1, Math.round(pages * 2.5));
+    const queryText = `
+      UPDATE nclex_notes
+      SET pages = $1, reading_time = $2
+      WHERE id = $3
+      RETURNING *
+    `;
+    const result = await db.query(queryText, [pages, readingTime, noteId]);
+    
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: 'NCLEX note not found' });
+    }
+    
+    res.json({ message: 'Note page count updated successfully', note: result.rows[0] });
+  } catch (err) {
+    console.error('Update note pages error:', err.message);
+    res.status(500).send('Server error');
+  }
+});
+
 module.exports = router;
