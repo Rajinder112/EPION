@@ -67,6 +67,28 @@ async function runSelfTest() {
     const attemptRes = await db.query(attemptQuery, [newUser.id, 1, 0, false, 2]);
     assert(attemptRes.rows.length === 1, 'Successfully logged question attempt history.');
 
+    // Test 4.5: Revision Mistake Log
+    console.log('\n--- Test 4.5: Revision Mistake Log ---');
+    const getRevisionQuery = `
+      SELECT q.* FROM questions q 
+       WHERE q.id IN (
+         SELECT qa.question_id FROM question_attempts qa
+         WHERE qa.user_id = $1
+         AND qa.id = (
+           SELECT MAX(id) FROM question_attempts
+           WHERE question_id = qa.question_id AND user_id = $1
+         )
+         AND qa.is_correct = false
+       )
+    `;
+    let revisionRes = await db.query(getRevisionQuery, [newUser.id]);
+    assert(revisionRes.rows.length === 1 && revisionRes.rows[0].id === 1, 'Incorrect question #1 correctly appears in revision mistake list.');
+
+    // Now log a correct attempt for Question #1 (correct is 1)
+    await db.query(attemptQuery, [newUser.id, 1, 1, true, 4]);
+    revisionRes = await db.query(getRevisionQuery, [newUser.id]);
+    assert(revisionRes.rows.length === 0, 'Question #1 is successfully removed from revision mistake list after a correct attempt.');
+
     // 6. Test AI weak area scanner logic
     console.log('\n--- Test 5: AI Diagnosis Engine Sim ---');
     // Fetch attempts
@@ -82,7 +104,7 @@ async function runSelfTest() {
     assert(performanceResult.rows.length === 1, 'User performance data successfully aggregated.');
     const perfObj = performanceResult.rows[0];
     assert(perfObj.subject === 'Medical Surgical Nursing', 'Incorrect attempt correctly mapped to Medical Surgical Nursing.');
-    assert(parseInt(perfObj.attempted) === 1 && parseInt(perfObj.correct) === 0, 'Accuracy correctly computed as 0% for Medical Surgical.');
+    assert(parseInt(perfObj.attempted) === 2 && parseInt(perfObj.correct) === 1, 'Accuracy correctly computed as 50% for Medical Surgical.');
 
     // 7. Test NCLEX-RN Notes & User Progress system
     console.log('\n--- Test 6: NCLEX-RN Notes & Progress System ---');

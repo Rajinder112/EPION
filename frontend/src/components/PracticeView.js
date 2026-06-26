@@ -54,6 +54,18 @@ export default function PracticeView({ initialFilters = null, directLaunchQuesti
       setSelectedTopic(initialFilters.topic || '');
       setSelectedDifficulty(initialFilters.difficulty || '');
       
+      if (initialFilters.list && initialFilters.list.length > 0) {
+        setSessionQuestions(initialFilters.list);
+        setCurrentIndex(initialFilters.startIndex || 0);
+        setSelectedOption(null);
+        setHasSubmitted(false);
+        setAttemptResult(null);
+        setConfidence(0);
+        setActiveSession(true);
+        checkBookmarkStatus(initialFilters.list[initialFilters.startIndex || 0].id);
+        return;
+      }
+      
       if (initialFilters.subject) {
         if (initialFilters.isDailyChallenge) {
           setIsDailyChallenge(true);
@@ -101,9 +113,15 @@ export default function PracticeView({ initialFilters = null, directLaunchQuesti
   const startPracticeSession = async (subject = selectedSubject, topic = selectedTopic, difficulty = selectedDifficulty, customLimit = null) => {
     if (subject) {
       const meta = subjectsMetadata[subject];
-      if (meta && meta.status === 'coming_soon' && user?.role !== 'admin') {
-        alert('This subject is coming soon and cannot be practiced yet.');
-        return;
+      if (meta && user?.role !== 'admin') {
+        if (meta.status === 'coming_soon') {
+          alert('This subject is coming soon and cannot be practiced yet.');
+          return;
+        }
+        if (meta.status === 'inactive') {
+          alert('This subject is currently inactive and cannot be practiced.');
+          return;
+        }
       }
     }
     setLoading(true);
@@ -305,9 +323,21 @@ export default function PracticeView({ initialFilters = null, directLaunchQuesti
                   className="w-full py-2 px-3 bg-muted-bg border border-border rounded-lg text-sm text-foreground focus:outline-none focus:border-primary"
                 >
                   <option value="">-- All Subjects --</option>
-                  {Object.keys(subjectsHierarchy).map((sub, idx) => (
-                    <option key={idx} value={sub}>{sub}</option>
-                  ))}
+                  {Object.keys(subjectsHierarchy).map((sub, idx) => {
+                    const meta = subjectsMetadata[sub] || {};
+                    const isComingSoon = meta.status === 'coming_soon';
+                    const isInactive = meta.status === 'inactive';
+                    if (isInactive && user?.role !== 'admin') return null;
+                    return (
+                      <option 
+                        key={idx} 
+                        value={sub}
+                        disabled={isComingSoon && user?.role !== 'admin'}
+                      >
+                        {sub} {isComingSoon ? ' (Coming Soon)' : ''}
+                      </option>
+                    );
+                  })}
                 </select>
               </div>
 
@@ -410,17 +440,18 @@ export default function PracticeView({ initialFilters = null, directLaunchQuesti
                     <button
                       onClick={() => {
                         if (isComingSoon && user?.role !== 'admin') return;
+                        if (isInactive && user?.role !== 'admin') return;
                         setSelectedSubject(subject);
                         setSelectedTopic('');
                         startPracticeSession(subject, '', '');
                       }}
-                      disabled={isComingSoon && user?.role !== 'admin'}
+                      disabled={(isComingSoon || isInactive) && user?.role !== 'admin'}
                       className={`p-2.5 rounded-lg transition-colors ${
-                        isComingSoon && user?.role !== 'admin'
+                        (isComingSoon || isInactive) && user?.role !== 'admin'
                           ? 'bg-muted-bg text-muted-text/30 border border-border cursor-not-allowed'
                           : 'bg-primary-light text-primary hover:bg-primary hover:text-white'
                       }`}
-                      title={isComingSoon ? 'Coming Soon' : 'Play'}
+                      title={isComingSoon ? 'Coming Soon' : isInactive ? 'Inactive' : 'Play'}
                     >
                       <Play className="w-4 h-4 fill-current" />
                     </button>
@@ -433,14 +464,17 @@ export default function PracticeView({ initialFilters = null, directLaunchQuesti
       ) : (
         // Question Session Screen (Flashcard Learning Mode)
         <div className="max-w-2xl mx-auto space-y-4">
-          {/* Header toolbar */}
-          <div className="flex items-center justify-between bg-card border border-border px-4 py-2.5 rounded-xl">
+          <div className="flex items-center justify-between">
             <button
-              onClick={() => setActiveSession(false)}
-              className="text-xs font-semibold text-muted-text hover:text-foreground flex items-center gap-1"
+              onClick={() => {
+                setActiveSession(false);
+                if ((initialFilters?.source === 'revision' || directLaunchQuestion) && onNavigateHome) {
+                  onNavigateHome();
+                }
+              }}
+              className="px-3 py-1.5 border border-border hover:bg-muted-bg text-muted-text hover:text-foreground text-xs font-semibold rounded-lg transition-colors flex items-center gap-1 cursor-pointer"
             >
-              <ArrowLeft className="w-4 h-4" />
-              <span>Exit Practice</span>
+              &larr; Exit Session
             </button>
 
             <div className="text-xs font-bold text-muted-text">

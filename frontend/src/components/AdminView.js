@@ -1385,7 +1385,7 @@ export default function AdminView() {
             <div className="bg-card border border-border rounded-xl p-4 shadow-sm flex flex-col justify-between">
               <span className="text-[10px] font-bold text-muted-text uppercase tracking-widest">Published vs Draft</span>
               <span className="text-2xl font-extrabold text-foreground mt-2">
-                {nclexNotes.filter(n => n.status === 'Published').length} / {nclexNotes.filter(n => n.status === 'Draft' || n.status === 'Hidden').length}
+                {nclexNotes.filter(n => n.status === 'Published' || n.status === 'active').length} / {nclexNotes.filter(n => n.status === 'Draft' || n.status === 'inactive' || n.status === 'coming_soon').length}
               </span>
             </div>
             <div className="bg-card border border-border rounded-xl p-4 shadow-sm flex flex-col justify-between">
@@ -1457,11 +1457,13 @@ export default function AdminView() {
                         </td>
                         <td className="p-4">
                           <span className={`px-1.5 py-0.5 text-[9px] font-black rounded uppercase tracking-wider ${
-                            note.status === 'Published'
+                            note.status === 'Published' || note.status === 'active'
                               ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
-                              : 'bg-amber-500/10 text-amber-600 dark:text-amber-400'
+                              : note.status === 'coming_soon'
+                              ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400'
+                              : 'bg-red-500/10 text-red-600 dark:text-red-400'
                           }`}>
-                            {note.status || 'Published'}
+                            {note.status === 'Published' || note.status === 'active' ? 'Active' : note.status === 'Draft' || note.status === 'inactive' ? 'Inactive' : 'Coming Soon'}
                           </span>
                         </td>
                         <td className="p-4 text-center font-bold text-foreground">
@@ -1593,8 +1595,9 @@ export default function AdminView() {
                     onChange={(e) => setNoteStatus(e.target.value)}
                     className="w-full py-2.5 px-3 bg-muted-bg border border-border rounded-lg text-sm text-foreground focus:outline-none focus:border-primary"
                   >
-                    <option value="Published">Published</option>
-                    <option value="Draft">Draft</option>
+                    <option value="active">Active (Visible & Openable)</option>
+                    <option value="coming_soon">Coming Soon (Visible but Locked)</option>
+                    <option value="inactive">Inactive (Hidden from Students)</option>
                   </select>
                 </div>
 

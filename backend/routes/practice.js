@@ -206,6 +206,41 @@ router.get('/random', [auth, trial], async (req, res) => {
       queryText += ` AND subject = $${paramIndex}`;
       params.push(subject);
       paramIndex++;
+    } else {
+      // Exclude inactive and coming_soon subjects from random practice sets for non-admins
+      const userCheck = await db.query('SELECT role, batch_id FROM users WHERE id = $1', [req.user.id]);
+      const currentUser = userCheck.rows.length > 0 ? userCheck.rows[0] : null;
+      const isAdminUser = currentUser && currentUser.role === 'admin';
+
+      if (!isAdminUser) {
+        // Exclude coming_soon and inactive subjects
+        const configRes = await db.query("SELECT subject_name FROM practice_subjects WHERE status IN ('inactive', 'coming_soon')");
+        const excludedList = configRes.rows.map(r => r.subject_name);
+
+        // Also exclude batch-restricted subjects the student is not in
+        const batchRes = await db.query("SELECT subject_name, allowed_batches FROM practice_subjects WHERE allowed_batches IS NOT NULL AND allowed_batches != ''");
+        for (const row of batchRes.rows) {
+          let allowed = [];
+          try {
+            allowed = typeof row.allowed_batches === 'string' ? JSON.parse(row.allowed_batches) : row.allowed_batches;
+          } catch (e) {
+            allowed = row.allowed_batches.split(',').map(x => parseInt(x.trim())).filter(Boolean);
+          }
+          if (allowed.length > 0) {
+            const userBatch = currentUser?.batch_id ? parseInt(currentUser.batch_id) : null;
+            const isAllowed = allowed.map(Number).includes(Number(userBatch));
+            if (!isAllowed && !excludedList.includes(row.subject_name)) {
+              excludedList.push(row.subject_name);
+            }
+          }
+        }
+
+        if (excludedList.length > 0) {
+          queryText += ` AND subject NOT IN (${excludedList.map((_, i) => `$${paramIndex + i}`).join(', ')})`;
+          params.push(...excludedList);
+          paramIndex += excludedList.length;
+        }
+      }
     }
 
     if (topic) {
@@ -387,12 +422,18 @@ router.get('/revision', [auth, trial], async (req, res) => {
       [req.user.id]
     );
 
-    // 2. Fetch unique incorrectly answered questions
-    // Using a JOIN between questions and attempts where is_correct is false
+    // 2. Fetch incorrectly answered questions where the LATEST attempt is incorrect
     const incorrectResult = await db.query(
-      `SELECT DISTINCT q.* FROM questions q 
-       JOIN question_attempts qa ON q.id = qa.question_id 
-       WHERE qa.user_id = $1 AND qa.is_correct = false`,
+      `SELECT q.* FROM questions q 
+       WHERE q.id IN (
+         SELECT qa.question_id FROM question_attempts qa
+         WHERE qa.user_id = $1
+         AND qa.id = (
+           SELECT MAX(id) FROM question_attempts
+           WHERE question_id = qa.question_id AND user_id = $1
+         )
+         AND qa.is_correct = false
+       )`,
       [req.user.id]
     );
 

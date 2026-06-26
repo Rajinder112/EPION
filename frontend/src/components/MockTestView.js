@@ -145,6 +145,17 @@ export default function MockTestView({ onNavigateHome, user }) {
   };
 
   const handleStartExam = async (test) => {
+    const testStatus = test.status || 'active';
+    if (user?.role !== 'admin') {
+      if (testStatus === 'coming_soon') {
+        alert('This mock test is coming soon and cannot be started yet.');
+        return;
+      }
+      if (testStatus === 'inactive') {
+        alert('This mock test is currently inactive.');
+        return;
+      }
+    }
     setLoading(true);
     try {
       const data = await api.getMockTestDetails(test.id);

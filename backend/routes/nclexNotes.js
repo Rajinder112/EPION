@@ -67,7 +67,7 @@ router.get('/', auth, async (req, res) => {
       SELECT n.*, np.last_page, np.progress_percent, np.bookmarked, np.completed, np.last_opened
       FROM nclex_notes n
       LEFT JOIN user_note_progress np ON n.id = np.note_id AND np.user_id = $1
-      WHERE n.status = 'Published'
+      WHERE n.status IN ('Published', 'active', 'coming_soon')
     `;
     const params = [userId];
     let paramIndex = 2;

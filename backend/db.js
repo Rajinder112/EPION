@@ -966,6 +966,32 @@ function simulateQuery(text, params = []) {
     return { rows: [] };
   }
 
+  // 14.5 SELECT q.* FROM questions q WHERE q.id IN (SELECT qa.question_id FROM question_attempts qa ...)
+  if (normalizedSql.includes('from questions') && normalizedSql.includes('question_attempts') && normalizedSql.includes('is_correct = false')) {
+    const userId = params[0];
+    const attempts = dbData.question_attempts || [];
+    const userAttempts = attempts.filter(a => a.user_id === userId);
+    
+    // Get the latest attempt ID for each question
+    const latestAttemptMap = {}; // question_id -> attempt
+    userAttempts.forEach(a => {
+      const qId = a.question_id;
+      if (!latestAttemptMap[qId] || new Date(a.attempted_at) > new Date(latestAttemptMap[qId].attempted_at)) {
+        latestAttemptMap[qId] = a;
+      }
+    });
+    
+    // Filter to get only question_ids where the latest attempt is incorrect
+    const incorrectQuestionIds = Object.values(latestAttemptMap)
+      .filter(a => !a.is_correct)
+      .map(a => a.question_id);
+      
+    // Fetch matching questions
+    const questions = dbData.questions || [];
+    const incorrectQuestions = questions.filter(q => incorrectQuestionIds.includes(q.id));
+    return { rows: incorrectQuestions };
+  }
+
   // 15. SELECT * FROM bookmarks
   if (normalizedSql.includes('from bookmarks') || normalizedSql.includes('join bookmarks')) {
     const userId = params[0];
@@ -1203,6 +1229,11 @@ function simulateQuery(text, params = []) {
 
   // SELECT * FROM practice_subjects
   if (normalizedSql.startsWith('select * from practice_subjects')) {
+    if (normalizedSql.includes('subject_name =')) {
+      const subject_name = params[0];
+      const match = (dbData.practice_subjects || []).find(ps => ps.subject_name === subject_name);
+      return { rows: match ? [match] : [] };
+    }
     return { rows: dbData.practice_subjects || [] };
   }
 
@@ -1396,8 +1427,8 @@ function simulateQuery(text, params = []) {
       };
     });
 
-    if (normalizedSql.includes("status = 'published'") || normalizedSql.includes("status = $2")) {
-      rows = rows.filter(r => r.status === 'Published');
+    if (normalizedSql.includes("status = 'published'") || normalizedSql.includes("status = $2") || normalizedSql.includes("coming_soon") || normalizedSql.includes("status in")) {
+      rows = rows.filter(r => r.status === 'Published' || r.status === 'active' || r.status === 'coming_soon');
     }
 
     rows.sort((a, b) => {

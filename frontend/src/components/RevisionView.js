@@ -9,7 +9,7 @@ import {
   Calendar, Droplet
 } from 'lucide-react';
 
-export default function RevisionView({ onStartQuestionPractice, user }) {
+export default function RevisionView({ onStartQuestionPractice, user, onNavigateHome }) {
   const [bookmarkedList, setBookmarkedList] = useState([]);
   const [incorrectList, setIncorrectList] = useState([]);
   const [activeTab, setActiveTab] = useState('bookmarks'); // 'bookmarks' | 'incorrect' | 'notes' | 'concepts' | 'sureshot' | 'calculators'
@@ -1459,12 +1459,22 @@ export default function RevisionView({ onStartQuestionPractice, user }) {
   return (
     <div className="space-y-6 pb-20 animate-fade-in print:p-0">
       {/* Revision Hub Welcome Header */}
-      <div className="space-y-1 print:hidden">
-        <h2 className="text-xl font-extrabold text-foreground flex items-center gap-2">
-          <GraduationCap className="w-6 h-6 text-primary" />
-          <span>Revision & Study Hub</span>
-        </h2>
-        <p className="text-muted-text text-sm">Access clinical calculators, high-yield system cards, exam Q&As, and your saved questions checklist.</p>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 print:hidden">
+        <div className="space-y-1">
+          <h2 className="text-xl font-extrabold text-foreground flex items-center gap-2">
+            <GraduationCap className="w-6 h-6 text-primary" />
+            <span>Revision & Study Hub</span>
+          </h2>
+          <p className="text-muted-text text-sm">Access clinical calculators, high-yield system cards, exam Q&As, and your saved questions checklist.</p>
+        </div>
+        {onNavigateHome && (
+          <button
+            onClick={onNavigateHome}
+            className="self-start sm:self-center px-4 py-2 border border-border bg-card hover:bg-muted-bg text-muted-text hover:text-foreground text-xs font-semibold rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer shadow-sm"
+          >
+            &larr; Exit Hub
+          </button>
+        )}
       </div>
 
       {/* Main Tabs Selection Navigation */}
@@ -1548,7 +1558,7 @@ export default function RevisionView({ onStartQuestionPractice, user }) {
               bookmarkedList.map((q) => (
                 <div
                   key={q.id}
-                  onClick={() => onStartQuestionPractice(q)}
+                  onClick={() => onStartQuestionPractice(q, bookmarkedList)}
                   className="bg-card border border-border p-4 rounded-xl shadow-sm flex items-start justify-between gap-4 hover:border-primary/45 cursor-pointer transition-all group"
                 >
                   <div className="space-y-1.5 pr-2">
@@ -1609,7 +1619,7 @@ export default function RevisionView({ onStartQuestionPractice, user }) {
               incorrectList.map((q) => (
                 <div
                   key={q.id}
-                  onClick={() => onStartQuestionPractice(q)}
+                  onClick={() => onStartQuestionPractice(q, incorrectList)}
                   className="bg-card border border-border p-4 rounded-xl shadow-sm flex items-start justify-between gap-4 hover:border-primary/45 cursor-pointer transition-all group"
                 >
                   <div className="space-y-1.5 pr-2">

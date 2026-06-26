@@ -204,12 +204,13 @@ export default function Home() {
 
   const handleStartQuestionPractice = (questionObj, questionList = null) => {
     if (questionList) {
-      // In revision, we can pass arrays
+      // In revision, we can pass arrays and set the starting index to the selected question
+      const startIndex = questionObj ? questionList.findIndex(q => q.id === questionObj.id) : 0;
       setDirectQuestion(null);
-      setPracticeFilters({ list: questionList });
+      setPracticeFilters({ list: questionList, startIndex: Math.max(0, startIndex), source: 'revision' });
     } else {
       setDirectQuestion(questionObj);
-      setPracticeFilters(null);
+      setPracticeFilters({ source: 'revision' });
     }
     setActiveTab('practice');
   };
@@ -467,7 +468,15 @@ export default function Home() {
           <PracticeView 
             initialFilters={practiceFilters}
             directLaunchQuestion={directQuestion}
-            onNavigateHome={() => setActiveTab('dashboard')}
+            onNavigateHome={() => {
+              if (practiceFilters?.source === 'revision' || directQuestion) {
+                setActiveTab('revision');
+              } else {
+                setActiveTab('dashboard');
+              }
+              setPracticeFilters(null);
+              setDirectQuestion(null);
+            }}
             user={user}
           />
         )}
@@ -482,6 +491,7 @@ export default function Home() {
         {activeTab === 'revision' && (
           <RevisionView 
             onStartQuestionPractice={handleStartQuestionPractice}
+            onNavigateHome={() => setActiveTab('dashboard')}
             user={user}
           />
         )}
@@ -489,6 +499,7 @@ export default function Home() {
         {activeTab === 'nclex-notes' && (
           <NclexNotesView 
             user={user}
+            onNavigateHome={() => setActiveTab('dashboard')}
           />
         )}
         

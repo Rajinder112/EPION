@@ -20,7 +20,7 @@ const CATEGORIES = [
   'Psychiatric'
 ];
 
-export default function NclexNotesView({ user }) {
+export default function NclexNotesView({ user, onNavigateHome }) {
   const [notes, setNotes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -585,14 +585,24 @@ export default function NclexNotesView({ user }) {
       {/* Header Banner */}
       <div className="bg-gradient-to-r from-card to-primary-light border border-border p-5 rounded-2xl shadow-sm relative overflow-hidden">
         <div className="absolute -right-10 -top-10 w-32 h-32 bg-primary/10 rounded-full blur-2xl"></div>
-        <div className="space-y-1">
-          <h2 className="text-2xl font-bold text-foreground flex items-center gap-2">
-            <span>NCLEX-RN Study Notes</span>
-            <BookOpen className="w-5 h-5 text-primary shrink-0" />
-          </h2>
-          <p className="text-muted-text text-sm max-w-2xl">
-            Read and download high-quality NCLEX-RN PDF notes prepared by educators. Track your reading progress, bookmark important topics, and resume right where you left off.
-          </p>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="space-y-1">
+            <h2 className="text-2xl font-bold text-foreground flex items-center gap-2">
+              <span>NCLEX-RN Study Notes</span>
+              <BookOpen className="w-5 h-5 text-primary shrink-0" />
+            </h2>
+            <p className="text-muted-text text-sm max-w-2xl">
+              Read and download high-quality NCLEX-RN PDF notes prepared by educators. Track your reading progress, bookmark important topics, and resume right where you left off.
+            </p>
+          </div>
+          {onNavigateHome && (
+            <button
+              onClick={onNavigateHome}
+              className="px-3 py-1.5 bg-card hover:bg-muted-bg text-muted-text hover:text-foreground border border-border text-xs font-semibold rounded-lg transition-colors flex items-center gap-1 cursor-pointer shrink-0"
+            >
+              &larr; Exit Notes
+            </button>
+          )}
         </div>
       </div>
 
@@ -701,8 +711,15 @@ export default function NclexNotesView({ user }) {
               >
                 {/* Header Row (Expand trigger) styled exactly like Concept Card rows in uploaded image */}
                 <div
-                  onClick={() => handleToggleExpand(note)}
+                  onClick={() => {
+                    if (note.status === 'coming_soon') {
+                      showToast('This study note is coming soon!', 'info');
+                      return;
+                    }
+                    handleToggleExpand(note);
+                  }}
                   className={`w-full p-4 flex flex-col sm:flex-row sm:items-center justify-between text-left transition-colors duration-150 gap-4 cursor-pointer ${
+                    note.status === 'coming_soon' ? 'opacity-70 bg-card cursor-not-allowed' :
                     isExpanded 
                       ? 'bg-primary-light/40 text-primary border-b border-border/80' 
                       : 'bg-card hover:bg-muted-bg/30'
@@ -719,11 +736,25 @@ export default function NclexNotesView({ user }) {
                       {note.topic_name}
                     </span>
 
-                    {/* Draft Indicator (Admin only) */}
-                    {user?.role === 'admin' && note.status === 'Draft' && (
-                      <span className="px-1.5 py-0.5 text-[8px] bg-amber-500/10 text-amber-600 dark:text-amber-400 font-bold border border-amber-500/10 rounded tracking-wider uppercase shrink-0">
-                        Draft
-                      </span>
+                    {/* Status Indicators (Admin only) */}
+                    {user?.role === 'admin' && (
+                      <>
+                        {(note.status === 'Draft' || note.status === 'inactive') && (
+                          <span className="px-1.5 py-0.5 text-[8px] bg-red-500/10 text-red-600 dark:text-red-400 font-bold border border-red-500/10 rounded tracking-wider uppercase shrink-0">
+                            Inactive
+                          </span>
+                        )}
+                        {note.status === 'coming_soon' && (
+                          <span className="px-1.5 py-0.5 text-[8px] bg-amber-500/10 text-amber-600 dark:text-amber-400 font-bold border border-amber-500/10 rounded tracking-wider uppercase shrink-0">
+                            Coming Soon
+                          </span>
+                        )}
+                        {(note.status === 'Published' || note.status === 'active') && (
+                          <span className="px-1.5 py-0.5 text-[8px] bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold border border-emerald-500/10 rounded tracking-wider uppercase shrink-0">
+                            Active
+                          </span>
+                        )}
+                      </>
                     )}
                   </div>
 
@@ -775,7 +806,11 @@ export default function NclexNotesView({ user }) {
 
                       {/* Toggle Expand Arrow */}
                       <span className="text-muted-text ml-1 shrink-0">
-                        {isExpanded ? (
+                        {note.status === 'coming_soon' ? (
+                          <span className="px-2 py-0.5 text-[9px] font-black bg-amber-500/10 text-amber-600 dark:text-amber-400 rounded border border-amber-500/10 uppercase tracking-wider">
+                            Coming Soon
+                          </span>
+                        ) : isExpanded ? (
                           <ChevronUp className="w-4.5 h-4.5 text-primary" />
                         ) : (
                           <ChevronDown className="w-4.5 h-4.5" />
@@ -1117,8 +1152,9 @@ export default function NclexNotesView({ user }) {
                     onChange={(e) => setNoteStatus(e.target.value)}
                     className="w-full py-2.5 px-3 bg-muted-bg border border-border rounded-lg text-sm text-foreground focus:outline-none focus:border-primary"
                   >
-                    <option value="Published">Published</option>
-                    <option value="Draft">Draft</option>
+                    <option value="active">Active (Visible & Openable)</option>
+                    <option value="coming_soon">Coming Soon (Visible but Locked)</option>
+                    <option value="inactive">Inactive (Hidden from Students)</option>
                   </select>
                 </div>
 
