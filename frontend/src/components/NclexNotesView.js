@@ -5,7 +5,7 @@ import { api, BASE_URL } from '../utils/api';
 import { 
   Search, Filter, BookOpen, Bookmark, Clock, Eye, Download, 
   X, CheckCircle, Info, ChevronRight, AlertCircle, RefreshCw,
-  ChevronDown, ChevronUp, Edit2, Trash2, Plus, FileText, Sparkles, Maximize2
+  ChevronDown, ChevronUp, Edit2, Trash2, Plus, FileText, Sparkles, Maximize2, ZoomIn, ZoomOut
 } from 'lucide-react';
 
 const CATEGORIES = [
@@ -39,6 +39,12 @@ export default function NclexNotesView({ user }) {
   const [windowWidth, setWindowWidth] = useState(0);
   const [pageInput, setPageInput] = useState('1');
   const [isFullScreen, setIsFullScreen] = useState(false);
+  const [zoom, setZoom] = useState(1.0);
+
+  // Reset zoom on fullscreen changes
+  useEffect(() => {
+    setZoom(1.0);
+  }, [isFullScreen]);
 
   const notesRef = useRef(notes);
   useEffect(() => {
@@ -251,15 +257,23 @@ export default function NclexNotesView({ user }) {
         const scaleX = (containerWidth - padding) / unscaledViewport.width;
         const scaleY = containerHeight / unscaledViewport.height;
         
-        // Fit to width on mobile (to keep text readable), fit to screen bounds on desktop
-        const scale = isFullScreen 
+        // Apply zoom factor
+        const scale = (isFullScreen 
           ? (windowWidth < 768 ? scaleX : Math.min(scaleX, scaleY)) 
-          : scaleX;
+          : scaleX) * zoom;
 
-        const viewport = page.getViewport({ scale: scale || 1.2 });
+        // Render at high DPI (devicePixelRatio) for razor-sharp quality
+        const devicePixelRatio = typeof window !== 'undefined' ? (window.devicePixelRatio || 1) : 1;
+        const dpr = Math.min(devicePixelRatio, 2); // Cap at 2.0 to prevent crash on massive PDFs
 
-        canvas.height = viewport.height;
+        const viewport = page.getViewport({ scale: scale * dpr });
+
         canvas.width = viewport.width;
+        canvas.height = viewport.height;
+        
+        // Preserve crispness by matching CSS layout bounds
+        canvas.style.width = `${viewport.width / dpr}px`;
+        canvas.style.height = `${viewport.height / dpr}px`;
 
         const renderContext = {
           canvasContext: context,
@@ -289,7 +303,7 @@ export default function NclexNotesView({ user }) {
         renderTask.cancel();
       }
     };
-  }, [pdfDoc, currentPage, expandedNoteId, windowWidth, isFullScreen]);
+  }, [pdfDoc, currentPage, expandedNoteId, windowWidth, isFullScreen, zoom]);
 
   const showToast = (message, type = 'success') => {
     setToast({ message, type });
@@ -347,6 +361,7 @@ export default function NclexNotesView({ user }) {
     } else {
       setExpandedNoteId(note.id);
       setCurrentPage(note.last_page || 1);
+      setZoom(1.0);
 
       // Increment view count locally and on backend
       setNotes(prev => prev.map(n => {
@@ -862,6 +877,37 @@ export default function NclexNotesView({ user }) {
                             className="w-full h-1 bg-muted-bg rounded-lg appearance-none cursor-pointer accent-primary border-none"
                           />
                         </div>
+
+                        {/* Zoom Controls */}
+                        <div className="flex items-center gap-1 bg-card border border-border rounded-lg px-2 py-0.5 shrink-0 select-none">
+                          <button
+                            type="button"
+                            disabled={zoom <= 0.6}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setZoom(prev => Math.max(0.5, prev - 0.15));
+                            }}
+                            className="p-1 hover:text-primary disabled:opacity-40 cursor-pointer text-muted-text"
+                            title="Zoom Out"
+                          >
+                            <ZoomOut className="w-3.5 h-3.5" />
+                          </button>
+                          <span className="text-[10px] font-bold text-muted-text w-9 text-center">
+                            {Math.round(zoom * 100)}%
+                          </span>
+                          <button
+                            type="button"
+                            disabled={zoom >= 3.0}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setZoom(prev => Math.min(3.0, prev + 0.15));
+                            }}
+                            className="p-1 hover:text-primary disabled:opacity-40 cursor-pointer text-muted-text"
+                            title="Zoom In"
+                          >
+                            <ZoomIn className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
                       </div>
 
                       {/* Right: Actions (Mark Complete / Download / Full Screen) */}
@@ -910,7 +956,7 @@ export default function NclexNotesView({ user }) {
                     </div>
 
                     {/* DYNAMIC CANVAS-BASED KINDLE READER VIEWPORT */}
-                    <div className="border border-border rounded-xl bg-[#F8F9FA] dark:bg-[#1E2022] overflow-hidden relative shadow-inner flex items-center justify-center p-4" style={{ minHeight: '650px' }}>
+                    <div className="border border-border rounded-xl bg-[#F8F9FA] dark:bg-[#1E2022] overflow-auto relative shadow-inner flex items-center justify-center p-4" style={{ minHeight: '650px' }}>
                       {pdfLoading ? (
                         <div className="flex flex-col items-center justify-center gap-2">
                           <div className="w-8 h-8 border-3 border-primary border-t-transparent rounded-full animate-spin"></div>
@@ -934,7 +980,7 @@ export default function NclexNotesView({ user }) {
                           </button>
                         </div>
                       ) : (
-                        <div className="relative w-full flex justify-center bg-white dark:bg-zinc-900 rounded-lg overflow-hidden select-none p-2 border border-border/40 shadow-sm max-w-[850px]">
+                        <div className="relative w-full flex justify-center bg-white dark:bg-zinc-900 rounded-lg overflow-auto select-none p-2 border border-border/40 shadow-sm max-w-[850px]">
                           {/* Left Navigation Overlay Zone */}
                           <div 
                             onClick={(e) => {
@@ -1197,6 +1243,37 @@ export default function NclexNotesView({ user }) {
                   }}
                   className="w-24 md:w-32 h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-primary border-none"
                 />
+
+                {/* Zoom Controls */}
+                <div className="flex items-center gap-1 bg-slate-800 border border-slate-700 rounded-lg px-2 py-0.5 select-none text-slate-300">
+                  <button
+                    type="button"
+                    disabled={zoom <= 0.6}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setZoom(prev => Math.max(0.5, prev - 0.15));
+                    }}
+                    className="p-1 hover:text-white disabled:opacity-40 cursor-pointer"
+                    title="Zoom Out"
+                  >
+                    <ZoomOut className="w-3.5 h-3.5" />
+                  </button>
+                  <span className="text-[10px] font-bold text-slate-300 w-9 text-center">
+                    {Math.round(zoom * 100)}%
+                  </span>
+                  <button
+                    type="button"
+                    disabled={zoom >= 3.0}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setZoom(prev => Math.min(3.0, prev + 0.15));
+                    }}
+                    className="p-1 hover:text-white disabled:opacity-40 cursor-pointer"
+                    title="Zoom In"
+                  >
+                    <ZoomIn className="w-3.5 h-3.5" />
+                  </button>
+                </div>
                 
                 <span className="text-[10px] text-slate-400">({progressPercent}% read)</span>
               </div>
@@ -1306,48 +1383,80 @@ export default function NclexNotesView({ user }) {
                 </span>
               </div>
 
-              {/* Row 2: Page controls & Actions */}
+              {/* Row 2: Page controls & Zoom */}
               <div className="flex items-center justify-between gap-2 w-full text-xs">
-                <button
-                  disabled={currentPage <= 1}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handlePrevPage();
-                  }}
-                  className="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 disabled:opacity-40 rounded-lg text-white font-bold transition-all cursor-pointer"
-                  title="Previous Page"
-                >
-                  &larr; Prev
-                </button>
-
-                <div className="flex items-center gap-1.5 text-slate-300 font-bold">
-                  <span>Page</span>
-                  <input
-                    type="text"
-                    value={pageInput}
-                    onChange={(e) => setPageInput(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter') {
-                        handlePageSubmit();
-                      }
+                <div className="flex items-center gap-1.5">
+                  <button
+                    disabled={currentPage <= 1}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handlePrevPage();
                     }}
-                    onBlur={handlePageSubmit}
-                    className="w-12 bg-slate-800 border border-slate-700 focus:border-primary rounded-lg text-center font-bold text-xs py-1 text-white focus:outline-none"
-                  />
-                  <span>of {note.pages || 1}</span>
+                    className="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 disabled:opacity-40 rounded-lg text-white font-bold transition-all cursor-pointer"
+                    title="Previous Page"
+                  >
+                    &larr; Prev
+                  </button>
+
+                  <div className="flex items-center gap-1 text-slate-300 font-bold text-[11px]">
+                    <input
+                      type="text"
+                      value={pageInput}
+                      onChange={(e) => setPageInput(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          handlePageSubmit();
+                        }
+                      }}
+                      onBlur={handlePageSubmit}
+                      className="w-10 bg-slate-800 border border-slate-700 focus:border-primary rounded-lg text-center font-bold text-xs py-0.5 text-white focus:outline-none"
+                    />
+                    <span>/ {note.pages || 1}</span>
+                  </div>
+
+                  <button
+                    disabled={currentPage >= (note.pages || 1)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleNextPage(note);
+                    }}
+                    className="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 disabled:opacity-40 rounded-lg text-white font-bold transition-all cursor-pointer"
+                    title="Next Page"
+                  >
+                    Next &rarr;
+                  </button>
                 </div>
 
-                <button
-                  disabled={currentPage >= (note.pages || 1)}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleNextPage(note);
-                  }}
-                  className="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 disabled:opacity-40 rounded-lg text-white font-bold transition-all cursor-pointer"
-                  title="Next Page"
-                >
-                  Next &rarr;
-                </button>
+                {/* Zoom Controls on mobile */}
+                <div className="flex items-center gap-0.5 bg-slate-800 border border-slate-750 rounded-lg px-1.5 py-0.5 select-none text-slate-300 shrink-0">
+                  <button
+                    type="button"
+                    disabled={zoom <= 0.6}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setZoom(prev => Math.max(0.5, prev - 0.15));
+                    }}
+                    className="p-1 hover:text-white disabled:opacity-40 cursor-pointer text-slate-400"
+                    title="Zoom Out"
+                  >
+                    <ZoomOut className="w-3.5 h-3.5" />
+                  </button>
+                  <span className="text-[10px] font-bold text-slate-300 w-8 text-center">
+                    {Math.round(zoom * 100)}%
+                  </span>
+                  <button
+                    type="button"
+                    disabled={zoom >= 3.0}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setZoom(prev => Math.min(3.0, prev + 0.15));
+                    }}
+                    className="p-1 hover:text-white disabled:opacity-40 cursor-pointer text-slate-400"
+                    title="Zoom In"
+                  >
+                    <ZoomIn className="w-3.5 h-3.5" />
+                  </button>
+                </div>
               </div>
 
               {/* Row 3: Mark Completed for mobile */}
