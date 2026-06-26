@@ -244,9 +244,17 @@ export default function NclexNotesView({ user }) {
 
         const unscaledViewport = page.getViewport({ scale: 1.0 });
         
-        const scaleX = (containerWidth - (isFullScreen ? 64 : 48)) / unscaledViewport.width;
+        // On mobile, maximize readability by fitting to width and reducing side margins
+        const padding = isFullScreen 
+          ? (windowWidth < 768 ? 16 : 64) 
+          : 48;
+        const scaleX = (containerWidth - padding) / unscaledViewport.width;
         const scaleY = containerHeight / unscaledViewport.height;
-        const scale = isFullScreen ? Math.min(scaleX, scaleY) : scaleX;
+        
+        // Fit to width on mobile (to keep text readable), fit to screen bounds on desktop
+        const scale = isFullScreen 
+          ? (windowWidth < 768 ? scaleX : Math.min(scaleX, scaleY)) 
+          : scaleX;
 
         const viewport = page.getViewport({ scale: scale || 1.2 });
 
@@ -1222,7 +1230,7 @@ export default function NclexNotesView({ user }) {
             </div>
 
             {/* Main Immersive Canvas Area */}
-            <div className="flex-1 flex items-center justify-center p-4 relative overflow-hidden bg-slate-950">
+            <div className="flex-1 flex items-center justify-center p-4 relative overflow-y-auto bg-slate-950">
               {pdfLoading ? (
                 <div className="flex flex-col items-center justify-center gap-2">
                   <div className="w-10 h-10 border-3 border-primary border-t-transparent rounded-full animate-spin"></div>
@@ -1261,7 +1269,7 @@ export default function NclexNotesView({ user }) {
                   {/* Canvas for rendering PDF */}
                   <canvas 
                     id="pdf-canvas-fullscreen" 
-                    className="shadow-2xl rounded-md max-w-full max-h-[85vh] object-contain"
+                    className="shadow-2xl rounded-md max-w-full"
                     style={{ display: 'block' }}
                   />
 
