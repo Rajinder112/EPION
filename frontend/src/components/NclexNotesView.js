@@ -239,7 +239,7 @@ export default function NclexNotesView({ user }) {
         
         // Dynamic height scaling for fullscreen mode to prevent scrolling
         const containerHeight = isFullScreen 
-          ? (window.innerHeight - 150) 
+          ? (window.innerHeight - (windowWidth < 768 ? 240 : 150)) 
           : 650;
 
         const unscaledViewport = page.getViewport({ scale: 1.0 });
@@ -1125,18 +1125,18 @@ export default function NclexNotesView({ user }) {
         return (
           <div className="fixed inset-0 z-[100] flex flex-col bg-slate-950 text-slate-100 select-none animate-fade-in">
             {/* Header: Title and controls */}
-            <div className="bg-slate-900 border-b border-slate-800 p-4 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="bg-slate-900 border-b border-slate-800 p-3 md:p-4 flex flex-row items-center justify-between gap-4">
               <div className="flex items-center gap-3">
-                <span className="bg-primary/20 text-primary px-2.5 py-1 rounded-lg text-xs font-black uppercase">
+                <span className="bg-primary/20 text-primary px-2 py-0.5 rounded text-[10px] font-black uppercase hidden sm:inline-block">
                   NCLEX Notes
                 </span>
-                <h2 className="font-extrabold text-sm md:text-base text-white truncate max-w-xs md:max-w-md">
+                <h2 className="font-extrabold text-xs md:text-sm text-white truncate max-w-[150px] sm:max-w-xs md:max-w-md">
                   {note.topic_name}
                 </h2>
               </div>
 
-              {/* Navigation Controls in Fullscreen */}
-              <div className="flex items-center gap-3 font-bold text-xs">
+              {/* Navigation Controls in Fullscreen - Desktop Only */}
+              <div className="hidden md:flex items-center gap-3 font-bold text-xs">
                 <button
                   disabled={currentPage <= 1}
                   onClick={(e) => {
@@ -1201,10 +1201,10 @@ export default function NclexNotesView({ user }) {
                       e.stopPropagation();
                       handleSaveProgress(note, note.pages, true);
                     }}
-                    className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg text-xs transition-colors flex items-center gap-1 cursor-pointer"
+                    className="hidden md:flex px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg text-xs transition-colors items-center gap-1 cursor-pointer"
                   >
                     <CheckCircle className="w-3.5 h-3.5" />
-                    <span className="hidden sm:inline">Mark Completed</span>
+                    <span>Mark Completed</span>
                   </button>
                 )}
                 
@@ -1232,6 +1232,18 @@ export default function NclexNotesView({ user }) {
                 <div className="flex flex-col items-center justify-center gap-2 p-6 text-center">
                   <AlertCircle className="w-10 h-10 text-rose-500" />
                   <p className="text-xs text-rose-500 font-bold">{pdfError}</p>
+                  <button 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      // Re-trigger document load
+                      const prev = expandedNoteId;
+                      setExpandedNoteId(null);
+                      setTimeout(() => setExpandedNoteId(prev), 50);
+                    }}
+                    className="mt-2 py-1 px-3 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-lg transition-colors cursor-pointer"
+                  >
+                    Retry
+                  </button>
                 </div>
               ) : (
                 <div className="relative flex justify-center bg-white dark:bg-zinc-950 rounded-lg shadow-2xl max-w-full max-h-full overflow-hidden select-none p-1 border border-slate-800">
@@ -1241,9 +1253,9 @@ export default function NclexNotesView({ user }) {
                       e.stopPropagation();
                       handlePrevPage();
                     }}
-                    className={`absolute left-0 top-0 bottom-0 w-24 flex items-center justify-center opacity-0 hover:opacity-100 bg-gradient-to-r from-black/25 to-transparent cursor-pointer transition-opacity z-10 ${currentPage <= 1 ? 'pointer-events-none' : ''}`}
+                    className={`absolute left-0 top-0 bottom-0 w-20 flex items-center justify-center opacity-0 hover:opacity-100 bg-gradient-to-r from-black/25 to-transparent cursor-pointer transition-opacity z-10 ${currentPage <= 1 ? 'pointer-events-none' : ''}`}
                   >
-                    <span className="w-10 h-10 rounded-full bg-slate-900/90 text-white shadow-lg flex items-center justify-center font-black text-lg border border-slate-700">&larr;</span>
+                    <span className="w-8 h-8 rounded-full bg-slate-900/90 text-white shadow-lg flex items-center justify-center font-black text-sm border border-slate-700">&larr;</span>
                   </div>
 
                   {/* Canvas for rendering PDF */}
@@ -1259,11 +1271,89 @@ export default function NclexNotesView({ user }) {
                       e.stopPropagation();
                       handleNextPage(note);
                     }}
-                    className={`absolute right-0 top-0 bottom-0 w-24 flex items-center justify-center opacity-0 hover:opacity-100 bg-gradient-to-l from-black/25 to-transparent cursor-pointer transition-opacity z-10 ${currentPage >= (note.pages || 1) ? 'pointer-events-none' : ''}`}
+                    className={`absolute right-0 top-0 bottom-0 w-20 flex items-center justify-center opacity-0 hover:opacity-100 bg-gradient-to-l from-black/25 to-transparent cursor-pointer transition-opacity z-10 ${currentPage >= (note.pages || 1) ? 'pointer-events-none' : ''}`}
                   >
-                    <span className="w-10 h-10 rounded-full bg-slate-900/90 text-white shadow-lg flex items-center justify-center font-black text-lg border border-slate-700">&rarr;</span>
+                    <span className="w-8 h-8 rounded-full bg-slate-900/90 text-white shadow-lg flex items-center justify-center font-black text-sm border border-slate-700">&rarr;</span>
                   </div>
                 </div>
+              )}
+            </div>
+
+            {/* Mobile Bottom Bar: Visible only on mobile screens */}
+            <div className="md:hidden bg-slate-900 border-t border-slate-800 p-4 flex flex-col gap-3.5 select-none z-10">
+              {/* Row 1: Range slider scrubbing */}
+              <div className="flex items-center justify-between gap-4 w-full">
+                <input
+                  type="range"
+                  min={1}
+                  max={note.pages || 1}
+                  value={currentPage}
+                  onChange={(e) => {
+                    handleSaveProgress(note, parseInt(e.target.value));
+                  }}
+                  className="flex-1 h-1 bg-slate-850 rounded-lg appearance-none cursor-pointer accent-primary border-none"
+                />
+                <span className="text-[10px] text-slate-400 font-bold shrink-0">
+                  {progressPercent}% read
+                </span>
+              </div>
+
+              {/* Row 2: Page controls & Actions */}
+              <div className="flex items-center justify-between gap-2 w-full text-xs">
+                <button
+                  disabled={currentPage <= 1}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handlePrevPage();
+                  }}
+                  className="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 disabled:opacity-40 rounded-lg text-white font-bold transition-all cursor-pointer"
+                  title="Previous Page"
+                >
+                  &larr; Prev
+                </button>
+
+                <div className="flex items-center gap-1.5 text-slate-300 font-bold">
+                  <span>Page</span>
+                  <input
+                    type="text"
+                    value={pageInput}
+                    onChange={(e) => setPageInput(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        handlePageSubmit();
+                      }
+                    }}
+                    onBlur={handlePageSubmit}
+                    className="w-12 bg-slate-800 border border-slate-700 focus:border-primary rounded-lg text-center font-bold text-xs py-1 text-white focus:outline-none"
+                  />
+                  <span>of {note.pages || 1}</span>
+                </div>
+
+                <button
+                  disabled={currentPage >= (note.pages || 1)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleNextPage(note);
+                  }}
+                  className="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 disabled:opacity-40 rounded-lg text-white font-bold transition-all cursor-pointer"
+                  title="Next Page"
+                >
+                  Next &rarr;
+                </button>
+              </div>
+
+              {/* Row 3: Mark Completed for mobile */}
+              {!isCompleted && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleSaveProgress(note, note.pages, true);
+                  }}
+                  className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold rounded-lg text-xs transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+                >
+                  <CheckCircle className="w-4 h-4" />
+                  <span>Mark Completed</span>
+                </button>
               )}
             </div>
           </div>

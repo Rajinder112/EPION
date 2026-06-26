@@ -387,6 +387,7 @@ if (process.env.DATABASE_URL) {
         last_opened TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
         UNIQUE (user_id, note_id)
     );
+    ALTER TABLE nclex_notes ADD COLUMN IF NOT EXISTS pdf_data BYTEA;
   `).then(() => {
     console.log('Postgres migrations completed successfully.');
   }).catch(err => {
@@ -1460,6 +1461,7 @@ function simulateQuery(text, params = []) {
       status: params[10] || 'Published',
       display_order: parseInt(params[11]) || 0,
       created_by: params[12],
+      pdf_data: params[13] && Buffer.isBuffer(params[13]) ? params[13].toString('base64') : params[13],
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString()
     };
@@ -1508,7 +1510,25 @@ function simulateQuery(text, params = []) {
 
     let id;
     let updatedNote;
-    if (params.length === 9) {
+    if (params.length === 10) {
+      id = parseInt(params[9]);
+      const note = dbData.nclex_notes.find(n => parseInt(n.id) === parseInt(id));
+      if (note) {
+        note.topic_name = params[0];
+        note.description = params[1];
+        note.category = params[2];
+        note.difficulty = params[3];
+        note.pdf_path = params[4];
+        note.thumbnail = params[5];
+        note.status = params[6];
+        note.display_order = parseInt(params[7]) || 0;
+        if (params[8]) {
+          note.pdf_data = Buffer.isBuffer(params[8]) ? params[8].toString('base64') : params[8];
+        }
+        note.updated_at = new Date().toISOString();
+        updatedNote = note;
+      }
+    } else if (params.length === 9) {
       id = parseInt(params[8]);
       const note = dbData.nclex_notes.find(n => parseInt(n.id) === parseInt(id));
       if (note) {

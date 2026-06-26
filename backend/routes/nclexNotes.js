@@ -145,22 +145,29 @@ router.get('/:id', auth, async (req, res) => {
 // @access  Private (Authenticated Users)
 router.get('/:id/pdf', auth, async (req, res) => {
   try {
-    const result = await db.query('SELECT pdf_path, topic_name FROM nclex_notes WHERE id = $1', [req.params.id]);
+    const result = await db.query('SELECT pdf_path, topic_name, pdf_data FROM nclex_notes WHERE id = $1', [req.params.id]);
     if (result.rows.length === 0) {
       return res.status(404).json({ message: 'NCLEX note not found' });
     }
     const note = result.rows[0];
-    const absolutePath = path.join(__dirname, '..', note.pdf_path);
-
-    if (!fs.existsSync(absolutePath)) {
-      return res.status(404).json({ message: 'PDF file not found on disk storage' });
-    }
 
     // Secure view tracking
     await db.query('UPDATE nclex_notes SET views = views + 1 WHERE id = $1', [req.params.id]);
 
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', `inline; filename="${encodeURIComponent(note.topic_name)}.pdf"`);
+
+    if (note.pdf_data) {
+      const buffer = Buffer.isBuffer(note.pdf_data)
+        ? note.pdf_data
+        : Buffer.from(note.pdf_data, 'base64');
+      return res.send(buffer);
+    }
+
+    const absolutePath = path.join(__dirname, '..', note.pdf_path);
+    if (!fs.existsSync(absolutePath)) {
+      return res.status(404).json({ message: 'PDF file not found on disk storage' });
+    }
 
     const stream = fs.createReadStream(absolutePath);
     stream.pipe(res);
@@ -175,22 +182,29 @@ router.get('/:id/pdf', auth, async (req, res) => {
 // @access  Private (Authenticated Users)
 router.get('/:id/download', auth, async (req, res) => {
   try {
-    const result = await db.query('SELECT pdf_path, topic_name FROM nclex_notes WHERE id = $1', [req.params.id]);
+    const result = await db.query('SELECT pdf_path, topic_name, pdf_data FROM nclex_notes WHERE id = $1', [req.params.id]);
     if (result.rows.length === 0) {
       return res.status(404).json({ message: 'NCLEX note not found' });
     }
     const note = result.rows[0];
-    const absolutePath = path.join(__dirname, '..', note.pdf_path);
-
-    if (!fs.existsSync(absolutePath)) {
-      return res.status(404).json({ message: 'PDF file not found on disk storage' });
-    }
 
     // Increment downloads analytics
     await db.query('UPDATE nclex_notes SET downloads = downloads + 1 WHERE id = $1', [req.params.id]);
 
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', `attachment; filename="${encodeURIComponent(note.topic_name)}.pdf"`);
+
+    if (note.pdf_data) {
+      const buffer = Buffer.isBuffer(note.pdf_data)
+        ? note.pdf_data
+        : Buffer.from(note.pdf_data, 'base64');
+      return res.send(buffer);
+    }
+
+    const absolutePath = path.join(__dirname, '..', note.pdf_path);
+    if (!fs.existsSync(absolutePath)) {
+      return res.status(404).json({ message: 'PDF file not found on disk storage' });
+    }
 
     const stream = fs.createReadStream(absolutePath);
     stream.pipe(res);
@@ -250,8 +264,8 @@ router.post('/', [auth, isAdmin, upload.single('pdf')], async (req, res) => {
 
     // Add note to database
     const queryText = `
-      INSERT INTO nclex_notes (topic_name, slug, description, category, difficulty, pdf_path, thumbnail, pages, file_size, reading_time, status, display_order, created_by)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+      INSERT INTO nclex_notes (topic_name, slug, description, category, difficulty, pdf_path, thumbnail, pages, file_size, reading_time, status, display_order, created_by, pdf_data)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
       RETURNING *
     `;
     const params = [
@@ -267,7 +281,8 @@ router.post('/', [auth, isAdmin, upload.single('pdf')], async (req, res) => {
       reading_time,
       status || 'Published',
       parseInt(display_order) || 0,
-      req.user.id
+      req.user.id,
+      req.file.buffer
     ];
 
     const result = await db.query(queryText, params);
@@ -357,8 +372,8 @@ router.put('/:id', [auth, isAdmin, upload.single('pdf')], async (req, res) => {
 
     const queryText = `
       UPDATE nclex_notes 
-      SET topic_name = $1, description = $2, category = $3, difficulty = $4, pdf_path = $5, thumbnail = $6, status = $7, display_order = $8 
-      WHERE id = $9 
+      SET topic_name = $1, description = $2, category = $3, difficulty = $4, pdf_path = $5, thumbnail = $6, status = $7, display_order = $8, pdf_data = COALESCE($9, pdf_data)
+      WHERE id = $10 
       RETURNING *
     `;
     const params = [
@@ -370,6 +385,7 @@ router.put('/:id', [auth, isAdmin, upload.single('pdf')], async (req, res) => {
       existingNote.thumbnail,
       status || 'Published',
       parseInt(display_order) || 0,
+      req.file ? req.file.buffer : null,
       noteId
     ];
 
