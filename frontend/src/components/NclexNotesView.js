@@ -882,10 +882,10 @@ export default function NclexNotesView({ user }) {
                         <div className="flex items-center gap-1 bg-card border border-border rounded-lg px-2 py-0.5 shrink-0 select-none">
                           <button
                             type="button"
-                            disabled={zoom <= 0.6}
+                            disabled={zoom <= 0.5}
                             onClick={(e) => {
                               e.stopPropagation();
-                              setZoom(prev => Math.max(0.5, prev - 0.15));
+                              setZoom(prev => Math.max(0.5, prev - 0.25));
                             }}
                             className="p-1 hover:text-primary disabled:opacity-40 cursor-pointer text-muted-text"
                             title="Zoom Out"
@@ -900,7 +900,7 @@ export default function NclexNotesView({ user }) {
                             disabled={zoom >= 3.0}
                             onClick={(e) => {
                               e.stopPropagation();
-                              setZoom(prev => Math.min(3.0, prev + 0.15));
+                              setZoom(prev => Math.min(3.0, prev + 0.25));
                             }}
                             className="p-1 hover:text-primary disabled:opacity-40 cursor-pointer text-muted-text"
                             title="Zoom In"
@@ -980,7 +980,7 @@ export default function NclexNotesView({ user }) {
                           </button>
                         </div>
                       ) : (
-                        <div className="relative w-full flex justify-center bg-white dark:bg-zinc-900 rounded-lg overflow-auto select-none p-2 border border-border/40 shadow-sm max-w-[850px]">
+                        <div className="relative w-full bg-white dark:bg-zinc-900 rounded-lg overflow-auto select-none p-2 border border-border/40 shadow-sm max-w-[850px]">
                           {/* Left Navigation Overlay Zone */}
                           <div 
                             onClick={(e) => {
@@ -996,7 +996,7 @@ export default function NclexNotesView({ user }) {
                           {/* Render Page Canvas */}
                           <canvas 
                             id={`pdf-canvas-${note.id}`} 
-                            className="shadow-md rounded-md max-w-full"
+                            className="shadow-md rounded-md mx-auto block"
                             style={{ display: 'block' }}
                           />
 
@@ -1248,10 +1248,10 @@ export default function NclexNotesView({ user }) {
                 <div className="flex items-center gap-1 bg-slate-800 border border-slate-700 rounded-lg px-2 py-0.5 select-none text-slate-300">
                   <button
                     type="button"
-                    disabled={zoom <= 0.6}
+                    disabled={zoom <= 0.5}
                     onClick={(e) => {
                       e.stopPropagation();
-                      setZoom(prev => Math.max(0.5, prev - 0.15));
+                      setZoom(prev => Math.max(0.5, prev - 0.25));
                     }}
                     className="p-1 hover:text-white disabled:opacity-40 cursor-pointer"
                     title="Zoom Out"
@@ -1266,7 +1266,7 @@ export default function NclexNotesView({ user }) {
                     disabled={zoom >= 3.0}
                     onClick={(e) => {
                       e.stopPropagation();
-                      setZoom(prev => Math.min(3.0, prev + 0.15));
+                      setZoom(prev => Math.min(3.0, prev + 0.25));
                     }}
                     className="p-1 hover:text-white disabled:opacity-40 cursor-pointer"
                     title="Zoom In"
@@ -1331,7 +1331,7 @@ export default function NclexNotesView({ user }) {
                   </button>
                 </div>
               ) : (
-                <div className="relative flex justify-center bg-white dark:bg-zinc-950 rounded-lg shadow-2xl max-w-full max-h-full overflow-hidden select-none p-1 border border-slate-800">
+                <div className="relative bg-white dark:bg-zinc-950 rounded-lg shadow-2xl max-w-full max-h-full overflow-auto select-none p-1 border border-slate-800">
                   {/* Left Navigation Zone Overlay */}
                   <div 
                     onClick={(e) => {
@@ -1346,7 +1346,7 @@ export default function NclexNotesView({ user }) {
                   {/* Canvas for rendering PDF */}
                   <canvas 
                     id="pdf-canvas-fullscreen" 
-                    className="shadow-2xl rounded-md max-w-full"
+                    className="shadow-2xl rounded-md mx-auto block"
                     style={{ display: 'block' }}
                   />
 
@@ -1431,10 +1431,10 @@ export default function NclexNotesView({ user }) {
                 <div className="flex items-center gap-0.5 bg-slate-800 border border-slate-750 rounded-lg px-1.5 py-0.5 select-none text-slate-300 shrink-0">
                   <button
                     type="button"
-                    disabled={zoom <= 0.6}
+                    disabled={zoom <= 0.5}
                     onClick={(e) => {
                       e.stopPropagation();
-                      setZoom(prev => Math.max(0.5, prev - 0.15));
+                      setZoom(prev => Math.max(0.5, prev - 0.25));
                     }}
                     className="p-1 hover:text-white disabled:opacity-40 cursor-pointer text-slate-400"
                     title="Zoom Out"
@@ -1449,7 +1449,7 @@ export default function NclexNotesView({ user }) {
                     disabled={zoom >= 3.0}
                     onClick={(e) => {
                       e.stopPropagation();
-                      setZoom(prev => Math.min(3.0, prev + 0.15));
+                      setZoom(prev => Math.min(3.0, prev + 0.25));
                     }}
                     className="p-1 hover:text-white disabled:opacity-40 cursor-pointer text-slate-400"
                     title="Zoom In"
